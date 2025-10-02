@@ -1,0 +1,122 @@
+[
+    {
+      "id": 1,
+      "question": "Je hebt 80% kans om €100 te winnen. Speel je mee?",
+      "options": ["Ja", "Nee"],
+      "category": "framing"
+    },
+    {
+      "id": 2,
+      "question": "Je hebt 20% kans om €100 te verliezen. Speel je mee?",
+      "options": ["Ja", "Nee"],
+      "category": "framing"
+    },
+    {
+      "id": 3,
+      "question": "Kies je €50 gegarandeerd, of een 50% kans op €100?",
+      "options": ["€50 zeker", "50% kans op €100"],
+      "category": "risk"
+    },
+    {
+      "id": 4,
+      "question": "Neem je een vaste baan met €2000/maand, of een freelance job met gemiddeld €2500 maar risico op maanden zonder werk?",
+      "options": ["Vaste baan", "Freelance job"],
+      "category": "risk"
+    },
+    {
+      "id": 5,
+      "question": "Je kan een veilige weg nemen (10 min) of een snelle maar gevaarlijke weg (5 min, maar kans op ongeluk). Welke kies je?",
+      "options": ["Veilige weg", "Snelle weg"],
+      "category": "risk"
+    },
+    {
+      "id": 6,
+      "question": "Kies binnen 3 seconden: rood of blauw?",
+      "options": ["Rood", "Blauw"],
+      "category": "time_pressure"
+    },
+    {
+      "id": 7,
+      "question": "Kies binnen 3 seconden: links of rechts?",
+      "options": ["Links", "Rechts"],
+      "category": "time_pressure"
+    },
+    {
+      "id": 8,
+      "question": "Wat kies je als snack: koek of fruit?",
+      "options": ["Koek", "Fruit"],
+      "category": "consistency"
+    },
+    {
+      "id": 9,
+      "question": "Er zijn 5 mensen in gevaar, je kan 1 persoon opofferen om hen te redden. Doe je het?",
+      "options": ["Ja", "Nee"],
+      "category": "ethics"
+    },
+    {
+      "id": 10,
+      "question": "Je vindt een portemonnee met €50. Hou je hem of breng je hem terug?",
+      "options": ["Hou hem", "Breng terug"],
+      "category": "ethics"
+    },
+    {
+      "id": 11,
+      "question": "Je vriend spiekt op een examen en vraagt je stil te blijven. Zeg je iets?",
+      "options": ["Ja", "Nee"],
+      "category": "ethics"
+    },
+    {
+      "id": 12,
+      "question": "Wat kies je als snack: fruit of koek?",
+      "options": ["Fruit", "Koek"],
+      "category": "consistency"
+    },
+    {
+      "id": 13,
+      "question": "Ochtendmens of avondmens?",
+      "options": ["Ochtendmens", "Avondmens"],
+      "category": "preference"
+    },
+    {
+      "id": 14,
+      "question": "Stad of natuur?",
+      "options": ["Stad", "Natuur"],
+      "category": "preference"
+    },
+    {
+      "id": 15,
+      "question": "Koffie of thee?",
+      "options": ["Koffie", "Thee"],
+      "category": "preference"
+    },
+    {
+      "id": 16,
+      "question": "Je kan nu €20 krijgen, of €50 binnen een maand. Wat kies je?",
+      "options": ["Nu €20", "Binnen een maand €50"],
+      "category": "impulsivity"
+    },
+    {
+      "id": 17,
+      "question": "Je moet leren maar je favoriete serie komt online. Wat doe je?",
+      "options": ["Serie kijken", "Leren"],
+      "category": "impulsivity"
+    },
+    {
+      "id": 18,
+      "question": "Kies een teamgenoot: slim maar lui, of gemiddeld slim maar hardwerkend.",
+      "options": ["Slim maar lui", "Hardwerkend maar gemiddeld slim"],
+      "category": "tradeoff"
+    },
+    {
+      "id": 19,
+      "question": "Wil je liever hogere belastingen en minder files, of lagere belastingen en meer files?",
+      "options": ["Hogere belastingen, minder files", "Lagere belastingen, meer files"],
+      "category": "tradeoff"
+    },
+    {
+      "id": 20,
+      "question": "Je hebt tijd voor maar één: een goed salaris of veel vrije tijd. Wat kies je?",
+      "options": ["Goed salaris", "Veel vrije tijd"],
+      "category": "tradeoff"
+    }
+]

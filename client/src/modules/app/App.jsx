@@ -1,35 +1,98 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef, useState } from "react"
 
-function App() {
-  const [count, setCount] = useState(0)
+//Data
+import questions from '../../shared/data/questions.json';
+
+export const App = () => {
+
+  const [questionCount, setQuestionCount] = useState(0);
+  const [question, setQuestion] = useState();
+  const [ elapsedHoverTime, setElapsedHoverTime] = useState({ option1: 0, option2: 0});
+  const hoverStart = useRef({})
+  
+
+  useEffect(() => {
+    console.log(questions);
+    setQuestion(questions[questionCount]);
+  }, []);
+
+  useEffect(() => {
+    setQuestion(questions[questionCount]);
+  }, [questionCount])
+
+  const handleNextButton = () => {
+    setQuestionCount( questionCount + 1)
+  }
+
+  const handleMouseEnter = (id) => {
+    console.log('hover start', id);
+    hoverStart.current[id] = Date.now();
+    console.log(hoverStart.current[id])
+  }
+
+  const handleMouseLeave = (id) => {
+    console.log('hover stop', id);
+
+    const start = hoverStart.current[id];
+
+    if (start) {
+      const duration = ((Date.now() - start) / 1000);
+
+      console.log(`nadenktijd: ${duration}s`);
+
+      hoverStart.current[id] = null;
+
+      addHoverTime(id, duration);
+    }
+  }
+  
+  const addHoverTime = (optionId, duration) => {
+    console.log('Add hover time:', optionId, duration);
+    setElapsedHoverTime( prev => (
+      {
+        ...prev,
+        [optionId]: (prev[optionId] || 0) + duration
+      }
+    ))
+  }
+
+  const handleButtonClick = (id) => {
+    handleMouseLeave(id);
+  }
+
+  useEffect(() => {
+  console.log("option1:", elapsedHoverTime.option1, "option2:", elapsedHoverTime.option2, "elapsedtime");
+  }, [elapsedHoverTime])
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Hello World</h1>
+      {
+        question &&
+        <>
+          <h3>{ question.question }</h3>
+          <button
+            onMouseEnter={ () => handleMouseEnter("option1") }         
+            onMouseLeave={ () => handleMouseLeave("option1") } 
+            onClick={ () => handleButtonClick("option1") }
+          >
+            { question.options[0] }
+          </button>
+          <button
+            onMouseEnter={ () => handleMouseEnter("option2") }    
+            onMouseLeave={ () => handleMouseLeave("option2") }
+            onClick={ () => handleButtonClick("option2") }
+          >
+            { question.options[1] }
+          </button>
+        </>
+      }
+      
+      <button
+        onClick={ handleNextButton }
+      >
+        Next
+      </button>
     </>
   )
 }
-
-export default App
