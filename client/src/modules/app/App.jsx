@@ -13,7 +13,7 @@ export const App = () => {
   
 
   useEffect(() => {
-    console.log(questions);
+    // console.log(questions);
     setQuestion(questions[questionCount]);
   }, []);
 
@@ -22,7 +22,9 @@ export const App = () => {
   }, [questionCount])
 
   const handleNextButton = () => {
-    setQuestionCount( questionCount + 1)
+    setQuestionCount( questionCount + 1);
+    setElapsedHoverTime({ option1: 0, option2: 0});
+    setChangedMind({ option1: 0, option2: 0});
   }
 
   const handleMouseEnter = (id) => {
@@ -66,7 +68,6 @@ export const App = () => {
 
   const handleButtonClick = (id) => {
     handleMouseLeave(id);
-
     updateChoice(id);
   }
 
