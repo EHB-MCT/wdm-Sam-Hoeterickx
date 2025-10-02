@@ -7,7 +7,8 @@ export const App = () => {
 
   const [questionCount, setQuestionCount] = useState(0);
   const [question, setQuestion] = useState();
-  const [ elapsedHoverTime, setElapsedHoverTime] = useState({ option1: 0, option2: 0});
+  const [elapsedHoverTime, setElapsedHoverTime] = useState({ option1: 0, option2: 0});
+  const [changedMind, setChangedMind] = useState({ option1: 0, option2: 0});
   const hoverStart = useRef({})
   
 
@@ -51,18 +52,28 @@ export const App = () => {
     setElapsedHoverTime( prev => (
       {
         ...prev,
-        [optionId]: (prev[optionId] || 0) + duration
+        [optionId]: ( prev[optionId] || 0 ) + duration
       }
     ))
   }
 
+  const updateChoice = (optionId) => {
+    setChangedMind( prev => ({
+      ...prev,
+      [optionId]: ( prev[optionId] || 0 ) + 1
+    }));
+  }
+
   const handleButtonClick = (id) => {
     handleMouseLeave(id);
+
+    updateChoice(id);
   }
 
   useEffect(() => {
-  console.log("option1:", elapsedHoverTime.option1, "option2:", elapsedHoverTime.option2, "elapsedtime");
-  }, [elapsedHoverTime])
+    console.log("option1:", elapsedHoverTime.option1, changedMind.option1, "option2:", elapsedHoverTime.option2, changedMind.option2);
+
+  }, [elapsedHoverTime, changedMind])
 
   return (
     <>
