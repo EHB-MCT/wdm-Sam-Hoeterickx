@@ -5,16 +5,18 @@ import questions from '../../shared/data/questions.json';
 
 export const App = () => {
 
-  const [questionCount, setQuestionCount] = useState(0);
-  const [question, setQuestion] = useState();
   const [elapsedHoverTime, setElapsedHoverTime] = useState({ option1: 0, option2: 0});
   const [changedMind, setChangedMind] = useState({ option1: 0, option2: 0});
-  const hoverStart = useRef({})
+  const [questionCount, setQuestionCount] = useState(0);
+  const [question, setQuestion] = useState();
   
-
+  const decisionStart = useRef({});
+  const hoverStart = useRef({});
+  
   useEffect(() => {
     // console.log(questions);
     setQuestion(questions[questionCount]);
+    decisionStart.current = Date.now();
   }, []);
 
   useEffect(() => {
@@ -25,10 +27,12 @@ export const App = () => {
     setQuestionCount( questionCount + 1);
     setElapsedHoverTime({ option1: 0, option2: 0});
     setChangedMind({ option1: 0, option2: 0});
+    
+    updateDecisionTime();
   }
 
   const handleMouseEnter = (id) => {
-    console.log('hover start', id);
+    // console.log('hover start', id);
     hoverStart.current[id] = Date.now();
     console.log(hoverStart.current[id])
   }
@@ -41,7 +45,7 @@ export const App = () => {
     if (start) {
       const duration = ((Date.now() - start) / 1000);
 
-      console.log(`nadenktijd: ${duration}s`);
+      // console.log(`hoverTime: ${duration}s`);
 
       hoverStart.current[id] = null;
 
@@ -71,9 +75,20 @@ export const App = () => {
     updateChoice(id);
   }
 
-  useEffect(() => {
-    console.log("option1:", elapsedHoverTime.option1, changedMind.option1, "option2:", elapsedHoverTime.option2, changedMind.option2);
+  const updateDecisionTime = () => {
+    const start = decisionStart.current;
 
+    if(start){
+      const duration = ((Date.now() - start) / 1000);
+      console.log(typeof duration)
+      console.log(`decisionTime: ${duration}s`);
+    }
+
+    decisionStart.current = Date.now();
+  }
+
+  useEffect(() => {
+    // console.log("option1:", elapsedHoverTime.option1, changedMind.option1, "option2:", elapsedHoverTime.option2, changedMind.option2);
   }, [elapsedHoverTime, changedMind])
 
   return (
