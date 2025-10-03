@@ -1,84 +1,34 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react";
 
-//Data
-import questions from '../../shared/data/questions.json';
+//Hooks
+import { useChoiceTracking } from "../../shared/hooks/useChoiceTracking.hook";
+import { useHoverTracking } from "../../shared/hooks/useHoverTracking.hook";
+import { useQuestions } from "../../shared/hooks/useQuestions.hook";
+
 
 export const App = () => {
 
-  const [elapsedHoverTime, setElapsedHoverTime] = useState({ option1: 0, option2: 0});
-  const [changedMind, setChangedMind] = useState({ option1: 0, option2: 0});
+  const { question, nextQuestion, getDecisionTime } = useQuestions();
+  const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
+  const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
 
-  useEffect(() => {
-    setQuestion(questions[questionCount]);
-  }, [questionCount])
-
-  const handleNextButton = () => {
-    setQuestionCount( questionCount + 1);
-    setElapsedHoverTime({ option1: 0, option2: 0});
-    setChangedMind({ option1: 0, option2: 0});
-    
-    updateDecisionTime();
-  }
-
-  const handleMouseEnter = (id) => {
-    // console.log('hover start', id);
-    hoverStart.current[id] = Date.now();
-    console.log(hoverStart.current[id])
-  }
-
-  const handleMouseLeave = (id) => {
-    console.log('hover stop', id);
-
-    const start = hoverStart.current[id];
-
-    if (start) {
-      const duration = ((Date.now() - start) / 1000);
-
-      // console.log(`hoverTime: ${duration}s`);
-
-      hoverStart.current[id] = null;
-
-      addHoverTime(id, duration);
-    }
-  }
-  
-  const addHoverTime = (optionId, duration) => {
-    console.log('Add hover time:', optionId, duration);
-    setElapsedHoverTime( prev => (
-      {
-        ...prev,
-        [optionId]: ( prev[optionId] || 0 ) + duration
-      }
-    ))
-  }
-
-  const updateChoice = (optionId) => {
-    setChangedMind( prev => ({
-      ...prev,
-      [optionId]: ( prev[optionId] || 0 ) + 1
-    }));
-  }
 
   const handleButtonClick = (id) => {
     handleMouseLeave(id);
     updateChoice(id);
   }
 
-  const updateDecisionTime = () => {
-    const start = decisionStart.current;
+  const handleNextButton = () => {
+    console.log("Decision time:", getDecisionTime(), "s");
+    console.log("Hover times:", elapsedHoverTime);
+    console.log("Changed mind:", changedMind);
 
-    if(start){
-      const duration = ((Date.now() - start) / 1000);
-      console.log(typeof duration)
-      console.log(`decisionTime: ${duration}s`);
-    }
+    resetHoverTime();
+    resetChoices();
 
-    decisionStart.current = Date.now();
+    nextQuestion();
+
   }
-
-  useEffect(() => {
-    // console.log("option1:", elapsedHoverTime.option1, changedMind.option1, "option2:", elapsedHoverTime.option2, changedMind.option2);
-  }, [elapsedHoverTime, changedMind])
 
   return (
     <>

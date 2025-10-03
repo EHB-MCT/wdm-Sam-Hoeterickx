@@ -1,3 +1,5 @@
+
+import { useEffect, useState, useRef } from "react";
 //Data
 import questions from "../data/questions.json";
 
@@ -12,7 +14,7 @@ export const useQuestions = () => {
         // console.log(questions);
         setQuestion(questions[questionCount]);
         decisionStart.current = Date.now();
-    }, []);
+    }, [questionCount]);
 
     const nextQuestion = () => {
         setQuestionCount(prev => prev + 1);
