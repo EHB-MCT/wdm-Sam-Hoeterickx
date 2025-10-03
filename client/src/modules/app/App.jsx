@@ -7,17 +7,6 @@ export const App = () => {
 
   const [elapsedHoverTime, setElapsedHoverTime] = useState({ option1: 0, option2: 0});
   const [changedMind, setChangedMind] = useState({ option1: 0, option2: 0});
-  const [questionCount, setQuestionCount] = useState(0);
-  const [question, setQuestion] = useState();
-  
-  const decisionStart = useRef({});
-  const hoverStart = useRef({});
-  
-  useEffect(() => {
-    // console.log(questions);
-    setQuestion(questions[questionCount]);
-    decisionStart.current = Date.now();
-  }, []);
 
   useEffect(() => {
     setQuestion(questions[questionCount]);
