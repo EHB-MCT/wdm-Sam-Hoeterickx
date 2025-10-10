@@ -25,4 +25,20 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+      - OLLAMA_HOST=http://ollama:11434
     command: npm run run
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports: ["11434:11434"]
+    volumes:
+      - ollama_data:/root/.ollama
+    pull_policy: always
+    tty: true
+    restart: unless-stopped
+    
+volumes:
+  ollama_data:
