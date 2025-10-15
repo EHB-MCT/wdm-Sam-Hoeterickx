@@ -12,6 +12,13 @@ export const App = () => {
   const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
   const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
 
+  useEffect(() => {
+    fetch('http://localhost:3000/api/session/sessionId', {
+      credentials: 'include',
+    })
+    .then(response => response.json())
+    .then(data => console.log(data));
+  }, [])
 
   const handleButtonClick = (id) => {
     handleMouseLeave(id);
