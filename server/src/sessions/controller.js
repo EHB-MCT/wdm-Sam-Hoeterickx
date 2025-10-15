@@ -12,7 +12,9 @@ const createSessionId = async (req, res, collection) => {
             })
         }
 
-        const result = collection.insertOne(SESSION_ID);
+        const result = await collection.insertOne({
+            sessionId: SESSION_ID
+        });
 
         if(!result){
             return res.status(500).send({
