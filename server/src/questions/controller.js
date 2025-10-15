@@ -1,10 +1,10 @@
 const getAllQuestions = (req, res, collection) => {
     try{
 
-        const questions = collection
-        console.log(questions);
+        const QUESTIONS = collection
+        console.log(QUESTIONS);
 
-        if(!questions){
+        if(!QUESTIONS){
             return res.status(404).send({
                 status: 404,
                 message: 'Questions not found'
@@ -14,7 +14,7 @@ const getAllQuestions = (req, res, collection) => {
         return res.status(200).send({
             status: 200,
             message: 'Questions found successfully',
-            data: questions
+            data: QUESTIONS
         })
 
     }catch(error){
