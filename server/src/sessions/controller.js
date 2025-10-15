@@ -47,6 +47,18 @@ const createSessionId = async (req, res, collection) => {
     }
 }
 
+const readCookie = (req, res) => {
+
+    const SESSION_ID = req.signedCookies.session;
+    console.log(SESSION_ID);
+
+    res.send({
+        message: "ok"
+    })
+}
+
+
 module.exports = {
-    createSessionId
+    createSessionId,
+    readCookie
 }

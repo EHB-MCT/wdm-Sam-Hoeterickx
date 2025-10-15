@@ -17,7 +17,14 @@ export const App = () => {
       credentials: 'include',
     })
     .then(response => response.json())
-    .then(data => console.log(data));
+    .then(data => console.log(data))
+    .then(() => {
+      fetch('http://localhost:3000/api/session/readCookie', {
+          credentials: 'include'
+        })
+        .then(response => response.json())
+        .then(data => console.log(data));
+    })
   }, [])
 
   const handleButtonClick = (id) => {
