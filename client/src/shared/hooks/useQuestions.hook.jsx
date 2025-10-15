@@ -31,5 +31,5 @@ export const useQuestions = () => {
        
     };
 
-    return { question, nextQuestion, getDecisionTime };
+    return { question, questionCount, nextQuestion, getDecisionTime };
 }

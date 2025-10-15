@@ -16,7 +16,7 @@ export const App = () => {
     changedMind: undefined 
   });
 
-  const { question, nextQuestion, getDecisionTime } = useQuestions();
+  const { question, questionCount, nextQuestion, getDecisionTime } = useQuestions();
   const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
   const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
 
@@ -37,15 +37,19 @@ export const App = () => {
     }));
   }
 
+  useEffect(() => {
+    if(questionCount === 3) {
+      console.log("count is 4");
+      //Add logic to get al the answers with this SESSION_ID and send it to ollama to make a prediction
+    }
+  }, [questionCount])
+
   const handleNextButton = (e) => {
     const decision_time = getDecisionTime();
     const selected_answer = answer.answer;
     const question_id = e.target.id;
     const elapsed_hover_time = elapsedHoverTime;
     const changed_mind = changedMind;
-    // console.log("Decision time:", decisionTime, "s");
-    // console.log("Hover times:", elapsedHoverTime);
-    // console.log("Changed mind:", changedMind);
     
     setAnswer(prev => ({
       ...prev,
@@ -74,12 +78,12 @@ export const App = () => {
       })
     })
     .then(response => response.json())
-    .then(data => console.log(data))
-    .then(() => {
+    .then(data => {
+      console.log(data);
       resetHoverTime();
       resetChoices();
       nextQuestion();
-    });
+    })
   }
 
   return (
