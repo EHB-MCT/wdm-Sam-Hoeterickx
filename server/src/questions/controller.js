@@ -1,7 +1,9 @@
-const getAllQuestions = (req, res, collection) => {
+const { getAllQuestions } = require('./model.js');
+
+const getQuestions = async(req, res, collection) => {
     try{
 
-        const QUESTIONS = collection
+        const QUESTIONS = await getAllQuestions(collection);
         console.log(QUESTIONS);
 
         if(!QUESTIONS){
@@ -27,5 +29,5 @@ const getAllQuestions = (req, res, collection) => {
 }
 
 module.exports = {
-    getAllQuestions
+    getQuestions
 }

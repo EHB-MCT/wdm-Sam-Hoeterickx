@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //Collections
-const questionsCollection = DATABASE.collection('questions')
+const questionsCollection = DATABASE.collection('questions');
 
 //Routes
 const ollamaRouter = require('./ollama/route.js');
