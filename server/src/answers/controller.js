@@ -1,6 +1,5 @@
 const answerQuestion = (req, res, collection) => {
     try{
-
         
 
     }catch(error){
