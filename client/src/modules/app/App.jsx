@@ -11,10 +11,10 @@ export const App = () => {
   const [answer, setAnswer] = useState({
     question_id: undefined,
     answer: undefined,
-    descion_time: undefined,
+    decision_time: undefined,
     elapsedHoverTime: undefined,
     changedMind: undefined 
-  })
+  });
 
   const { question, nextQuestion, getDecisionTime } = useQuestions();
   const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
@@ -26,59 +26,60 @@ export const App = () => {
     })
     .then(response => response.json())
     .then(data => console.log(data))
-    .then(() => {
-      fetch('http://localhost:3000/api/session/readCookie', {
-          credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(data => console.log(data));
-    })
   }, [])
 
-  const handleButtonClick = (id) => {
+  const handleButtonClick = (e, id) => {
     handleMouseLeave(id);
     updateChoice(id);
     setAnswer(prev => ({
       ...prev,
-      answer: id
+      answer: e.target.id
     }));
   }
 
-  const handleNextButton = () => {
-    const decisionTime = getDecisionTime()
-    console.log("Decision time:", decisionTime, "s");
-    console.log("Hover times:", elapsedHoverTime);
-    console.log("Changed mind:", changedMind);
-
-
-
-    handleAnswerQuestion();
-
+  const handleNextButton = (e) => {
+    const decision_time = getDecisionTime();
+    const selected_answer = answer.answer;
+    const question_id = e.target.id;
+    const elapsed_hover_time = elapsedHoverTime;
+    const changed_mind = changedMind;
+    // console.log("Decision time:", decisionTime, "s");
+    // console.log("Hover times:", elapsedHoverTime);
+    // console.log("Changed mind:", changedMind);
+    
     setAnswer(prev => ({
       ...prev,
-      question_id: undefined,
-      descion_time: decisionTime,
-      elapsedHoverTime: elapsedHoverTime,
-      changedMind: changedMind 
-    }))
-
+      question_id: e.target.id,
+      decision_time: decision_time,
+      elapsed_hover_time: elapsedHoverTime,
+      changed_mind: changedMind 
+    }));
+    
+    handleAnswerQuestion(question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind);
   }
 
-  const handleAnswerQuestion = () => {
+  const handleAnswerQuestion = (question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind) => {
     fetch('http://localhost:3000/api/answers/saveAnswer', {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        'Content-type': "application/json"
+      },
       body: JSON.stringify({
-
+        question_id: question_id,
+        selected_answer: selected_answer,
+        decision_time: decision_time,
+        elapsed_hover_time: elapsed_hover_time,
+        changed_mind: changed_mind
       })
     })
     .then(response => response.json())
     .then(data => console.log(data))
     .then(() => {
-      // resetHoverTime();
-      // resetChoices();
-      //nextQuestion();
-    })
+      resetHoverTime();
+      resetChoices();
+      nextQuestion();
+    });
   }
 
   return (
@@ -89,27 +90,31 @@ export const App = () => {
         <>
           <h3>{ question.question }</h3>
           <button
+            id={question.options[0]}
             onMouseEnter={ () => handleMouseEnter("option1") }         
             onMouseLeave={ () => handleMouseLeave("option1") } 
-            onClick={ () => handleButtonClick("option1") }
+            onClick={ (e) => handleButtonClick(e, "option1") }
           >
             { question.options[0] }
           </button>
           <button
+            id={question.options[1]}
             onMouseEnter={ () => handleMouseEnter("option2") }    
             onMouseLeave={ () => handleMouseLeave("option2") }
-            onClick={ () => handleButtonClick("option2") }
+            onClick={ (e) => handleButtonClick(e, "option2") }
           >
             { question.options[1] }
+          </button>
+          <button
+            onClick={ (e) => handleNextButton(e) }
+            id={question._id}
+          >
+            Next
           </button>
         </>
       }
       
-      <button
-        onClick={ handleNextButton }
-      >
-        Next
-      </button>
+
     </>
   )
 }
