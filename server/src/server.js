@@ -16,12 +16,15 @@ app.use(express.urlencoded({ extended: true }));
 
 //Collections
 const questionsCollection = DATABASE.collection('questions');
+const sessionCollection = DATABASE.collection('sessions');
 
 //Routes
 const ollamaRouter = require('./ollama/route.js');
+const sessionRouter = require('./sessions/route.js')
 const questionRouter = require('./questions/route.js');
 
 app.use('/api/ollama', ollamaRouter);
+app.use('/api/session', sessionRouter(sessionCollection));
 app.use('/api/questions', questionRouter(questionsCollection));
 
 app.get('/api/', (req, res) => {
