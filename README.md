@@ -33,3 +33,10 @@ To run this project, follow these steps
     docker-compose up --build
 ```
 
+## Where to get help?
+
+If you encounter issues or have questions regarding this project:
+
+* Open an Issue: Submit a detailed bug report or feature request via the GitHub Issues page.
+
+* Contact the Author: For urgent questions or specific project details, refer to the contact information in the Authors section below.
