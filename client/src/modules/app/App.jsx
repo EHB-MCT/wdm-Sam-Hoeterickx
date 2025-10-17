@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 //Hooks
+import { useAnswerQuestion } from "../../shared/hooks/useAnswerQuestion.hook";
 import { useChoiceTracking } from "../../shared/hooks/useChoiceTracking.hook";
 import { useHoverTracking } from "../../shared/hooks/useHoverTracking.hook";
 import { useQuestions } from "../../shared/hooks/useQuestions.hook";
@@ -16,6 +17,7 @@ export const App = () => {
     changedMind: undefined 
   });
 
+  const { isSuccess, error, handleAnswerQuestion } = useAnswerQuestion();
   const { question, questionCount, nextQuestion, getDecisionTime } = useQuestions();
   const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
   const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
@@ -59,33 +61,15 @@ export const App = () => {
       changed_mind: changedMind 
     }));
     
-    handleAnswerQuestion(question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind);
+    handleAnswerQuestion(question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind, onSuccess);
   }
-
-  const handleAnswerQuestion = (question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind) => {
-    fetch('http://localhost:3000/api/answers/saveAnswer', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-type': "application/json"
-      },
-      body: JSON.stringify({
-        question_id: question_id,
-        selected_answer: selected_answer,
-        decision_time: decision_time,
-        elapsed_hover_time: elapsed_hover_time,
-        changed_mind: changed_mind
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      resetHoverTime();
-      resetChoices();
-      nextQuestion();
-    })
+  
+  const onSuccess = () => {
+    resetHoverTime();
+    resetChoices();
+    nextQuestion();
   }
-
+ 
   return (
     <>
       <h1>Hello World</h1>
