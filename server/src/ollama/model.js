@@ -1,6 +1,6 @@
 const generateWithPrompt = async (prompt) => {
     const requestBody = {
-        model: "llama3.2",
+        model: "phi3",
         prompt: prompt,
         stream: false,
         format: 'json' 

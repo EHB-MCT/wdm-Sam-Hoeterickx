@@ -8,7 +8,7 @@ const handlePrompt = async (req, res) => {
 
         console.log('start');
 
-        const prompt = req.body.prompt;
+        const prompt = req.query.prompt;
         console.log(prompt);
 
        const response = await generateWithPrompt(prompt);
@@ -20,7 +20,7 @@ const handlePrompt = async (req, res) => {
             });
         }
 
-        const data = await response.json();
+        const data = response;
         const output = data.response || "No response generated";
         
         return res.send(output);

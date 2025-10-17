@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Swal from "sweetalert2";
 
 //Hooks
 import { useAnswerQuestion } from "../../shared/hooks/useAnswerQuestion.hook";
@@ -24,7 +25,7 @@ export const App = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { isSuccess, error, handleAnswerQuestion } = useAnswerQuestion();
-  const { checkPrediction } = useCheckPrediction();
+  const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
   const { question, questionCount, nextQuestion, getDecisionTime } = useQuestions();
   const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
   const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
@@ -35,6 +36,8 @@ export const App = () => {
     })
     .then(response => response.json())
     .then(data => console.log(data))
+
+    fetch('http://localhost:3000/api/ollama/chat?prompt=hey')
   }, [])
 
   const handleButtonClick = (e, id) => {
@@ -54,8 +57,30 @@ export const App = () => {
 
     if(prediction !== undefined){
       checkPrediction(prediction, e.target.value);
+
+      if(!isPredictionCorrect){
+        openAreYouSure()
+      }
     }
     console.log(e.target.value)
+  }
+
+  const openAreYouSure = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      showCancelButton: true, 
+      
+      confirmButtonText: "Ja ik ben zeker", 
+      cancelButtonText: "Nee ik ben niet zeker", 
+      
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log("Gebruiker is zeker!");
+            
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            console.log("Gebruiker is niet zeker.");
+        }
+    });
   }
 
   useEffect(() => {
