@@ -44,10 +44,10 @@ If you encounter issues or have questions regarding this project:
 ## Project status
 
 In progress: 
-    - Core functionality (data collection, MongoDB storage, and basic Ollama integration for prediction) is operational.
+    * Core functionality (data collection, MongoDB storage, and basic Ollama integration for prediction) is operational.
 Next Steps:
-    - Create profile with ollama of the user according to the answers and tracked data.
-    - ...
+    * Create profile with ollama of the user according to the answers and tracked data.
+    * ...
 
 ## Author
 This project is developed by
