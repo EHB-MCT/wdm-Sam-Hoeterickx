@@ -34,10 +34,10 @@ export const App = () => {
   }, [])
 
   const handleButtonClick = (e, id) => {
-    if(id === 1){
+    if(id === "option1"){
       setSelectedOptionOne(true);
       setSelectedOptionTwo(false);
-    }else{
+    }else if(id === "option2"){
       setSelectedOptionTwo(true);
       setSelectedOptionOne(false);
     }
@@ -51,9 +51,14 @@ export const App = () => {
 
   useEffect(() => {
     if(questionCount === 3) {
-      console.log("count is 4");
-      //Add logic to get al the answers with this SESSION_ID and send it to ollama to make a prediction
+      console.log("count is 3");
+      fetch(`http://localhost:3000/api/ollama/predict-next-answer?question_id=${questionCount}`,{
+        credentials: 'include'
+      })
+      .then(response => response.json())
+      .then(data => console.log(data));
     }
+    console.log(questionCount)
   }, [questionCount])
 
   const handleNextButton = (e) => {

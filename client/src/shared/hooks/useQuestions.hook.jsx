@@ -5,7 +5,7 @@ import questions from "../data/questions.json";
 
 export const useQuestions = () => {
     
-    const [questionCount, setQuestionCount] = useState(0);
+    const [questionCount, setQuestionCount] = useState(1);
     const [question, setQuestion] = useState();
     
     const decisionStart = useRef({});

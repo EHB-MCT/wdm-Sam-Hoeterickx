@@ -1,3 +1,7 @@
+
+const { findAllAnswerWithSessionId } = require('../answers/model');
+const { findNextQuestion } = require('../questions/model');
+
 const handlePrompt = async (req, res) => {
     try {
 
@@ -35,6 +39,40 @@ const handlePrompt = async (req, res) => {
 }
 
 const generatePrediction = async (req, res, collection, answerCollection, questionsCollection ) => {
+
+    try{
+
+        const QUESTION_ID = parseInt(req.query.question_id);
+        const SESSION_ID = req.signedCookies.session;
+
+        const answers = await findAllAnswerWithSessionId(answerCollection, SESSION_ID);
+        if(!answers){
+            return res.status(404).send({
+                status: 404,
+                message: 'No answers found with matching session id'
+            });
+        }
+        
+        const nextQuestion = await findNextQuestion(questionsCollection, QUESTION_ID);
+        if(!nextQuestion){
+            return res.status(404).send({
+                status: 404,
+                message: 'No question found'
+            });
+        }
+
+
+        console.log(nextQuestion);
+
+
+
+    }catch(error){
+        console.error('Error while generating prediction');
+        return res.status(500).send({
+            status: 500,
+            message: error.message
+        })
+    }
 
 }
 

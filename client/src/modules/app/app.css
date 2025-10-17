@@ -23,7 +23,7 @@
 
 .options-container {
     display: flex;
-    flex-direction: column; 
+    flex-direction: row; 
     gap: 15px; 
     margin-bottom: 30px;
 }
