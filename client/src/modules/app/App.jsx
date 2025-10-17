@@ -6,6 +6,7 @@ import { useChoiceTracking } from "../../shared/hooks/useChoiceTracking.hook";
 import { useHoverTracking } from "../../shared/hooks/useHoverTracking.hook";
 import { useQuestions } from "../../shared/hooks/useQuestions.hook";
 
+import './app.css'
 
 export const App = () => {
 
@@ -16,6 +17,8 @@ export const App = () => {
     elapsedHoverTime: undefined,
     changedMind: undefined 
   });
+  const [selectedOptionOne, setSelectedOptionOne] = useState(false);
+  const [selectedOptionTwo, setSelectedOptionTwo] = useState(false);
 
   const { isSuccess, error, handleAnswerQuestion } = useAnswerQuestion();
   const { question, questionCount, nextQuestion, getDecisionTime } = useQuestions();
@@ -31,6 +34,13 @@ export const App = () => {
   }, [])
 
   const handleButtonClick = (e, id) => {
+    if(id === 1){
+      setSelectedOptionOne(true);
+      setSelectedOptionTwo(false);
+    }else{
+      setSelectedOptionTwo(true);
+      setSelectedOptionOne(false);
+    }
     handleMouseLeave(id);
     updateChoice(id);
     setAnswer(prev => ({
@@ -63,46 +73,52 @@ export const App = () => {
     
     handleAnswerQuestion(question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind, onSuccess);
   }
-  
+
   const onSuccess = () => {
     resetHoverTime();
     resetChoices();
     nextQuestion();
+    setSelectedOptionOne(false);
+    setSelectedOptionTwo(false);
   }
  
   return (
-    <>
-      <h1>Hello World</h1>
+    <div className="quiz-container">
       {
         question &&
-        <>
-          <h3>{ question.question }</h3>
+        <div className="question-section">
+          <h3 className="question-text">{ question.question }</h3>
+        
+          <div className="options-container">
+            <button
+              className={ "option-button " + (selectedOptionOne ? "selected" : "") }
+              id={question.options[0]}
+              onMouseEnter={ () => handleMouseEnter("option1") }
+              onMouseLeave={ () => handleMouseLeave("option1") } 
+              onClick={ (e) => handleButtonClick(e, "option1") }
+            >
+              { question.options[0] }
+            </button>
+            <button
+              className={ "option-button " + (selectedOptionTwo ? "selected" : "") }
+              id={question.options[1]}
+              onMouseEnter={ () => handleMouseEnter("option2") }
+              onMouseLeave={ () => handleMouseLeave("option2") }
+              onClick={ (e) => handleButtonClick(e, "option2") }
+            >
+              { question.options[1] }
+            </button>
+          </div>
+
           <button
-            id={question.options[0]}
-            onMouseEnter={ () => handleMouseEnter("option1") }         
-            onMouseLeave={ () => handleMouseLeave("option1") } 
-            onClick={ (e) => handleButtonClick(e, "option1") }
-          >
-            { question.options[0] }
-          </button>
-          <button
-            id={question.options[1]}
-            onMouseEnter={ () => handleMouseEnter("option2") }    
-            onMouseLeave={ () => handleMouseLeave("option2") }
-            onClick={ (e) => handleButtonClick(e, "option2") }
-          >
-            { question.options[1] }
-          </button>
-          <button
+            className="next-button"
             onClick={ (e) => handleNextButton(e) }
             id={question._id}
           >
             Next
           </button>
-        </>
+        </div>
       }
-      
-
-    </>
+    </div>
   )
 }
