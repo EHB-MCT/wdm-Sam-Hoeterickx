@@ -34,6 +34,11 @@ const handlePrompt = async (req, res) => {
     }
 }
 
+const generatePrediction = async (req, res, collection, answerCollection, questionsCollection ) => {
+
+}
+
 module.exports = {
-    handlePrompt
+    handlePrompt,
+    generatePrediction
 }

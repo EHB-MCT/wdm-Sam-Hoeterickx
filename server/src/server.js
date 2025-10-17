@@ -38,6 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Collections
 const questionsCollection = DATABASE.collection('questions');
+const predicitionCollection = DATABASE.collection('predictions')
 const sessionCollection = DATABASE.collection('sessions');
 const answerCollection = DATABASE.collection('answers');
 
@@ -48,7 +49,7 @@ const sessionRouter = require('./sessions/route.js')
 const questionRouter = require('./questions/route.js');
 
 app.use('/api/answers', answerRouter(answerCollection));
-app.use('/api/ollama', ollamaRouter);
+app.use('/api/ollama', ollamaRouter(predicitionCollection, answerCollection, questionsCollection));
 app.use('/api/session', sessionRouter(sessionCollection));
 app.use('/api/questions', questionRouter(questionsCollection));
 
