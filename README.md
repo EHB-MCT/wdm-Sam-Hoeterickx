@@ -40,3 +40,19 @@ If you encounter issues or have questions regarding this project:
 * Open an Issue: Submit a detailed bug report or feature request via the GitHub Issues page.
 
 * Contact the Author: For urgent questions or specific project details, refer to the contact information in the Authors section below.
+
+## Project status
+
+In progress: 
+    - Core functionality (data collection, MongoDB storage, and basic Ollama integration for prediction) is operational.
+Next Steps:
+    - Create profile with ollama of the user according to the answers and tracked data.
+    - ...
+
+## Author
+This project is developed by
+    Sam Hoeterickx
+    email: sam.hoeterickx@student.ehb.be
+    (linkedin)[https://www.linkedin.com/in/sam-hoeterickx/] 
+
+## License
