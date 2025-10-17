@@ -51,8 +51,11 @@ Next Steps:
 
 ## Author
 This project is developed by
+<br />
     Sam Hoeterickx
+    <br />
     email: sam.hoeterickx@student.ehb.be
+    <br />
     (linkedin)[https://www.linkedin.com/in/sam-hoeterickx/] 
 
 ## License
