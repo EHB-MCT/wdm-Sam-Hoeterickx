@@ -9,8 +9,7 @@ import { Dashboard } from '~modules/dashboard/Dashboard';
 import '~styles/base.css';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
+  // <StrictMode>
     <App />
-    <Dashboard />
-  </StrictMode>,
+  // </StrictMode>,
 )
