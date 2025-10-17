@@ -19,6 +19,7 @@ export const App = () => {
   });
   const [selectedOptionOne, setSelectedOptionOne] = useState(false);
   const [selectedOptionTwo, setSelectedOptionTwo] = useState(false);
+  const [prediction, setPrediction] = useState(undefined);
 
   const { isSuccess, error, handleAnswerQuestion } = useAnswerQuestion();
   const { question, questionCount, nextQuestion, getDecisionTime } = useQuestions();
@@ -51,14 +52,15 @@ export const App = () => {
 
   useEffect(() => {
     if(questionCount === 3) {
-      console.log("count is 3");
       fetch(`http://localhost:3000/api/ollama/predict-next-answer?question_id=${questionCount}`,{
         credentials: 'include'
       })
       .then(response => response.json())
-      .then(data => console.log(data));
+      .then(data => {
+        console.log(data);
+        setPrediction(data.prediction);
+      });
     }
-    console.log(questionCount)
   }, [questionCount])
 
   const handleNextButton = (e) => {
