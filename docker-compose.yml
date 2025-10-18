@@ -28,9 +28,11 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
       - OLLAMA_HOST=http://ollama:11434
+      - MONGO_URI=${DB_URI}
     command: npm run run
     depends_on:
       - ollama
+      - mongodb
 
   ollama:
     image: ollama/ollama:latest
@@ -42,5 +44,16 @@ services:
     tty: true
     restart: unless-stopped
     
+  mongodb:
+    image: mongo:latest
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/data/db
+  
 volumes:
   ollama_data:
+  mongodata:
+    driver: local
