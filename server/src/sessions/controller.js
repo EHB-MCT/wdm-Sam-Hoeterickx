@@ -1,4 +1,4 @@
-const { generateSessionId } = require('./model.js');
+const { generateSessionId, saveSessionId } = require('./model.js');
 
 const createSessionId = async (req, res, collection) => {
     try{
@@ -9,18 +9,16 @@ const createSessionId = async (req, res, collection) => {
             return res.status(500).send({
                 status: 500,
                 message: 'Failed to create session id',
-            })
+            });
         }
 
-        const result = await collection.insertOne({
-            sessionId: SESSION_ID
-        });
+        const result = await saveSessionId(collection, SESSION_ID);
 
         if(!result){
             return res.status(500).send({
                 status: 500,
                 message: 'Failed to save session id',
-            })
+            });
         }
 
         res.cookie('session', SESSION_ID, {
