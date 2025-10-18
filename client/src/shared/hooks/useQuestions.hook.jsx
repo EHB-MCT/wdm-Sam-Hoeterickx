@@ -1,20 +1,24 @@
 
 import { useEffect, useState, useRef } from "react";
-//Data
-import questions from "../data/questions.json";
 
 export const useQuestions = () => {
     
+    const [questionList, setQuestionList] = useState([]);
     const [questionCount, setQuestionCount] = useState(1);
     const [question, setQuestion] = useState();
     
     const decisionStart = useRef({});
 
     useEffect(() => {
-        // console.log(questions);
-        setQuestion(questions[questionCount]);
+        fetch('http://localhost:3000/api/questions/questions')
+        .then(response => response.json())
+        .then(data => setQuestionList(data.data));
+    }, [])
+
+    useEffect(() => {
+        setQuestion(questionList[questionCount]);
         decisionStart.current = Date.now();
-    }, [questionCount]);
+    }, [questionCount, questionList]);
 
     const nextQuestion = () => {
         setQuestionCount(prev => prev + 1);

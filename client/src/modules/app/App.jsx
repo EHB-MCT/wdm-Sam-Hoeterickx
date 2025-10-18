@@ -3,12 +3,12 @@ import Swal from "sweetalert2";
 
 //Hooks
 import { useAnswerQuestion } from "../../shared/hooks/useAnswerQuestion.hook";
+import { useCheckPrediction } from "../../shared/hooks/useCheckPrediction.hook";
 import { useChoiceTracking } from "../../shared/hooks/useChoiceTracking.hook";
 import { useHoverTracking } from "../../shared/hooks/useHoverTracking.hook";
 import { useQuestions } from "../../shared/hooks/useQuestions.hook";
 
 import './app.css'
-import { useCheckPrediction } from "../../shared/hooks/useCheckPrediction.hook";
 
 export const App = () => {
 

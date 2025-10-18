@@ -1,5 +1,14 @@
 const getAllQuestions = async(collection) => {
-    return await collection.find({}).toArray();
+    const result = await collection.find({}).toArray();
+
+    if(!result){
+        return result
+    }
+
+    const sortedQuestionsList = result.sort((a, b) => a._id - b._id);
+
+    return sortedQuestionsList
+
 }
 
 const findNextQuestion = async(collection, question_id) => {
