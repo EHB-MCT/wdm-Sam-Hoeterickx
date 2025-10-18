@@ -24,8 +24,11 @@ To run this project, follow these steps
 
 2. ENV configurtion
 ```sh
+    # Mongo db username and password
+    MONGO_INITDB_ROOT_USERNAME=<username>
+    MONGO_INITDB_ROOT_PASSWORD=<password>
     # Database connection string
-    DB_URI: mongodb+srv://<username>:<password>@web2.iejxy.mongodb.net/?retryWrites=true&w=majority&appName=Web2
+    DB_URI: mongodb://<MONGO_INITDB_ROOT_USERNAME>:<MONGO_INITDB_ROOT_PASSWORD>@mongodb:27017/<DB_NAME>?authSource=admin
 ```
 
 3. Build docker-compose
