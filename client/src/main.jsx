@@ -2,14 +2,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
 //Components
-import { App } from '~modules/app/App';
-import { Dashboard } from '~modules/dashboard/Dashboard';
+import { Root } from './modules/root';
 
 //Style
 import '~styles/base.css';
 
+
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
-    <App />
+    <Root />
   // </StrictMode>,
 )
