@@ -30,16 +30,6 @@ export const App = () => {
   const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
   const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
 
-  useEffect(() => {
-    fetch('http://localhost:3000/api/session/sessionId', {
-      credentials: 'include',
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-
-    fetch('http://localhost:3000/api/ollama/chat?prompt=hey')
-  }, [])
-
   const handleButtonClick = (e, id) => {
     if(id === "option1"){
       setSelectedOptionOne(true);

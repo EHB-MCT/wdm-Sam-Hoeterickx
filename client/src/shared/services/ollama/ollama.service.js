@@ -9,6 +9,7 @@ class OllamaService {
         }
 
         const DATA = await response.json();
+        return DATA
     }
 }
 
