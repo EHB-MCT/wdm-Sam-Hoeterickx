@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { ollamaService, sessionService } from "../services"
+import { sessionService, ollamaService } from "../../services";
 
 export const useAppStartUp = () => {
     useEffect(() => {

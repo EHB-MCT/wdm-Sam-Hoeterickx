@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
 
 //Hooks
-import { useAnswerQuestion } from "../../shared/hooks/useAnswerQuestion.hook";
-import { useCheckPrediction } from "../../shared/hooks/useCheckPrediction.hook";
-import { useChoiceTracking } from "../../shared/hooks/useChoiceTracking.hook";
-import { useHoverTracking } from "../../shared/hooks/useHoverTracking.hook";
-import { useQuestions } from "../../shared/hooks/useQuestions.hook";
+import { useAnswerQuestion } from "../../shared/hooks/questions/useAnswerQuestion.hook";
+import { useCheckPrediction } from "../../shared/hooks/prediction/useCheckPrediction.hook";
+import { useChoiceTracking } from "../../shared/hooks/tracking/useChoiceTracking.hook";
+import { useHoverTracking } from "../../shared/hooks/tracking/useHoverTracking.hook";
+import { useQuestions } from "../../shared/hooks/questions/useQuestions.hook";
 
 import './app.css'
 

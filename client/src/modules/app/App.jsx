@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom"
 
 //Hooks
-import { useAppStartUp } from "../../shared/hooks/useAppStartUp.hook"
+import { useAppStartUp } from "../../shared/hooks";
 
 export const App = () => {
 
