@@ -1,5 +1,6 @@
 
 import { useEffect, useState, useRef } from "react";
+import { questionService } from "../../services";
 
 export const useQuestions = () => {
     
@@ -10,10 +11,17 @@ export const useQuestions = () => {
     const decisionStart = useRef({});
 
     useEffect(() => {
-        fetch('http://localhost:3000/api/questions/questions')
-        .then(response => response.json())
-        .then(data => setQuestionList(data.data));
-    }, [])
+        const fetchQuestions = async() => {
+            try{
+                const data = await questionService.getQuestions();
+                setQuestionList(data.data);
+            }catch(error){ 
+                console.error('Failed to fetch questions:', error);
+            }
+        }
+
+        fetchQuestions();  
+    })
 
     useEffect(() => {
         setQuestion(questionList[questionCount]);
@@ -32,7 +40,6 @@ export const useQuestions = () => {
             const duration = (Date.now() - decisionStart.current) / 1000;
             return duration;
         }
-       
     };
 
     return { question, questionCount, nextQuestion, getDecisionTime };
