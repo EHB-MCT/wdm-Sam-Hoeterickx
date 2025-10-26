@@ -15,17 +15,19 @@ export const useQuestions = () => {
             try{
                 const data = await questionService.getQuestions();
                 setQuestionList(data.data);
+                // console.log('QuestionList:', questionList);
             }catch(error){ 
                 console.error('Failed to fetch questions:', error);
             }
         }
 
         fetchQuestions();  
-    })
+    }, []);
 
     useEffect(() => {
         setQuestion(questionList[questionCount]);
         decisionStart.current = Date.now();
+        // console.log('Current question:', question);
     }, [questionCount, questionList]);
 
     const nextQuestion = () => {

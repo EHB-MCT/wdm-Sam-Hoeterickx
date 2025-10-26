@@ -13,6 +13,7 @@ export const usePrediction = (questionCount) => {
 
         const fetchPrediction = async () => {
             setIsLoading(true);
+            console.log('hello');
 
             try{
                 const data = await predictionService.getPrediction(questionCount);
@@ -28,7 +29,7 @@ export const usePrediction = (questionCount) => {
 
         fetchPrediction();
 
-    }, [])
+    }, [questionCount])
 
     return { prediction, isLoadingPrediction: isLoading };
 }
