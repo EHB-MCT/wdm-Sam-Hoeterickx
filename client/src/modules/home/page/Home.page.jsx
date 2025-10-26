@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { QuizUI } from "../components";
 
 //Modals
-import { showConfirmationModal } from "../../../shared/utils/modals";
+import { ConfirmationModal } from "../../../shared/utils";
 
 //Hooks
 import {
@@ -23,6 +23,7 @@ export const Home = () => {
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [selectedButtonId, setSelectedButtonId] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { isSuccess, handleAnswerQuestion } = useAnswerQuestion();
     const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
@@ -32,16 +33,10 @@ export const Home = () => {
     const { prediction, isLoadingPrediction } = usePrediction(questionCount);
 
     useEffect(() => {
-        if(isPredictionCorrect === false){
-            showConfirmationModal().then((result) => {
-                if(result.isConfirmed){
-                    console.log('Gebruiker is zeker');
-                }else {
-                    console.log('Gebruiker is niet zeker');
-                }
-            })
+        if (isPredictionCorrect === false) {
+            setIsModalOpen(true);
         }
-    }, [isPredictionCorrect])
+    }, [isPredictionCorrect]);
 
     const onSuccess = () => {
         resetHoverTime();
@@ -75,13 +70,26 @@ export const Home = () => {
     }
     
     return(
-        <QuizUI
-            question={question}
-            selectedButtonId={selectedButtonId}
-            onOptionClick={handleOptionClick}
-            onNextClick={handleNextClick}
-            onHoverStart={handleMouseEnter}
-            onHoverEnd={handleMouseLeave}
-        />
+        <>
+            <QuizUI
+                question={question}
+                selectedButtonId={selectedButtonId}
+                onOptionClick={handleOptionClick}
+                onNextClick={handleNextClick}
+                onHoverStart={handleMouseEnter}
+                onHoverEnd={handleMouseLeave}
+            />
+            <ConfirmationModal 
+                isOpen={isModalOpen}
+                onConfirm={() => {
+                    console.log("Gebruiker is zeker!");
+                    setIsModalOpen(false);
+                }}
+                onCancel={() => {
+                    console.log("Gebruiker is niet zeker.");
+                    setIsModalOpen(false);
+                }}
+            />
+        </>
     )
 }
