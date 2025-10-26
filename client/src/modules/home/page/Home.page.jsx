@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 //Components
 import { QuizUI } from "../components";
 
+//Modals
+import { showConfirmationModal } from "../../../shared/utils/modals";
+
 //Hooks
 import {
     useAnswerQuestion,
@@ -27,6 +30,18 @@ export const Home = () => {
     const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
     const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
     const { prediction, isLoadingPrediction } = usePrediction(questionCount);
+
+    useEffect(() => {
+        if(isPredictionCorrect === false){
+            showConfirmationModal().then((result) => {
+                if(result.isConfirmed){
+                    console.log('Gebruiker is zeker');
+                }else {
+                    console.log('Gebruiker is niet zeker');
+                }
+            })
+        }
+    }, [isPredictionCorrect])
 
     const onSuccess = () => {
         resetHoverTime();

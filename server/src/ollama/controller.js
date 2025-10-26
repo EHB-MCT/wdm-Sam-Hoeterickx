@@ -6,8 +6,6 @@ const { generateWithPrompt } = require('./model.js');
 const handlePrompt = async (req, res) => {
     try {
 
-        console.log('start');
-
         const prompt = req.query.prompt;
         console.log(prompt);
 
