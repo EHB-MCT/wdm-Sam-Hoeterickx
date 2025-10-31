@@ -13,6 +13,27 @@ class PredictionService {
         const DATA = response.json();
         return DATA
     }
+
+    async savePredictionData(changedMindState, elapsedHoverTime, desicionTime){
+        const response = await fetch(`${BASE_URL}/savePrediction`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': "application/json"
+            },
+            body: JSON.stringify({
+                changedMindState,
+                elapsedHoverTime,
+                desicionTime
+            })
+        });
+        if(!response.ok){
+            throw new Error(`Failed to fetch prediction: ${response.statusText}`);
+        }
+        
+        const DATA = response.json();
+        return DATA
+    }
 }
 
 export const predictionService = new PredictionService();
