@@ -22,9 +22,9 @@ class PredictionService {
                 'Content-Type': "application/json"
             },
             body: JSON.stringify({
-                changedMindState,
-                elapsedHoverTime,
-                desicionTime
+                changed_mind_state: changedMindState,
+                elapsed_hover_time: elapsedHoverTime,
+                desicion_time: desicionTime
             })
         });
         if(!response.ok){

@@ -3,17 +3,17 @@ const { savePredictionData } = require('./model.js')
 const savePrediction = async (req, res, collection) => {
     try{
 
-        const { changedMindState, elapsedHoverTime, desicionTime } = req.body;
+        const { changed_mind_state, elapsed_hover_time, descion_time } = req.body;
+        const sessionId = req.signedCookies.session;
 
-        if(!changedMindState || !elapsedHoverTime || !desicionTime){
+        if(!changed_mind_state || !elapsed_hover_time || !descion_time || !sessionId){
             return res.status(401).send({
                 status: 401,
                 message: 'Missing info'
             });
         }
-        const sessionId = req.signedCookies.session;
 
-        const result = await savePredictionData(collection, sessionId, changedMindState, elapsedHoverTime, desicionTime);
+        const result = await savePredictionData(collection, sessionId, changed_mind_state, elapsed_hover_time, descion_time);
 
         if(!result){
             return res.status(400).send({
