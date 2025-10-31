@@ -1,12 +1,19 @@
-const { savePredictionChangedMind } = require('./model.js')
+const { savePredictionData } = require('./model.js')
 
 const savePrediction = async (req, res, collection) => {
     try{
 
-        const { changedMindState } = req.body;
+        const { changedMindState, elapsedHoverTime, desicionTime } = req.body;
+
+        if(!changedMindState || !elapsedHoverTime || !desicionTime){
+            return res.status(401).send({
+                status: 401,
+                message: 'Missing info'
+            });
+        }
         const sessionId = req.signedCookies.session;
 
-        const result = await savePredictionChangedMind(collection, sessionId, changedMindState);
+        const result = await savePredictionData(collection, sessionId, changedMindState, elapsedHoverTime, desicionTime);
 
         if(!result){
             return res.status(400).send({

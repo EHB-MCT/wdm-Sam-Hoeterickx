@@ -9,6 +9,8 @@ export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
         return null
     }
 
+
+
     const handleConfirm = () => {
         console.log('Modal elapsed hover time:', elapsedHoverTime);
         resetHoverTime();
