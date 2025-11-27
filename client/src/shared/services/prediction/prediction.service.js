@@ -1,8 +1,8 @@
-const BASE_URL = 'http://localhost:3000/api/ollama';
+const BASE_URL = 'http://localhost:3000/api';
 
 class PredictionService {
     async getPrediction(questionId){
-        const response = await fetch(`${BASE_URL}/predict-next-answer?question_id=${questionId}`, {
+        const response = await fetch(`${BASE_URL}/ollama/predict-next-answer?question_id=${questionId}`, {
             credentials: 'include'
         });
 
@@ -15,7 +15,7 @@ class PredictionService {
     }
 
     async savePredictionData(changedMindState, elapsedHoverTime, desicionTime){
-        const response = await fetch(`${BASE_URL}/savePrediction`, {
+        const response = await fetch(`${BASE_URL}/prediction/savePrediction`, {
             method: 'POST',
             credentials: 'include',
             headers: {

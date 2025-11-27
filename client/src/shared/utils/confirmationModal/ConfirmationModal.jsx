@@ -14,11 +14,8 @@ export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
     const handleConfirm = () => {
         console.log('Modal elapsed hover time:', elapsedHoverTime);
         const decisionTime = getDecisionTime();
-
-        //Post changedMindState, elapsedHoverTime en desicionTime to db
-        //predictionService.savePredictionData(false, elapsedHoverTime, decisionTime);
-        
-        console.log(decisionTime);
+    
+        savePredictionData(false, elapsedHoverTime, decisionTime);
 
         resetHoverTime();
         onConfirm();
@@ -27,15 +24,20 @@ export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
     const handleCancel = () => {
         console.log('Modal elapsed hover time:', elapsedHoverTime);
         const decisionTime = getDecisionTime();
-
-        //Post changedMindState, elapsedHoverTime en desicionTime to db
-        //predictionService.savePredictionData(true, elapsedHoverTime, decisionTime);
-        
-        console.log(decisionTime);
+    
+        savePredictionData(true, elapsedHoverTime, decisionTime);
         
         resetHoverTime();
         onCancel();
     }
+
+    const savePredictionData = async(changedMindState, elapsedHoverTime, decisionTime) =>{
+        try{
+            const data = await predictionService.savePredictionData(changedMindState, elapsedHoverTime, decisionTime);    
+        }catch(error){
+            console.error('Failed to fetch predictionData:', error);
+        }
+    } 
 
     return (
         <div className="pop-up">
@@ -49,7 +51,7 @@ export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
                 >
                     Ik ben zeker
                 </button>
-                 <button
+                <button
                     className="cancel-button"
                     onClick={ handleCancel }
                     onMouseEnter={ () => handleMouseEnter('cancel') }

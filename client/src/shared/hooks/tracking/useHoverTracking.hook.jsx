@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 export const useHoverTracking = () => {
-  const [elapsedHoverTime, setElapsedHoverTime] = useState({ option1: 0, option2: 0 });
+  const [elapsedHoverTime, setElapsedHoverTime] = useState({ option1: 0, option2: 0, cancel: 0, confirm: 0 });
   const hoverStart = useRef({});
 
   const handleMouseEnter = (id) => {
@@ -12,7 +12,7 @@ export const useHoverTracking = () => {
     const start = hoverStart.current[id];
     if (start) {
       const duration = (Date.now() - start) / 1000;
-
+      
       hoverStart.current[id] = null;
 
       setElapsedHoverTime((prev) => ({
@@ -23,7 +23,7 @@ export const useHoverTracking = () => {
   };
 
   const resetHoverTime = () => {
-    setElapsedHoverTime({ option1: 0, option2: 0 });
+    setElapsedHoverTime({ option1: 0, option2: 0, confirm: 0, cancel: 0 });
     hoverStart.current = {};
   };
 

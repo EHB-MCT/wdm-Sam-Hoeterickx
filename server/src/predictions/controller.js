@@ -2,25 +2,29 @@ const { savePredictionData } = require('./model.js')
 
 const savePrediction = async (req, res, collection) => {
     try{
+        
+        console.log('save prediction');
 
         const { changed_mind_state, elapsed_hover_time, descion_time } = req.body;
         const sessionId = req.signedCookies.session;
 
-        if(!changed_mind_state || !elapsed_hover_time || !descion_time || !sessionId){
-            return res.status(401).send({
-                status: 401,
-                message: 'Missing info'
-            });
-        }
+        console.log(sessionId, req.body)
 
-        const result = await savePredictionData(collection, sessionId, changed_mind_state, elapsed_hover_time, descion_time);
+        // if(!changed_mind_state || !elapsed_hover_time || !descion_time || !sessionId){
+        //     return res.status(401).send({
+        //         status: 401,
+        //         message: 'Missing info'
+        //     });
+        // }
 
-        if(!result){
-            return res.status(400).send({
-                status: 400,
-                message: 'Failed to save prediction state'
-            })
-        }
+        // const result = await savePredictionData(collection, sessionId, changed_mind_state, elapsed_hover_time, descion_time);
+
+        // if(!result){
+        //     return res.status(400).send({
+        //         status: 400,
+        //         message: 'Failed to save prediction state'
+        //     })
+        // }
         
         return res.status(201).send({
             status: 201,
