@@ -1,6 +1,11 @@
 //Hooks
 import { useHoverTracking, useQuestions } from "../../hooks";
+
+//Service
 import { predictionService } from "../../services";
+
+//Style
+import './confirmationModal.css';
 
 export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
 

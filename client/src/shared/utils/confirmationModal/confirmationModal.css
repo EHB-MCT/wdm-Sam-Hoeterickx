@@ -1,0 +1,80 @@
+/* --- Modal / Pop-up Styling --- */
+
+.pop-up {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: 90%;
+    max-width: 400px;
+    
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2); 
+    border: 1px solid #e0e0e0;
+    
+    z-index: 1000;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.pop-up::before {
+    content: '';
+    position: fixed;
+    top: -50vh;
+    left: -50vw;
+    width: 200vw;
+    height: 200vh;
+    background-color: #b9b9b979;
+    z-index: -1;
+    pointer-events: all; 
+}
+
+.pop-up h4 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #000000;
+    font-size: 1.4em;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Algemene stijl voor beide knoppen */
+.confirm-button, .cancel-button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+}
+
+.confirm-button:active, .cancel-button:active {
+    transform: scale(0.98);
+}
+
+/* Specifieke kleuren */
+.confirm-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.cancel-button {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.confirm-button:hover {
+    background-color: #0056b3;
+}
+
+.cancel-button:hover {
+    background-color: #d0d0d0; 
+}
