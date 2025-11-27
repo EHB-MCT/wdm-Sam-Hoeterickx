@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000/api/ollama'
+const BASE_URL = `${import.meta.env.VITE_API_URL}/ollama`;
 
 class OllamaService {
     async awakeOllama(){
