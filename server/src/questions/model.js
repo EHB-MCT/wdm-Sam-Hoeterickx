@@ -22,7 +22,14 @@ const findNextQuestion = async(collection, question_id) => {
     return result
 }
 
+const insertAllQuestions = async(collection,questions) => {
+    const result = await collection.insertMany(questions);
+    
+    return result;
+}
+
 module.exports = {
     getAllQuestions,
-    findNextQuestion
+    findNextQuestion,
+    insertAllQuestions
 }
