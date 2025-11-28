@@ -33,7 +33,7 @@ export const Home = () => {
     const { prediction, isLoadingPrediction } = usePrediction(questionCount);
 
     useEffect(() => {
-        if (isPredictionCorrect === false) {
+        if (isPredictionCorrect !== undefined) {
             setIsModalOpen(true);
         }
     }, [isPredictionCorrect]);

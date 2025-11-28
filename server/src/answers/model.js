@@ -1,3 +1,8 @@
+const getAllAnswers = async(collection) => {
+    const result = await collection.find({}).toArray();
+    return result;
+}
+
 const saveAnswer = async(collection, SESSION_ID, question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind) => {
     const result = await collection.insertOne({
         session_id: SESSION_ID,
@@ -21,6 +26,7 @@ const findAllAnswerWithSessionId = async (collection, SESSION_ID) => {
 }
 
 module.exports = {
+    getAllAnswers,
     saveAnswer,
     findAllAnswerWithSessionId
 }

@@ -43,6 +43,8 @@ services:
     pull_policy: always
     tty: true
     restart: unless-stopped
+    entrypoint: /bin/sh
+    command: -c "ollama serve & sleep 5 && ollama pull phi3:latest && wait"
     
   mongodb:
     image: mongo:latest

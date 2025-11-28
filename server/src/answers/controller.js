@@ -1,4 +1,31 @@
-const { saveAnswer } = require('./model.js');
+const { saveAnswer, getAllAnswers } = require('./model.js');
+
+const getAnswers = async(req, res, collection) => {
+    try{
+
+        const answers = await getAllAnswers(collection);
+        
+        if(!answers){
+            return res.status(404).send({
+                status: 404,
+                message: 'No answers found'
+            });
+        }
+
+        return res.status(200).send({
+            status: 200,
+            message: 'Answers found successfully',
+            data: answers
+        })
+
+    }catch(error){
+        console.error('Get answers error:', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message
+        });
+    }
+}
 
 const answerQuestion = async(req, res, collection) => {
     try{
@@ -37,5 +64,6 @@ const answerQuestion = async(req, res, collection) => {
 }
 
 module.exports = {
-    answerQuestion
+    answerQuestion,
+    getAnswers
 }

@@ -6,7 +6,9 @@ export const usePrediction = (questionCount) => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        if(questionCount !== 3){
+        const predictionQuestions = [3, 12];
+        
+        if(!predictionQuestions.includes(questionCount)){
             setPrediction(undefined);
             return;
         }
