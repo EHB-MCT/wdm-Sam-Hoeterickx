@@ -24,6 +24,9 @@ export const Home = () => {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [selectedButtonId, setSelectedButtonId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(3);
+    const [timerActive, setTimerActive] = useState(false);
+    const [optionLocked, setOptionLocked] = useState(false);
 
     const { isSuccess, handleAnswerQuestion } = useAnswerQuestion();
     const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
@@ -38,6 +41,31 @@ export const Home = () => {
         }
     }, [isPredictionCorrect]);
 
+    useEffect(() => {
+        if (question && question.category === 'time_pressure') {
+            setTimeLeft(3);
+            setTimerActive(true);
+            setOptionLocked(false);
+            setSelectedAnswer(null);
+            setSelectedButtonId(null);
+        } else {
+            setTimerActive(false);
+            setOptionLocked(false);
+        }
+    }, [question]);
+
+    useEffect(() => {
+        if (timerActive && timeLeft > 0) {
+            const timer = setTimeout(() => {
+                setTimeLeft(timeLeft - 1);
+            }, 1000);
+            return () => clearTimeout(timer);
+        } else if (timerActive && timeLeft === 0) {
+            setTimerActive(false);
+            setOptionLocked(true);
+        }
+    }, [timerActive, timeLeft]);
+
     const onSuccess = () => {
         resetHoverTime();
         resetChoices();
@@ -47,10 +75,14 @@ export const Home = () => {
     };
 
     const handleOptionClick = (buttonId, answerValue) => {
+        if (question.category === 'time_pressure' && optionLocked) {
+            return;
+        }
+        
         setSelectedAnswer(answerValue);
         setSelectedButtonId(buttonId);
-        
        
+        
         handleMouseLeave(buttonId);
         updateChoice(buttonId);
 
@@ -78,6 +110,9 @@ export const Home = () => {
                 onNextClick={handleNextClick}
                 onHoverStart={handleMouseEnter}
                 onHoverEnd={handleMouseLeave}
+                timeLeft={timeLeft}
+                timerActive={timerActive}
+                optionLocked={optionLocked}
             />
             <ConfirmationModal 
                 isOpen={isModalOpen}
