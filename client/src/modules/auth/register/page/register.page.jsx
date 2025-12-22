@@ -1,47 +1,82 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 
-//Styles
+// Styles
 import '~styles/auth.css';
 
+//Hooks
+import { useRegisterUser } from '../../../../shared/hooks'; 
+
+//Routes
+import { LOGIN_ROUTE } from '../../login';
+
 export const Register = () => {
+
+    const [validationError, setValidationError] = useState(null);
     const [formData, setFormData] = useState({
-        name: '',
+        username: '',
         email: '',
         password: '',
-        confirmPassword: ''
-    })
+        repeatPassword: ''
+    });
+
+    const { register, isLoading, isSuccess, error } = useRegisterUser();
 
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         })
+        
+        if (validationError) setValidationError(null);
     }
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        if (formData.password !== formData.confirmPassword) {
-            alert('Passwords do not match!')
-            return
+        e.preventDefault();
+        setValidationError(null);
+
+        if (formData.password !== formData.repeatPassword) {
+            setValidationError('Wachtwoorden komen niet overeen.');
+            return;
         }
-        console.log('Register attempt:', formData)
+
+        if (formData.password.length < 6) {
+            setValidationError('Wachtwoord moet minimaal 6 tekens zijn.');
+            return;
+        }
+
+        register(formData.username, formData.email, formData.password, formData.repeatPassword);
     }
 
     return (
         <div className="auth-container">
             <div className="auth-card">
                 <h2 className="auth-title">Register</h2>
+                
+                {error && (
+                    <div className="alert alert-error" style={{ color: 'red', marginBottom: '1rem' }}>
+                        {error.message || "Registratie mislukt."}
+                    </div>
+                )}
+
+                {validationError && (
+                    <div className="alert alert-warning" style={{ color: 'orange', marginBottom: '1rem' }}>
+                        {validationError}
+                    </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="auth-form">
                     <div className="form-group">
-                        <label htmlFor="name">Name</label>
+                        <label htmlFor="name">username</label>
                         <input
                             type="text"
                             id="name"
-                            name="name"
-                            value={formData.name}
+                            name="username"
+                            value={formData.username}
                             onChange={handleChange}
                             required
                             className="form-input"
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="form-group">
@@ -54,6 +89,7 @@ export const Register = () => {
                             onChange={handleChange}
                             required
                             className="form-input"
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="form-group">
@@ -66,26 +102,32 @@ export const Register = () => {
                             onChange={handleChange}
                             required
                             className="form-input"
+                            disabled={isLoading}
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="confirmPassword">Confirm Password</label>
+                        <label htmlFor="repeatPassword">Confirm Password</label>
                         <input
                             type="password"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
+                            id="repeatPassword"
+                            name="repeatPassword"
+                            value={formData.repeatPassword}
                             onChange={handleChange}
                             required
                             className="form-input"
+                            disabled={isLoading}
                         />
                     </div>
-                    <button type="submit" className="auth-button">
-                        Register
+                    <button 
+                        type="submit" 
+                        className="auth-button"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Registreren...' : 'Register'}
                     </button>
                 </form>
                 <div className="auth-link">
-                    Already have an account? <a href="/login">Login</a>
+                    <Link to={`/${LOGIN_ROUTE.path}`}>Login</Link>
                 </div>
             </div>
         </div>
