@@ -24,7 +24,7 @@ app.use(session({
     secure: false,
     maxAge: 1000 * 60 * 60 * 24
   }
-}))
+}));
 app.use(cookieParser('abc'));
 
 app.use(cors({
@@ -42,19 +42,22 @@ const myPredictionCollection = DATABASE.collection('myPredictions');
 const predicitionCollection = DATABASE.collection('predictions');
 const questionsCollection = DATABASE.collection('questions');
 const sessionCollection = DATABASE.collection('sessions');
+const userCollection = DATABASE.collection('users');
 
 //Routes
 const answerRouter = require('./answers/route.js');
 const ollamaRouter = require('./ollama/route.js');
-const predictionRouter = require('./predictions/route.js')
+const predictionRouter = require('./predictions/route.js');
 const questionRouter = require('./questions/route.js');
-const sessionRouter = require('./sessions/route.js')
+const sessionRouter = require('./sessions/route.js');
+const userRouter = require('./users/route.js');
 
 app.use('/api/answers', answerRouter(answerCollection));
 app.use('/api/ollama', ollamaRouter(predicitionCollection, answerCollection, questionsCollection));
 app.use('/api/prediction', predictionRouter(myPredictionCollection) )
 app.use('/api/questions', questionRouter(questionsCollection));
 app.use('/api/session', sessionRouter(sessionCollection));
+app.use('/api/auth', userRouter(userCollection));
 
 app.get('/api/', (req, res) => {
   res.status(200).send('Hello world');
