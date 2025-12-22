@@ -63,6 +63,20 @@ const loginUser = async(req, res, collection) => {
         });
     }
 } 
+
+const registerUser = async(req, res, collection) => {
+    try{
+
+
+    }catch(error){
+        console.error('Error whith login', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message
+        });
+    }
+} 
 module.exports = {
-    loginUser
+    loginUser,
+    registerUser
 };
