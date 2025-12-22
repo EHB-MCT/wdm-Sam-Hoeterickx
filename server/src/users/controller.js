@@ -82,6 +82,14 @@ const registerUser = async(req, res, collection) => {
             })
         }
 
+        const user = await findUserByEmail(collection, email);
+        if(user){
+            return res.status(409).send({
+                status: 409,
+                message: "Email already in use"
+            })         
+        }
+
 
     }catch(error){
         console.error('Error whith login', error);
