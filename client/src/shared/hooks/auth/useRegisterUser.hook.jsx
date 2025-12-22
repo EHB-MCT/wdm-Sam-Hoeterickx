@@ -3,8 +3,8 @@ import { useState } from "react";
 //Service
 import { authService } from "../../services";
 
-export const useLoginUser = () => {
- 
+export const useRegisterUser = () => {
+
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(undefined);
     const [error, setError] = useState({
@@ -12,28 +12,27 @@ export const useLoginUser = () => {
         message: undefined
     });
 
-    const login = async(email, password, onSuccess) => {
+    const register = async (username, email, password, repeatPassword, onSuccess) => {
         setIsLoading(true);
         setIsSuccess(undefined);
         setError({ status: undefined, message: undefined });
 
-        try{
-            await authService.loginUser(email, password);
+        try {
+            await authService.registerUser(username, email, password, repeatPassword);
 
             setIsSuccess(true);
-            if(onSuccess) onSuccess(data);
+            if(onSuccess) onSuccess();
 
         }catch (error) {
             setIsSuccess(false);
-            setError({
-                status: error.status, 
-                message: error.message
+            setError({ 
+                status: error.status,
+                message: error.message 
             });
         } finally {
             setIsLoading(false);
         }
-    }
+    };
 
-    return { login, isLoading, isSuccess, error };
-    
-}
+    return { register, isLoading, isSuccess, error };
+};
