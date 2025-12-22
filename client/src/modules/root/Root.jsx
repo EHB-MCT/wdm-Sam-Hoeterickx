@@ -11,6 +11,9 @@ export const Root = () => {
                 {
                     path: HOME_ROUTE.path,
                     element: HOME_ROUTE.element
+                },
+                {
+                    path
                 }
             ]
         },

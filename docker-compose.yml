@@ -11,6 +11,9 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true 
+      - VITE_API_URL=http://localhost:3000/api
+
+
     command: npm run dev
   
   server:
