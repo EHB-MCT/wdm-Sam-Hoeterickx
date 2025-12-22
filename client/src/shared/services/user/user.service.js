@@ -2,7 +2,7 @@ const BASE_URL = `${import.meta.env.VITE_API_URL}/user`;
 
 class UserService {
     async getUserData(){
-        const response = await fetch(`${BASE_URL}`, {
+        const response = await fetch(`${BASE_URL}/`, {
             method: 'GET',
             credentials: 'include'
         });
@@ -15,3 +15,5 @@ class UserService {
         return await response.json();
     }
 }
+
+export const userService = new UserService();
