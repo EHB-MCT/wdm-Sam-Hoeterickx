@@ -5,4 +5,6 @@ const { loginUser } = require('./controller');
 
 module.exports = (collection) => {
     router.post('/login', (req, res) => loginUser(req, res, collection));
+
+    return router;
 }

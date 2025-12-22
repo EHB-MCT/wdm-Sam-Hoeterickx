@@ -3,7 +3,7 @@ const {
     verifyPassword
 } = require('./model');
 
-export const loginUser = async(req, res, collection) => {
+const loginUser = async(req, res, collection) => {
     try{
 
         const userId = req.signedCookies.user;
@@ -63,3 +63,6 @@ export const loginUser = async(req, res, collection) => {
         });
     }
 } 
+module.exports = {
+    loginUser
+};
