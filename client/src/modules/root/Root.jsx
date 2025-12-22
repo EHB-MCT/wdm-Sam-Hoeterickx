@@ -1,6 +1,12 @@
 import { createHashRouter, RouterProvider } from 'react-router-dom'
-import { HOME_ROUTE } from '../home'
+
+//Components
 import { App } from '../app';
+
+//Routes
+import { HOME_ROUTE } from '../home'
+import { LOGIN_ROUTE } from '../auth/login';
+import { REGISTER_ROUTE } from '../auth/register';
 
 export const Root = () => {
     const ROUTE = createHashRouter([
@@ -13,7 +19,12 @@ export const Root = () => {
                     element: HOME_ROUTE.element
                 },
                 {
-                    path
+                    path: LOGIN_ROUTE.path,
+                    element: LOGIN_ROUTE.element
+                },
+                {
+                    path: REGISTER_ROUTE.path,
+                    element: REGISTER_ROUTE.element
                 }
             ]
         },

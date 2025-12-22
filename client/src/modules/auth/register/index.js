@@ -1,0 +1,1 @@
+export { REGISTER_ROUTE } from './register.route';
