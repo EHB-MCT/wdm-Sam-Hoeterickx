@@ -28,7 +28,7 @@ export const Home = () => {
     const [timerActive, setTimerActive] = useState(false);
     const [optionLocked, setOptionLocked] = useState(false);
 
-const { handleAnswerQuestion } = useAnswerQuestion();
+    const { handleAnswerQuestion } = useAnswerQuestion();
     // const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
     const { question, questionCount, nextQuestion, getDecisionTime } = useQuestions();
     const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
