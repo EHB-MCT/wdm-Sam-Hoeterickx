@@ -129,7 +129,10 @@ const registerUser = async(req, res, collection) => {
 
 const logoutUser = (req, res) => {
     try{
-        
+        res.clearCookie('user');
+
+        res.status(200).send({ message: 'Logged out successfully' });
+
     }catch(error){
         console.error('Error whith logout', error);
         return res.status(500).send({
@@ -140,5 +143,6 @@ const logoutUser = (req, res) => {
 }
 module.exports = {
     loginUser,
-    registerUser
+    registerUser,
+    logoutUser
 };
