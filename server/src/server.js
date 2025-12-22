@@ -28,7 +28,7 @@ app.use(session({
 app.use(cookieParser('abc'));
 
 app.use(cors({
-    origin: ['http://localhost:8080', 'http://localhost:3000'],
+    origin: ['http://localhost:8080', 'http://localhost:3000', 'http://localhost:8080/#/'],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"]
 }));

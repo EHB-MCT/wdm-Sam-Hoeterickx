@@ -11,15 +11,23 @@ export const useQuestions = () => {
     const decisionStart = useRef({});
 
     useEffect(() => {
-        const fetchQuestions = async() => {
-            try{
-                const data = await questionService.getQuestions();
-                setQuestionList(data.data);
-                // console.log('QuestionList:', questionList);
-            }catch(error){ 
-                console.error('Failed to fetch questions:', error);
+        const fetchQuestions = async () => {
+            try {
+              const url = `${import.meta.env.VITE_API_URL}/questions/`;
+              console.log('🔍 Fetching from URL:', url);
+              console.log('🔍 Full URL will be:', url);
+              
+              const response = await fetch(url);
+              console.log('📡 Response status:', response.status);
+              console.log('📡 Response headers:', response.headers);
+              
+              const data = await response.json();
+              setQuestionList(data.data);
+
+            } catch (error) {
+              console.error('Failed to fetch questions:', error);
             }
-        }
+        };
 
         fetchQuestions();  
     }, []);
