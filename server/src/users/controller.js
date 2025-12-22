@@ -13,14 +13,13 @@ export const loginUser = async(req, res, collection) => {
             return res.status(200).send({
                 status: 200,
                 message: 'Login Successful',
-                login: true
             });
         };
 
         if(!email || !password){
             return res.status(422).send({
                 status: 422,
-                message: 'Missing login info'
+                message: 'Missing login info',
             });
         };
 
@@ -29,7 +28,7 @@ export const loginUser = async(req, res, collection) => {
         if(!user){
             return res.status(401).send({
                 status: 401,
-                message: 'Invalid credentials'
+                message: 'Invalid credentials',
             });
         };
 
@@ -39,11 +38,22 @@ export const loginUser = async(req, res, collection) => {
         if(!passwordMatch){
             return res.status(401).send({
                 status: 401,
-                message: 'Invalid credentials'
+                message: 'Invalid credentials',
             });
         };
 
+        res.cookie('session_id', excistingUser.id, {
+            httpOnly: true,
+            sameSite: process.env.NODE_STATE === 'production' ? 'none' : 'lax', 
+            secure: process.env.NODE_STATE === 'production', 
+            signed: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
 
+        return res.status(200).send({
+            status: 200,
+            message: 'Login succesfull',
+        });
 
     }catch(error){
         console.error('Error whith login', error);
