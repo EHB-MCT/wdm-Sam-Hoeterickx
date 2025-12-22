@@ -1,3 +1,8 @@
+const {
+    findUserByEmail,
+    verifyPassword
+} = require('./model');
+
 export const loginUser = async(req, res, collection) => {
     try{
 
@@ -22,6 +27,16 @@ export const loginUser = async(req, res, collection) => {
         const user = await findUserByEmail(collection, email);
         
         if(!user){
+            return res.status(401).send({
+                status: 401,
+                message: 'Invalid credentials'
+            });
+        };
+
+        
+        const passwordMatch = await verifyPassword(password, user.password);
+
+        if(!passwordMatch){
             return res.status(401).send({
                 status: 401,
                 message: 'Invalid credentials'
