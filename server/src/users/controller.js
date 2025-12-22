@@ -169,8 +169,35 @@ const logoutUser = (req, res) => {
         });
     }
 }
+
+const getUserInfo = (req, res, collection) => {
+    try{
+
+        const userId = req.signedCookies.user;
+        const sessionId = req.signedCookies.session;
+
+        console.log(userId, sessionId);
+
+        return res.status(200).send({
+            status: 200,
+            message: 'Successful',
+            data: {
+                userId,
+                sessionId
+            }
+        })
+        
+    }catch(error){
+        console.error('Error whith getting user info', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message,
+        });
+    }
+}
 module.exports = {
     loginUser,
     registerUser,
-    logoutUser
+    logoutUser,
+    getUserInfo
 };

@@ -58,6 +58,7 @@
   app.use('/api/questions', questionRouter(questionsCollection));
   app.use('/api/session', sessionRouter(sessionCollection));
   app.use('/api/auth', userRouter(userCollection));
+  app.use('/api/users', userRouter(userCollection));
 
   app.get('/api/', (req, res) => {
     res.status(200).send('Hello world');
