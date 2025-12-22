@@ -66,7 +66,14 @@ const loginUser = async(req, res, collection) => {
 
 const registerUser = async(req, res, collection) => {
     try{
+        const { username, email, password, repeatPassword } = req.body;
 
+        if(!username || !email || !password || !repeatPassword){
+            return res.status(422).send({
+                status: 422,
+                message: "Missing register info"
+            });
+        }
 
     }catch(error){
         console.error('Error whith login', error);
