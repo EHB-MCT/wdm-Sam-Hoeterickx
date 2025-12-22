@@ -2,36 +2,50 @@ import { useEffect, useState } from "react"
 import { predictionService } from "../../services";
 
 export const usePrediction = (questionCount) => {
-    const [prediction, setPrediction] = useState(undefined);
+    const [predictions, setPredictions] = useState(undefined);
+    const [showPrediction, setShowPrediction] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [popupCount, setPopupCount] = useState(0);
 
     useEffect(() => {
-        const predictionQuestions = [3, 12];
-        
-        if(!predictionQuestions.includes(questionCount)){
-            setPrediction(undefined);
-            return;
+        // Trigger batch prediction every 10 questions
+        if(questionCount > 0 && questionCount % 10 === 0){
+            const fetchBatchPrediction = async () => {
+                setIsLoading(true);
+                console.log('Fetching batch prediction after', questionCount, 'questions');
+
+                try{
+                    const data = await predictionService.getBatchPrediction();
+                    console.log('Batch prediction data:', data);
+                    
+                    setPredictions(data.predictions);
+                    
+                    // Randomly decide to show popup (2-3 times out of 10 opportunities)
+                    const shouldShow = Math.random() < 0.25 && popupCount < 3; // 25% chance, max 3 times
+                    if(shouldShow){
+                        setShowPrediction(true);
+                        setPopupCount(prev => prev + 1);
+                    }
+                }catch(error){
+                    console.error('Failed to fetch batch prediction:', error);
+                }finally{
+                    setIsLoading(false);
+                }
+            };
+
+            fetchBatchPrediction();
         }
+    }, [questionCount, popupCount]);
 
-        const fetchPrediction = async () => {
-            setIsLoading(true);
-            console.log('hello');
+    const closePrediction = () => {
+        setShowPrediction(false);
+    };
 
-            try{
-                const data = await predictionService.getPrediction(questionCount);
-                console.log('Prediction data:', data);
-                
-                setPrediction(data.prediction);
-            }catch(error){
-                console.error('Failed to fetch prediction:', error);
-            }finally{
-                setIsLoading(false);
-            }
-        };
-
-        fetchPrediction();
-
-    }, [questionCount])
-
-    return { prediction, isLoadingPrediction: isLoading };
+    return { 
+        predictions, 
+        showPrediction, 
+        isLoadingPrediction: isLoading, 
+        closePrediction,
+        popupCount
+    };
 }

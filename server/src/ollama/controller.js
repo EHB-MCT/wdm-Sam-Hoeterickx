@@ -29,6 +29,53 @@ const handlePrompt = async (req, res) => {
     }
 }
 
+const generateBatchPrediction = async (req, res, collection, answerCollection, questionsCollection ) => {
+
+    try{
+        // const SESSION_ID = req.signedCookies.session;
+        const { session_id } = req.body;
+        const SESSION_ID = session_id;
+
+        const answers = await findAllAnswerWithSessionId(answerCollection, SESSION_ID);
+        
+        if(!answers || answers.length < 8){
+            return res.status(404).send({
+                status: 404,
+                message: 'Not enough answers for prediction'
+            });
+        }
+
+        const prompt = `
+            You are an expert prediction model analyzing user behavior in a questionnaire. Your task is to predict the user's answers to the next 10 questions based on their previous responses and behavioral data.
+            
+            Analyze the Previous Answers data to infer the user's risk appetite and preference patterns.
+            
+            Previous Answers (last 10 questions):
+            ${JSON.stringify(answers.slice(-10), null, 2)}
+
+            Output your predictions as a JSON object with a single key, "predicted_answers", where the value is an array of 10 predicted answers (each should be one of the typical option choices like "Option A", "Option B", etc.). **DO NOT** include any other text or explanation.
+        `;
+
+        const ollamaData = await generateWithPrompt(prompt);
+        const predictionJson = JSON.parse(ollamaData.response);
+        const predictions = predictionJson.predicted_answers;
+
+        console.log('Batch predictions:', predictions);
+
+        return res.status(200).send({
+            status: 200,
+            predictions: predictions
+        });
+
+    }catch(error){
+        console.error('Error while generating batch prediction:', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message
+        });
+    }
+}
+
 const generatePrediction = async (req, res, collection, answerCollection, questionsCollection ) => {
 
     try{
@@ -80,5 +127,6 @@ const generatePrediction = async (req, res, collection, answerCollection, questi
 }
 module.exports = {
     handlePrompt,
+    generateBatchPrediction,
     generatePrediction
 }

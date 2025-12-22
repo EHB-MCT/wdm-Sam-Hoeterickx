@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { QuizUI } from "../components";
 
 //Modals
-import { ConfirmationModal } from "../../../shared/utils";
+import { ConfirmationModal, PredictionModal } from "../../../shared/utils";
 
 //Hooks
 import {
     useAnswerQuestion,
-    useCheckPrediction,
+    // useCheckPrediction,
     useChoiceTracking,
     useHoverTracking,
     useQuestions,
@@ -28,18 +28,18 @@ export const Home = () => {
     const [timerActive, setTimerActive] = useState(false);
     const [optionLocked, setOptionLocked] = useState(false);
 
-    const { isSuccess, handleAnswerQuestion } = useAnswerQuestion();
-    const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
+const { handleAnswerQuestion } = useAnswerQuestion();
+    // const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
     const { question, questionCount, nextQuestion, getDecisionTime } = useQuestions();
     const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
     const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
-    const { prediction, isLoadingPrediction } = usePrediction(questionCount);
+    const { predictions, showPrediction, isLoadingPrediction, closePrediction } = usePrediction(questionCount);
 
-    useEffect(() => {
-        if (isPredictionCorrect !== undefined) {
-            setIsModalOpen(true);
-        }
-    }, [isPredictionCorrect]);
+    // useEffect(() => {
+    //     if (isPredictionCorrect !== undefined) {
+    //         setIsModalOpen(true);
+    //     }
+    // }, [isPredictionCorrect]);
 
     useEffect(() => {
         if (question && question.category === 'time_pressure') {
@@ -86,9 +86,10 @@ export const Home = () => {
         handleMouseLeave(buttonId);
         updateChoice(buttonId);
 
-        if (prediction !== undefined) {
-            checkPrediction(prediction, answerValue);
-        }
+        // Note: Individual predictions are disabled in favor of batch predictions
+        // if (prediction !== undefined) {
+        //     checkPrediction(prediction, answerValue);
+        // }
     };
 
     const handleNextClick = (questionId) => {
@@ -114,7 +115,7 @@ export const Home = () => {
                 timerActive={timerActive}
                 optionLocked={optionLocked}
             />
-            <ConfirmationModal 
+<ConfirmationModal 
                 isOpen={isModalOpen}
                 onConfirm={() => {
                     console.log("Gebruiker is zeker!");
@@ -124,6 +125,11 @@ export const Home = () => {
                     console.log("Gebruiker is niet zeker.");
                     setIsModalOpen(false);
                 }}
+            />
+            <PredictionModal 
+                isOpen={showPrediction}
+                predictions={predictions}
+                onClose={closePrediction}
             />
         </>
     )
