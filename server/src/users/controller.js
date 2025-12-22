@@ -1,6 +1,7 @@
 const {
     findUserByEmail,
-    verifyPassword
+    verifyPassword,
+    registerNewUser
 } = require('./model');
 
 const loginUser = async(req, res, collection) => {
@@ -32,7 +33,6 @@ const loginUser = async(req, res, collection) => {
             });
         };
 
-        
         const passwordMatch = await verifyPassword(password, user.password);
 
         if(!passwordMatch){
@@ -42,10 +42,10 @@ const loginUser = async(req, res, collection) => {
             });
         };
 
-        res.cookie('session_id', excistingUser.id, {
+        res.cookie('user', user._id, {
             httpOnly: true,
-            sameSite: process.env.NODE_STATE === 'production' ? 'none' : 'lax', 
-            secure: process.env.NODE_STATE === 'production', 
+            sameSite: 'none',
+            secure: false, 
             signed: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
@@ -67,6 +67,12 @@ const loginUser = async(req, res, collection) => {
 const registerUser = async(req, res, collection) => {
     try{
         const { username, email, password, repeatPassword } = req.body;
+        const userData = {
+            username,
+            email,
+            password,
+            repeatPassword
+        }
 
         if(!username || !email || !password || !repeatPassword){
             return res.status(422).send({
@@ -90,12 +96,33 @@ const registerUser = async(req, res, collection) => {
             })         
         }
 
+        const newUser = await registerNewUser(collection, userData);
+
+        if(!newUser.newUser._id) {
+            return res.status(401).send({
+                status: 401,
+                message: "Error while creating account"
+            });
+        };
+
+        res.cookie('user', newUser.newUser._id, {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: false, 
+            signed: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        return res.status(201).send({
+            status: 201,
+            message: "Account created succesfully",
+        });
 
     }catch(error){
         console.error('Error whith login', error);
         return res.status(500).send({
             status: 500,
-            message: error.message
+            message: error.message,
         });
     }
 } 
