@@ -9,4 +9,4 @@ export { useQuestions } from './questions/useQuestions.hook';
 export { useAppStartUp } from './auth/useAppStartUp.hook';
 export { useLoginUser } from './auth/useLoginUser.hook';
 export { useRegisterUser } from './auth/useRegisterUser.hook';
-export { useLogoutUser } from './auth/useLogoutUser.hoook';
+export { useLogoutUser } from './auth/useLogoutUser.hook'

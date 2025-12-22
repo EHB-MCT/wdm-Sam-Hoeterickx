@@ -3,7 +3,7 @@ import { useState } from "react";
 //Service
 import { authService } from "../../services";
 
-export const useRegisterUser = () => {
+export const useLogoutUser = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(undefined);
