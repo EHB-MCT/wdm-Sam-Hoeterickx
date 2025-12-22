@@ -75,6 +75,14 @@ const registerUser = async(req, res, collection) => {
             });
         }
 
+        if(password !== repeatPassword){
+            return res.status(401).send({
+                status: 401,
+                message: "Passwords don't match"
+            })
+        }
+
+
     }catch(error){
         console.error('Error whith login', error);
         return res.status(500).send({
