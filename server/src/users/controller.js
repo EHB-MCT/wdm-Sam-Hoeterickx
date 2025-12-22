@@ -125,7 +125,19 @@ const registerUser = async(req, res, collection) => {
             message: error.message,
         });
     }
-} 
+}
+
+const logoutUser = (req, res) => {
+    try{
+        
+    }catch(error){
+        console.error('Error whith logout', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message,
+        });
+    }
+}
 module.exports = {
     loginUser,
     registerUser
