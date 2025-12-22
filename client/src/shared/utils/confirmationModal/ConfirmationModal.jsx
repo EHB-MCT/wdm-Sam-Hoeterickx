@@ -1,4 +1,4 @@
-ê//Hooks
+//Hooks
 import { useHoverTracking, useQuestions } from "../../hooks";
 
 //Service
