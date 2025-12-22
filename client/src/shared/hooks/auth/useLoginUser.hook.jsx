@@ -7,15 +7,12 @@ export const useLoginUser = () => {
  
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(undefined);
-    const [error, setError] = useState({
-        status: undefined,
-        message: undefined
-    });
+    const [error, setError] = useState(false);
 
     const login = async(email, password, onSuccess) => {
         setIsLoading(true);
         setIsSuccess(undefined);
-        setError({ status: undefined, message: undefined });
+        setError(false);
 
         try{
             await authService.loginUser(email, password);
