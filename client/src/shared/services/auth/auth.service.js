@@ -31,6 +31,7 @@ class AuthService {
             headers: {
                 'Content-Type': "application/json"
             },
+            credentials: 'include',
             body: {
                 email,
                 password,
@@ -41,6 +42,25 @@ class AuthService {
             const errorData = await response.json();
             console.log(errorData)
             throw new Error(`${errorData.status} | ${errorData.message}` || 'Failed to login');
+        }
+
+        const data = await response.json();
+        return data;
+    }
+
+    async logoutUser(){
+        const response = await fetch(`${BASE_URL}/lgout`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': "application/json"
+            },
+        });
+
+        if(!response.ok){
+            const errorData = await response.json();
+            console.log(errorData)
+            throw new Error(`${errorData.status} | ${errorData.message}` || 'Failed to logout');
         }
 
         const data = await response.json();
