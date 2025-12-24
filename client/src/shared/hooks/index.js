@@ -7,6 +7,7 @@ export { useQuestions } from './questions/useQuestions.hook';
 
 //AUTH
 export { useAppStartUp } from './auth/useAppStartUp.hook';
+export { useAuth } from './auth/useAuth.hook';
 export { useLoginUser } from './auth/useLoginUser.hook';
 export { useRegisterUser } from './auth/useRegisterUser.hook';
 export { useLogoutUser } from './auth/useLogoutUser.hook'
