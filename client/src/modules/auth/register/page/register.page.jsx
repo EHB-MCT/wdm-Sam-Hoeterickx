@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 // Styles
 import '~styles/auth.css';
@@ -11,6 +11,8 @@ import { useRegisterUser } from '../../../../shared/hooks';
 import { LOGIN_ROUTE } from '../../login';
 
 export const Register = () => {
+
+    const nav = useNavigate()
 
     const [validationError, setValidationError] = useState(null);
     const [formData, setFormData] = useState({
@@ -45,7 +47,11 @@ export const Register = () => {
             return;
         }
 
-        register(formData.username, formData.email, formData.password, formData.repeatPassword);
+        register(formData.username, formData.email, formData.password, formData.repeatPassword, onSuccess);
+    }
+
+    const onSuccess = () => {
+        nav('/dashboard');
     }
 
     return (

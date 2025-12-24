@@ -44,16 +44,16 @@ const loginUser = async(req, res, collection) => {
             });
         };
 
-        const currentUserId = user._id.toString();
+        const userIdString = user._id.toString();
 
-        res.cookie('user', currentUserId, {
+        res.cookie('user', userIdString, {
             httpOnly: true,
-            sameSite: 'none',
+            sameSite: 'lax',
             secure: false, 
             signed: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-        console.log('Cookie set:', currentUserId);
+        console.log('Cookie set:', userIdString);
 
         return res.status(200).send({
             status: 200,
@@ -138,9 +138,11 @@ const registerUser = async(req, res, collection) => {
             });
         };
 
-        res.cookie('user', newUser.newUser._id, {
+        const userIdString = newUser.newUser._id.toString();
+
+        res.cookie('user', userIdString, {
             httpOnly: true,
-            sameSite: 'none',
+            sameSite: 'lax',
             secure: false, 
             signed: true,
             maxAge: 7 * 24 * 60 * 60 * 1000

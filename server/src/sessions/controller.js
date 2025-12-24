@@ -23,7 +23,7 @@ const createSessionId = async (req, res, collection) => {
 
         res.cookie('session', SESSION_ID, {
             httpOnly: true,
-            sameSite: 'none',
+            sameSite: 'lax',
             secure: false,
             signed: true,
             maxAge: 24 * 60 * 60 * 1000,

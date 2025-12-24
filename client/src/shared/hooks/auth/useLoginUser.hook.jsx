@@ -18,7 +18,7 @@ export const useLoginUser = () => {
             await authService.loginUser(email, password);
 
             setIsSuccess(true);
-            if(onSuccess) onSuccess(data);
+            if(onSuccess) onSuccess();
 
         }catch (error) {
             setIsSuccess(false);

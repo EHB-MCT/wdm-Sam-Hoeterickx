@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-
+//Style
 import '~styles/auth.css';
 
 // Hooks
@@ -11,6 +11,8 @@ import { useLoginUser } from '../../../../shared/hooks';
 import { REGISTER_ROUTE } from '../../register';
 
 export const Login = () => {
+    
+    const nav = useNavigate();
     
     const [formData, setFormData] = useState({
         email: '',
@@ -28,7 +30,11 @@ export const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        login(formData.email, formData.password);
+        login(formData.email, formData.password, onSuccess);
+    }
+
+    const onSuccess = () => {
+        nav('/dashboard');
     }
 
     return (
