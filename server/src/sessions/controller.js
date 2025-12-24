@@ -3,6 +3,7 @@ const { generateSessionId, saveSessionId } = require('./model.js');
 const createSessionId = async (req, res, collection) => {
     try{
 
+        const USER_ID = req.signedCookies.user;
         const SESSION_ID = generateSessionId();
 
         if(!SESSION_ID){
@@ -12,7 +13,7 @@ const createSessionId = async (req, res, collection) => {
             });
         }
 
-        const result = await saveSessionId(collection, SESSION_ID);
+        const result = await saveSessionId(collection, SESSION_ID, USER_ID);
 
         if(!result){
             return res.status(500).send({

@@ -1,3 +1,5 @@
+const { findAllAnswerWithSessionId } = require('../answers/model');
+const { findSessionIdsOfUser } = require('../sessions/model');
 const {
     findUserByEmail,
     verifyPassword,
@@ -8,11 +10,11 @@ const {
 const loginUser = async(req, res, collection) => {
     try{
 
-        const userId = req.signedCookies.user;
+        const USER_ID = req.signedCookies.user;
         const {email, password} = req.body;
         console.log('login')
 
-        if(userId){
+        if(USER_ID){
             return res.status(200).send({
                 status: 200,
                 message: 'Login Successful',
@@ -44,16 +46,16 @@ const loginUser = async(req, res, collection) => {
             });
         };
 
-        const userIdString = user._id.toString();
+        const USER_IDString = user._id.toString();
 
-        res.cookie('user', userIdString, {
+        res.cookie('user', USER_IDString, {
             httpOnly: true,
             sameSite: 'lax',
             secure: false, 
             signed: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-        console.log('Cookie set:', userIdString);
+        console.log('Cookie set:', USER_IDString);
 
         return res.status(200).send({
             status: 200,
@@ -138,9 +140,9 @@ const registerUser = async(req, res, collection) => {
             });
         };
 
-        const userIdString = newUser.newUser._id.toString();
+        const USER_IDString = newUser.newUser._id.toString();
 
-        res.cookie('user', userIdString, {
+        res.cookie('user', USER_IDString, {
             httpOnly: true,
             sameSite: 'lax',
             secure: false, 
@@ -177,20 +179,39 @@ const logoutUser = (req, res) => {
     }
 }
 
-const getUserInfo = async(req, res, collection) => {
+const getUserInfo = async(req, res, userCollection, answerCollection, sessionCollection) => {
     try{
 
-        const userId = req.signedCookies.user;
-        const sessionId = req.signedCookies.session;
+        const USER_ID = req.signedCookies.user;
+        const SESSION_ID = req.signedCookies.session;
 
-        // console.log(userId, sessionId);
+        if(!USER_ID || !SESSION_ID){
+            return res.status(422).send({
+                status: 422,
+                message: 'Missing credentials'
+            });
+        };
+
+        const user = await findUserById(userCollection, USER_ID);
+        const userSessions = await findSessionIdsOfUser(sessionCollection, USER_ID);
+        const sessionIdList = userSessions.map(session => session.sessionId);
+        const answers = await findAllAnswerWithSessionId(answerCollection, sessionIdList);
+
+
+        if(!userSessions || !answers || !user){
+            return res.status(404).send({
+                status: 404,
+                message: 'Something was not found'
+            })
+        }
 
         return res.status(200).send({
             status: 200,
             message: 'Successful',
             data: {
-                userId,
-                sessionId
+                user,
+                userSessions,
+                answers
             }
         })
         
@@ -206,16 +227,16 @@ const getUserInfo = async(req, res, collection) => {
 const authenticateUser = async(req, res, collection) => {
     try{
 
-        const userId = req.signedCookies.user;
+        const USER_ID = req.signedCookies.user;
 
-        if(!userId){
+        if(!USER_ID){
             return res.status(422).send({
                 status: 422,
                 message: 'Missing credentials'
             });
         }
 
-        const user = await findUserById(collection, userId);
+        const user = await findUserById(collection, USER_ID);
 
         if(!user){
             return res.status(401).send({

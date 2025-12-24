@@ -6,7 +6,10 @@ const findUserByEmail = async(collection, email) => {
 }
 
 const findUserById = async(collection, userId) => {
-    return await collection.findOne({ _id: new ObjectId(userId) });
+    return await collection.findOne(
+        { _id: new ObjectId(userId) },
+        { projection: { username: 1, email: 1 } }
+    );
 }
 
 const verifyPassword = async(password, hashedpassword) => {

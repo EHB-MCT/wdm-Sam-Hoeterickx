@@ -28,9 +28,9 @@
   app.use(cookieParser('abc'));
 
   app.use(cors({
-      origin: ['http://localhost:8080', 'http://localhost:3000'],
-      credentials: true,
-      allowedHeaders: ["Content-Type", "Authorization"]
+    origin: ['http://localhost:8080', 'http://localhost:3000'],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"]
   }));
 
   app.use(express.json());
@@ -57,7 +57,7 @@
   app.use('/api/prediction', predictionRouter(myPredictionCollection) )
   app.use('/api/questions', questionRouter(questionsCollection));
   app.use('/api/session', sessionRouter(sessionCollection));
-  app.use('/api/auth', userRouter(userCollection));
+  app.use('/api/auth', userRouter(userCollection, answerCollection, sessionCollection));
   app.use('/api/users', userRouter(userCollection));
 
   app.get('/api/', (req, res) => {
