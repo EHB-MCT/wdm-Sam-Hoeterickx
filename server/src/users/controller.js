@@ -1,7 +1,8 @@
 const {
     findUserByEmail,
     verifyPassword,
-    registerNewUser
+    registerNewUser,
+    findUserById
 } = require('./model');
 
 const loginUser = async(req, res, collection) => {
@@ -9,6 +10,7 @@ const loginUser = async(req, res, collection) => {
 
         const userId = req.signedCookies.user;
         const {email, password} = req.body;
+        console.log('login')
 
         if(userId){
             return res.status(200).send({
@@ -42,13 +44,16 @@ const loginUser = async(req, res, collection) => {
             });
         };
 
-        res.cookie('user', user._id, {
+        const currentUserId = user._id.toString();
+
+        res.cookie('user', currentUserId, {
             httpOnly: true,
             sameSite: 'none',
             secure: false, 
             signed: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
+        console.log('Cookie set:', currentUserId);
 
         return res.status(200).send({
             status: 200,
@@ -170,7 +175,7 @@ const logoutUser = (req, res) => {
     }
 }
 
-const getUserInfo = (req, res, collection) => {
+const getUserInfo = async(req, res, collection) => {
     try{
 
         const userId = req.signedCookies.user;
@@ -195,9 +200,45 @@ const getUserInfo = (req, res, collection) => {
         });
     }
 }
+
+const authenticateUser = async(req, res, collection) => {
+    try{
+
+        const userId = req.signedCookies.user;
+
+        if(!userId){
+            return res.status(422).send({
+                status: 422,
+                message: 'Missing credentials'
+            });
+        }
+
+        const user = await findUserById(collection, userId);
+
+        if(!user){
+            return res.status(401).send({
+                status: 401,
+                message: 'User not authenticated'
+            });
+        };
+
+        return res.status(200).send({
+            status: 200,
+            message: 'Authentication successfull',
+        });
+
+    }catch(error){
+        console.error('Error while authenticating user', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message
+        });
+    };
+}
 module.exports = {
     loginUser,
     registerUser,
     logoutUser,
-    getUserInfo
+    getUserInfo,
+    authenticateUser
 };
