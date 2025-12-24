@@ -12,7 +12,7 @@ export const ProtectedRoute = ({ children, redirect_uri }) => {
     }
 
     if(!isAuthenticated){
-        <Navigate to={ redirect_uri } replace />
+        return <Navigate to={ redirect_uri } replace />
     }
 
     return children;

@@ -181,7 +181,7 @@ const getUserInfo = async(req, res, collection) => {
         const userId = req.signedCookies.user;
         const sessionId = req.signedCookies.session;
 
-        console.log(userId, sessionId);
+        // console.log(userId, sessionId);
 
         return res.status(200).send({
             status: 200,
@@ -225,6 +225,7 @@ const authenticateUser = async(req, res, collection) => {
         return res.status(200).send({
             status: 200,
             message: 'Authentication successfull',
+            data: user
         });
 
     }catch(error){
