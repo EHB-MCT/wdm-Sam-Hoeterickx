@@ -1,4 +1,4 @@
-const BASE_URL = `${import.meta.env.VITE_API_URL}/user`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}/users`;
 
 class UserService {
     async getUserData(){

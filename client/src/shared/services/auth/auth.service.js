@@ -51,6 +51,19 @@ class AuthService {
             const errorData = await response.json();
             throw new Error(errorData.message || 'Failed to logout');
         }
+        return await response.json();
+    }
+
+    async authenticateUser(){
+        const response = await fetch(`${BASE_URL}/authenticate`, { 
+            method: 'GET',
+            credentials: 'include',
+        });
+
+        if(!response.ok){
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to logout');
+        }
 
         return await response.json();
     }
