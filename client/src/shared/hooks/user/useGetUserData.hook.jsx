@@ -1,11 +1,32 @@
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { userService } from "../../services"
 
 export const useGetUserData = () => {
-    const getMyData = useCallback(async () => {
-        const data = await userService.getUserData();
-        console.log(data);
-    }, []);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [error, setError] = useState(false);
+    const [user, setUser] = useState();
 
-    return { getMyData };
+    const getMyData = async() => {
+        setIsLoading(true);
+
+        try{
+            const data = await userService.getUserData();
+            console.log(data);
+
+            setUser(data.data.user);
+            setIsLoading(false)
+
+        }catch(error){
+            setIsError(true);
+            setError({
+                status: error.status, 
+                message: error.message
+            });
+        }finally{
+            setIsLoading(false)
+        }
+    }
+
+    return { getMyData, user, isLoading, isError, error };
 }
