@@ -1,43 +1,50 @@
-
 import { useEffect, useState, useRef } from "react";
-import { questionService } from "../../services";
+// Zorg dat je dit pad aanpast naar waar jij je services hebt staan
+import { questionService } from "../../services"; 
 
 export const useQuestions = () => {
     
     const [questionList, setQuestionList] = useState([]);
-    const [questionCount, setQuestionCount] = useState(1);
+
+    const [questionCount, setQuestionCount] = useState(() => {
+        const savedQuestionId = localStorage.getItem('question_id');
+        return savedQuestionId ? parseInt(savedQuestionId) : 1;
+    });
+
     const [question, setQuestion] = useState();
-    
     const decisionStart = useRef({});
 
     useEffect(() => {
-        const fetchQuestions = async() => {
-            try{
-                const data = await questionService.getQuestions();
-                setQuestionList(data.data);
-                // console.log('QuestionList:', questionList);
-            }catch(error){ 
-                console.error('Failed to fetch questions:', error);
-            }
-        }
+        const fetchQuestions = async () => {
+            
+            try {
+                const response = await questionService.getQuestions();
+                
+                if(response.data) {
+                    setQuestionList(response.data);
+                }
 
-        fetchQuestions();  
+            } catch (error) {
+                console.error("Fout bij ophalen vragen:", error);
+            }
+
+        };
+
+        fetchQuestions();
     }, []);
 
     useEffect(() => {
-        const currentQuestionId = localStorage.getItem('question_id');
-
-        if(currentQuestionId === '1'){
+        if (questionList.length > 0) {
+            localStorage.setItem('question_id', questionCount.toString());
             setQuestion(questionList[questionCount]);
-        }else {
-            setQuestion(questionList[currentQuestionId``]);
+            decisionStart.current = Date.now();
         }
-        decisionStart.current = Date.now();
     }, [questionCount, questionList]);
 
     const nextQuestion = () => {
-        setQuestionCount(prev => prev + 1);
-        decisionStart.current = Date.now();
+        if (questionCount < questionList.length - 1) {
+            setQuestionCount(prev => prev + 1);
+        }
     };
 
     const getDecisionTime = () => {

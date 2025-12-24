@@ -9,6 +9,8 @@ export const useAnswerQuestion = () => {
     })
 
     const handleAnswerQuestion = (question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind, onSuccess) => {
+        const currentQuestionId = parseInt(question_id) - 1;
+        
         fetch('http://localhost:3000/api/answers/saveAnswer', {
             method: 'POST',
             credentials: 'include',
@@ -16,7 +18,7 @@ export const useAnswerQuestion = () => {
                 'Content-type': "application/json"
             },
             body: JSON.stringify({
-                question_id: question_id,
+                question_id: currentQuestionId,
                 selected_answer: selected_answer,
                 decision_time: decision_time,
                 elapsed_hover_time: elapsed_hover_time,

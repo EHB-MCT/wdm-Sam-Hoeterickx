@@ -84,8 +84,9 @@ export const Home = () => {
 
     const handleNextClick = (questionId) => {
         const decision_time = getDecisionTime();
+        const currentQuestionId= localStorage.getItem('question_id')
         
-        handleAnswerQuestion(questionId, selectedAnswer, decision_time, elapsedHoverTime, changedMind, onSuccess);
+        handleAnswerQuestion(currentQuestionId, selectedAnswer, decision_time, elapsedHoverTime, changedMind, onSuccess);
     };
 
     if (isLoadingPrediction) {
