@@ -9,10 +9,6 @@ export const Dashboard = () => {
         getMyData(); 
     }, []);
 
-    useEffect(() => {
-        console.log(user)
-    }, [user])
-
     if (isLoading) return <p>Gegevens laden...</p>;
     if (error) return <p style={{color: 'red'}}>Fout: {error}</p>;
 

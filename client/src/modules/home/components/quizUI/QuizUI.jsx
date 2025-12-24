@@ -1,9 +1,11 @@
 //Components
+import { useEffect } from 'react';
 import { OptionButton } from '../optionButton/OptionButton';
 
 export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick, onHoverStart, onHoverEnd, timeLeft, timerActive, optionLocked }) => {
     
     const handleNext = () => {
+        localStorage.setItem('question_id', question._id);
         onNextClick(question._id);
     };
 

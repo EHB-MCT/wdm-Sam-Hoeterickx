@@ -4,8 +4,18 @@ const createSessionId = async (req, res, collection) => {
     try{
 
         const USER_ID = req.signedCookies.user;
-        const SESSION_ID = generateSessionId();
+        const CURRENT_SESSION_ID = req.signedCookies.session;
+        const QUESTION_ID = req.query.q;
 
+        if(CURRENT_SESSION_ID && QUESTION_ID !== '1'){
+            return res.status(200).send({
+                status: 200,
+                message: 'Session id already excists',
+                sessionId: CURRENT_SESSION_ID
+            });
+        }
+
+        const SESSION_ID = generateSessionId();
         if(!SESSION_ID){
             return res.status(500).send({
                 status: 500,
@@ -14,7 +24,6 @@ const createSessionId = async (req, res, collection) => {
         }
 
         const result = await saveSessionId(collection, SESSION_ID, USER_ID);
-
         if(!result){
             return res.status(500).send({
                 status: 500,

@@ -35,11 +35,6 @@ export const Home = () => {
     const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
     const { predictions, showPrediction, isLoadingPrediction, closePrediction } = usePrediction(questionCount);
 
-    // useEffect(() => {
-    //     if (isPredictionCorrect !== undefined) {
-    //         setIsModalOpen(true);
-    //     }
-    // }, [isPredictionCorrect]);
 
     useEffect(() => {
         if (question && question.category === 'time_pressure') {
@@ -85,11 +80,6 @@ export const Home = () => {
         
         handleMouseLeave(buttonId);
         updateChoice(buttonId);
-
-        // Note: Individual predictions are disabled in favor of batch predictions
-        // if (prediction !== undefined) {
-        //     checkPrediction(prediction, answerValue);
-        // }
     };
 
     const handleNextClick = (questionId) => {

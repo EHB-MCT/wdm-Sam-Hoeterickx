@@ -25,9 +25,14 @@ export const useQuestions = () => {
     }, []);
 
     useEffect(() => {
-        setQuestion(questionList[questionCount]);
+        const currentQuestionId = localStorage.getItem('question_id');
+
+        if(currentQuestionId === '1'){
+            setQuestion(questionList[questionCount]);
+        }else {
+            setQuestion(questionList[currentQuestionId``]);
+        }
         decisionStart.current = Date.now();
-        // console.log('Current question:', question);
     }, [questionCount, questionList]);
 
     const nextQuestion = () => {
