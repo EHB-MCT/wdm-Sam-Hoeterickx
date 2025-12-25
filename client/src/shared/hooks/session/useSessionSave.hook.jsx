@@ -17,7 +17,7 @@ export const useSessionSave = () => {
         setSaveError(null);
 
         try {
-            await sessionService.createSession();
+            await sessionService.saveSession();
             setSaveSuccess(true);
             
             localStorage.removeItem('quiz_completed');

@@ -47,7 +47,7 @@ export const useQuestions = () => {
         }
     };
 
-    const isQuizComplete = questionList.length > 0 && questionCount >= questionList.length - 1;
+    const isQuizComplete = questionList.length > 0 && questionCount === questionList.length - 1;
 
     const getDecisionTime = () => {
         if (!decisionStart.current){

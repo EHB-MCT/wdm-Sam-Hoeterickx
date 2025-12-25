@@ -65,14 +65,6 @@ export const Home = () => {
         }
     }, [timerActive, timeLeft]);
 
-    const onSuccess = () => {
-        resetHoverTime();
-        resetChoices();
-        nextQuestion();
-        setSelectedAnswer(null);
-        setSelectedButtonId(null);
-    };
-
     const handleOptionClick = (buttonId, answerValue) => {
         if (question.category === 'time_pressure' && optionLocked) {
             return;
@@ -84,6 +76,16 @@ export const Home = () => {
         
         handleMouseLeave(buttonId);
         updateChoice(buttonId);
+    };
+
+    const onSuccess = () => {
+        resetHoverTime();
+        resetChoices();
+        if (!isQuizComplete) {
+            nextQuestion();
+        }
+        setSelectedAnswer(null);
+        setSelectedButtonId(null);
     };
 
     const handleNextClick = () => {

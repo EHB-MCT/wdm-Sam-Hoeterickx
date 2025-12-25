@@ -26,7 +26,7 @@ const addUserToSessionId = async(collection, SESSION_ID, USER_ID) => {
                 user_id: USER_ID
             }
         },
-        { ReturnDocument: 'after' }
+        { returnDocument: 'after' }
     )
 }
 

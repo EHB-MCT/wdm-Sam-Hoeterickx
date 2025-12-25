@@ -5,7 +5,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import '~styles/auth.css';
 
 //Hooks
-import { useRegisterUser } from '../../../../shared/hooks'; 
+import { useRegisterUser, useSessionSave } from '../../../../shared/hooks'; 
 
 //Routes
 import { LOGIN_ROUTE } from '../../login';
@@ -23,6 +23,8 @@ export const Register = () => {
     });
 
     const { register, isLoading, isSuccess, error } = useRegisterUser();
+        const { saveSessionAfterLogin, isSaving, saveError } = useSessionSave();
+    
 
     const handleChange = (e) => {
         setFormData({
@@ -50,7 +52,8 @@ export const Register = () => {
         register(formData.username, formData.email, formData.password, formData.repeatPassword, onSuccess);
     }
 
-    const onSuccess = () => {
+    const onSuccess = async () => {
+        await saveSessionAfterLogin();
         nav('/dashboard');
     }
 
@@ -61,7 +64,12 @@ export const Register = () => {
                 
                 {error && (
                     <div className="alert alert-error" style={{ color: 'red', marginBottom: '1rem' }}>
-                        {error.message || "Registratie mislukt."}
+                        {error.message || "Er is iets misgegaan tijdens het inloggen."}
+                    </div>
+                )}
+                {saveError && (
+                    <div className="alert alert-warning" style={{ color: 'orange', marginBottom: '1rem' }}>
+                        {saveError || "Sessie kon niet worden opgeslagen."}
                     </div>
                 )}
 
