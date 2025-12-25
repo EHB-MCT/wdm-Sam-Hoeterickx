@@ -7,6 +7,7 @@ export const Dashboard = () => {
 
     useEffect(() => {
         getMyData(); 
+        localStorage.clear();
     }, []);
 
     if (isLoading) return <p>Gegevens laden...</p>;
