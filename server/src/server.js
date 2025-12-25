@@ -9,7 +9,7 @@
   const app = express();
   const port = 3000;
 
-  const DB_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/Development-V-WDM';
+  const DB_URI = process.env.DB_URI || 'mongodb://localhost:27017/Development-V-WDM';
   const CLIENT = new MongoClient(DB_URI);
   const DB_NAME = 'Development-V-WDM';
   const DATABASE = CLIENT.db(DB_NAME);
@@ -27,7 +27,7 @@
   }));
   app.use(cookieParser('abc'));
 
-  app.use(cors({
+app.use(cors({
     origin: ['http://localhost:8080', 'http://localhost:3000'],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"]
