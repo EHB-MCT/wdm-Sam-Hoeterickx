@@ -12,5 +12,8 @@ export { useLoginUser } from './auth/useLoginUser.hook';
 export { useRegisterUser } from './auth/useRegisterUser.hook';
 export { useLogoutUser } from './auth/useLogoutUser.hook'
 
+//SESSION
+export { useSessionSave } from './session/useSessionSave.hook';
+
 //USERS
 export { useGetUserData } from './user/useGetUserData.hook';
