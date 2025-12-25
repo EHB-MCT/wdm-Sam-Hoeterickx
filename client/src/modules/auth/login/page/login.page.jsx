@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '~styles/auth.css';
 
 // Hooks
-import { useLoginUser } from '../../../../shared/hooks';
+import { useLoginUser, useSessionSave } from '../../../../shared/hooks';
 
 //Routes
 import { REGISTER_ROUTE } from '../../register';
@@ -19,7 +19,8 @@ export const Login = () => {
         password: ''
     });
 
-    const { login, isLoading, isSuccess, error } = useLoginUser();
+    const { login, isLoading, error } = useLoginUser();
+    const { saveSessionAfterLogin, isSaving, saveError } = useSessionSave();
 
     const handleChange = (e) => {
         setFormData({
@@ -33,7 +34,8 @@ export const Login = () => {
         login(formData.email, formData.password, onSuccess);
     }
 
-    const onSuccess = () => {
+    const onSuccess = async () => {
+        await saveSessionAfterLogin();
         nav('/dashboard');
     }
 
@@ -45,6 +47,11 @@ export const Login = () => {
                 {error && (
                     <div className="alert alert-error" style={{ color: 'red', marginBottom: '1rem' }}>
                         {error.message || "Er is iets misgegaan tijdens het inloggen."}
+                    </div>
+                )}
+                {saveError && (
+                    <div className="alert alert-warning" style={{ color: 'orange', marginBottom: '1rem' }}>
+                        {saveError || "Sessie kon niet worden opgeslagen."}
                     </div>
                 )}
 
@@ -78,9 +85,9 @@ export const Login = () => {
                     <button 
                         type="submit" 
                         className="auth-button"
-                        disabled={isLoading}
+                        disabled={isLoading || isSaving}
                     >
-                        {isLoading ? 'Laden...' : 'Login'}
+                        {isLoading || isSaving ? 'Laden...' : 'Login'}
                     </button>
                 </form>
                 <div className="auth-link">
