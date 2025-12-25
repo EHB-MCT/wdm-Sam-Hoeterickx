@@ -47,6 +47,8 @@ export const useQuestions = () => {
         }
     };
 
+    const isQuizComplete = questionList.length > 0 && questionCount >= questionList.length - 1;
+
     const getDecisionTime = () => {
         if (!decisionStart.current){
             return 0
@@ -56,5 +58,5 @@ export const useQuestions = () => {
         }
     };
 
-    return { question, questionCount, nextQuestion, getDecisionTime };
+    return { question, questionCount, nextQuestion, getDecisionTime, isQuizComplete };
 }
