@@ -31,6 +31,7 @@ export const Home = () => {
     const [timeLeft, setTimeLeft] = useState(3);
     const [timerActive, setTimerActive] = useState(false);
     const [optionLocked, setOptionLocked] = useState(false);
+    const [lastAnswerSubmitted, setLastAnswerSubmitted] = useState(false);
 
     const { handleAnswerQuestion } = useAnswerQuestion();
     // const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
@@ -83,13 +84,17 @@ export const Home = () => {
         resetChoices();
         if (!isQuizComplete) {
             nextQuestion();
+        } else {
+            // Laatste vraag is beantwoord
+            setLastAnswerSubmitted(true);
+            localStorage.setItem('quiz_completed', 'true');
         }
         setSelectedAnswer(null);
         setSelectedButtonId(null);
     };
 
     const handleNextClick = () => {
-        if (isQuizComplete) {
+        if (lastAnswerSubmitted) {
             nav(`/${LOGIN_ROUTE.path}`);
             return;
         }
@@ -117,6 +122,7 @@ export const Home = () => {
                 timerActive={timerActive}
                 optionLocked={optionLocked}
                 isQuizComplete={isQuizComplete}
+                lastAnswerSubmitted={lastAnswerSubmitted}
             />
 <ConfirmationModal 
                 isOpen={isModalOpen}
