@@ -1,16 +1,21 @@
 //Components
 import { OptionButton } from '../optionButton/OptionButton';
 
-export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick, onHoverStart, onHoverEnd, timeLeft, timerActive, optionLocked }) => {
+export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick, onHoverStart, onHoverEnd, timeLeft, timerActive, optionLocked, isQuizComplete, lastAnswerSubmitted }) => {
     
     const handleNext = () => {
-        onNextClick(question._id);
+        if (lastAnswerSubmitted) {
+            onNextClick(question._id);
+        } else {
+            localStorage.setItem('question_id', question._id);
+            onNextClick(question._id);
+        }
     };
 
     return(
         <>
             {
-                question && (
+                question && !lastAnswerSubmitted && (
                     <div className="quiz-container">
                         <section className="quiz-section">
                             <h3>{ question.question }</h3>
@@ -47,8 +52,28 @@ export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick,
                             <button
                                 className="next-button"
                                 onClick={handleNext}
+                                disabled={!selectedButtonId}
                             >
                                 Next
+                            </button>
+                        </section>
+                    </div>
+                )
+            }
+            {
+                lastAnswerSubmitted && (
+                    <div className="quiz-container">
+                        <section className="quiz-section">
+                            <h3>Quiz Voltooid!</h3>
+                            <div className="quiz-complete-message">
+                                <p>Bedankt voor het voltooien van de quiz. Je antwoorden zijn opgeslagen.</p>
+                                <p>Klik hieronder om in te loggen en je resultaten te bekijken.</p>
+                            </div>
+                            <button
+                                className="next-button"
+                                onClick={handleNext}
+                            >
+                                Bekijk je resultaten
                             </button>
                         </section>
                     </div>

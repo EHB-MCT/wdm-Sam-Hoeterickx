@@ -1,10 +1,22 @@
-const { generateSessionId, saveSessionId } = require('./model.js');
+const { findUserById } = require('../users/model.js');
+const { generateSessionId, saveSessionId, findSessionById, addUserToSessionId } = require('./model.js');
 
 const createSessionId = async (req, res, collection) => {
     try{
 
-        const SESSION_ID = generateSessionId();
+        const USER_ID = req.signedCookies.user;
+        const CURRENT_SESSION_ID = req.signedCookies.session;
+        const QUESTION_ID = req.query.q;
 
+        if(CURRENT_SESSION_ID && QUESTION_ID !== '1'){
+            return res.status(200).send({
+                status: 200,
+                message: 'Session id already excists',
+                sessionId: CURRENT_SESSION_ID
+            });
+        }
+
+        const SESSION_ID = generateSessionId();
         if(!SESSION_ID){
             return res.status(500).send({
                 status: 500,
@@ -12,8 +24,7 @@ const createSessionId = async (req, res, collection) => {
             });
         }
 
-        const result = await saveSessionId(collection, SESSION_ID);
-
+        const result = await saveSessionId(collection, SESSION_ID, USER_ID);
         if(!result){
             return res.status(500).send({
                 status: 500,
@@ -24,9 +35,9 @@ const createSessionId = async (req, res, collection) => {
         res.cookie('session', SESSION_ID, {
             httpOnly: true,
             sameSite: 'lax',
+            secure: false,
             signed: true,
             maxAge: 24 * 60 * 60 * 1000,
-            secure: false
         });
 
         return res.status(201).send({
@@ -45,6 +56,58 @@ const createSessionId = async (req, res, collection) => {
     }
 }
 
+const saveSessionToUser = async (req, res, sessionCollection, userCollection) => {
+    try{
+
+        const SESSION_ID = req.signedCookies.session;
+        const USER_ID = req.signedCookies.user;
+
+        if(!SESSION_ID || !USER_ID){
+            return res.status(422).send({
+                status: 422,
+                message: 'Missing credentials'
+            });
+        };
+
+        const excistingSession = await findSessionById(sessionCollection, SESSION_ID);
+        if(!excistingSession){
+            return res.status(404).send({
+                status: 404,
+                message: 'Session not found'
+            });
+        };
+        
+        const excistingUser = await findUserById(userCollection, USER_ID);
+        if(!excistingUser){
+            return res.status(404).send({
+                status: 404,
+                message: 'User not found'
+            });
+        };
+
+        const savedSessionToUser = await addUserToSessionId(sessionCollection, SESSION_ID, USER_ID);
+        
+        if(!savedSessionToUser){
+            return res.status(500).send({
+                status: 500,
+                message: 'Failed to save session to user'
+            });
+        };
+
+        return res.status(204).send({
+            status: 204,
+            message: 'Session saved successfully to User'
+        });
+
+    }catch(error){
+        console.error('Error while saving session to user', error);
+        return res.status(500).send({
+            status: 500,
+            message: error.message
+        });
+    };
+}
+
 const readCookie = (req, res) => {
 
     const SESSION_ID = req.signedCookies.session;
@@ -58,5 +121,6 @@ const readCookie = (req, res) => {
 
 module.exports = {
     createSessionId,
+    saveSessionToUser,
     readCookie
 }

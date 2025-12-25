@@ -17,9 +17,9 @@ const saveAnswer = async(collection, SESSION_ID, question_id, selected_answer, d
     return result
 }
 
-const findAllAnswerWithSessionId = async (collection, SESSION_ID) => {
+const findAllAnswerWithSessionId = async (collection, session_ids) => {
     const result = await collection.find({
-        session_id: SESSION_ID
+        session_id: { $in: session_ids }
     }).toArray();
 
     return result
@@ -28,5 +28,5 @@ const findAllAnswerWithSessionId = async (collection, SESSION_ID) => {
 module.exports = {
     getAllAnswers,
     saveAnswer,
-    findAllAnswerWithSessionId
+    findAllAnswerWithSessionId,
 }
