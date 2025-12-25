@@ -233,9 +233,11 @@ const authenticateUser = async(req, res, collection) => {
         console.log(USER_ID)
 
         if(!USER_ID){
-            return res.status(403).send({
-                status: 403,
-                message: 'Authorization failed'
+            return res.status(200).send({
+                status: 200,
+                message: 'Authorization failed',
+                isLoggedIn: false,
+                data: null
             });
         }
 
@@ -251,6 +253,7 @@ const authenticateUser = async(req, res, collection) => {
         return res.status(200).send({
             status: 200,
             message: 'Authentication successfull',
+            isLoggedIn: false,
             data: user
         });
 

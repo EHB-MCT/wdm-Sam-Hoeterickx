@@ -15,7 +15,7 @@ export const Dashboard = () => {
         document.title = 'WDM | Dashboard';
         getMyData(); 
         
-        localStorage.setItem('question_id', '0');
+        localStorage.setItem('question_id', '1');
         localStorage.removeItem('quiz_completed');
     }, []);
 
