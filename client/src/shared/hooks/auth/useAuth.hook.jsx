@@ -16,7 +16,7 @@ export const useAuth = () => {
         const authMe = async() => {
             try{
                 const authenticadedUser = await authService.authenticateUser();
-
+                
                 if (isMounted) {
                     setUser(authenticadedUser.data);
                     setIsError(false);

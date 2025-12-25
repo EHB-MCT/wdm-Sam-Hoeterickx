@@ -8,7 +8,7 @@ const createSessionId = async (req, res, collection) => {
         const CURRENT_SESSION_ID = req.signedCookies.session;
         const QUESTION_ID = req.query.q;
 
-        if(CURRENT_SESSION_ID && QUESTION_ID !== '1'){
+        if(CURRENT_SESSION_ID && QUESTION_ID !== '0'){
             return res.status(200).send({
                 status: 200,
                 message: 'Session id already excists',

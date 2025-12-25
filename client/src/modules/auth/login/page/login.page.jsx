@@ -24,8 +24,20 @@ export const Login = () => {
 
     useEffect(() => {
         document.title = 'WDM | Login';
-    }, [])
 
+        handleAuthCheck();
+
+    }, []);
+
+    const handleAuthCheck = () => {
+        const isAuthenticated = localStorage.getItem('auth_status');
+
+        if(isAuthenticated === 'true'){
+            return onSuccess();
+        }else{
+            return;
+        }
+    }
     const handleChange = (e) => {
         setFormData({
             ...formData,

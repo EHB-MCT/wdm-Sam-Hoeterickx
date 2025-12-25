@@ -65,7 +65,9 @@ class AuthService {
             throw new Error(errorData.message || 'Failed to autenticate');
         }
 
-        return await response.json();
+        const data = await response.json();
+
+        return data
     }
 }
 

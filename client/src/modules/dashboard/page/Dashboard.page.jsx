@@ -14,7 +14,9 @@ export const Dashboard = () => {
     useEffect(() => {
         document.title = 'WDM | Dashboard';
         getMyData(); 
-        localStorage.clear();
+        
+        localStorage.setItem('question_id', '0');
+        localStorage.removeItem('quiz_completed');
     }, []);
 
     if (isLoading) return <p>Gegevens laden...</p>;
@@ -25,7 +27,7 @@ export const Dashboard = () => {
             <h2>Dashboard</h2>
             <p>Welkom, {user?.username}</p>
 
-            <Link to={`/${HOME_ROUTE.path}`}>Start Again</Link>
+            <Link to={`/${HOME_ROUTE.path}`} replace reloadDocument >Start Again</Link>
         </div>
     )
 }

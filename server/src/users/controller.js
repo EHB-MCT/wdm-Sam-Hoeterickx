@@ -226,22 +226,25 @@ const getUserInfo = async(req, res, userCollection, answerCollection, sessionCol
 
 const authenticateUser = async(req, res, collection) => {
     try{
+        console.log('START AUTH USER')
 
         const USER_ID = req.signedCookies.user;
 
+        console.log(USER_ID)
+
         if(!USER_ID){
-            return res.status(422).send({
-                status: 422,
-                message: 'Missing credentials'
+            return res.status(403).send({
+                status: 403,
+                message: 'Authorization failed'
             });
         }
 
         const user = await findUserById(collection, USER_ID);
 
         if(!user){
-            return res.status(401).send({
-                status: 401,
-                message: 'User not authenticated'
+            return res.status(404).send({
+                status: 404,
+                message: 'User not found'
             });
         };
 
@@ -259,6 +262,7 @@ const authenticateUser = async(req, res, collection) => {
         });
     };
 }
+
 module.exports = {
     loginUser,
     registerUser,
