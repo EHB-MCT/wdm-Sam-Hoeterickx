@@ -1,12 +1,16 @@
 //Components
-import { useEffect } from 'react';
 import { OptionButton } from '../optionButton/OptionButton';
 
-export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick, onHoverStart, onHoverEnd, timeLeft, timerActive, optionLocked }) => {
+export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick, onHoverStart, onHoverEnd, timeLeft, timerActive, optionLocked, isQuizComplete }) => {
     
     const handleNext = () => {
-        localStorage.setItem('question_id', question._id);
-        onNextClick(question._id);
+        if (isQuizComplete) {
+            localStorage.setItem('quiz_completed', 'true');
+            onNextClick(question._id);
+        } else {
+            localStorage.setItem('question_id', question._id);
+            onNextClick(question._id);
+        }
     };
 
     return(
@@ -50,7 +54,7 @@ export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick,
                                 className="next-button"
                                 onClick={handleNext}
                             >
-                                Next
+                                {isQuizComplete ? 'Go to Dashboard' : 'Next'}
                             </button>
                         </section>
                     </div>

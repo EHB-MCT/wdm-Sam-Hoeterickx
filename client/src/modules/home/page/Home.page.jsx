@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 //Components
 import { QuizUI } from "../components";
@@ -18,8 +19,11 @@ import {
 
 //Style
 import './home.css';
+import { LOGIN_ROUTE } from "../../auth/login";
 
 export const Home = () => {
+    
+    const nav = useNavigate();
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [selectedButtonId, setSelectedButtonId] = useState(null);
@@ -30,7 +34,7 @@ export const Home = () => {
 
     const { handleAnswerQuestion } = useAnswerQuestion();
     // const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
-    const { question, questionCount, nextQuestion, getDecisionTime } = useQuestions();
+    const { question, questionCount, nextQuestion, getDecisionTime, isQuizComplete } = useQuestions();
     const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
     const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
     const { predictions, showPrediction, isLoadingPrediction, closePrediction } = usePrediction(questionCount);
@@ -82,7 +86,12 @@ export const Home = () => {
         updateChoice(buttonId);
     };
 
-    const handleNextClick = (questionId) => {
+    const handleNextClick = () => {
+        if (isQuizComplete) {
+            nav(`/${LOGIN_ROUTE.path}`);
+            return;
+        }
+        
         const decision_time = getDecisionTime();
         const currentQuestionId= localStorage.getItem('question_id')
         
@@ -105,6 +114,7 @@ export const Home = () => {
                 timeLeft={timeLeft}
                 timerActive={timerActive}
                 optionLocked={optionLocked}
+                isQuizComplete={isQuizComplete}
             />
 <ConfirmationModal 
                 isOpen={isModalOpen}
