@@ -6,7 +6,7 @@ const generateSessionId = () => {
 
 const saveSessionId = async (collection, SESSION_ID, USER_ID) => {
     const result = await collection.insertOne({
-        sessionId: SESSION_ID,
+        session_id: SESSION_ID,
         user_id: USER_ID,
         created_at: new Date()
     });
@@ -15,12 +15,12 @@ const saveSessionId = async (collection, SESSION_ID, USER_ID) => {
 } 
 
 const findSessionById = async (collection, SESSION_ID) => {
-    return collection.findOne({ sessionId: SESSION_ID });
+    return collection.findOne({ session_id: SESSION_ID });
 }
 
 const addUserToSessionId = async(collection, SESSION_ID, USER_ID) => {
     return await collection.findOneAndUpdate(
-        { sessionId: SESSION_ID },
+        { session_id: SESSION_ID },
         {
             $set: {
                 user_id: USER_ID
@@ -33,7 +33,7 @@ const addUserToSessionId = async(collection, SESSION_ID, USER_ID) => {
 const findSessionIdsOfUser = async(collection, USER_ID) => {
     return await collection.find(
         { user_id: USER_ID },
-        { projection: { sessionId: 1, _id: 0 }}
+        { projection: { session_id: 1, _id: 0 }}
     ).toArray();
 }
 

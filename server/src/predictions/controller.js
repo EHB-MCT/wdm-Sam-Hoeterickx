@@ -6,18 +6,18 @@ const savePrediction = async (req, res, collection) => {
         console.log('save prediction');
 
         const { changed_mind_state, elapsed_hover_time, descion_time } = req.body;
-        const sessionId = req.signedCookies.session;
+        const SESSION_ID = req.signedCookies.session;
 
-        console.log(sessionId, req.body)
+        console.log(SESSION_ID, req.body)
 
-        // if(!changed_mind_state || !elapsed_hover_time || !descion_time || !sessionId){
+        // if(!changed_mind_state || !elapsed_hover_time || !descion_time || !SESSION_ID){
         //     return res.status(401).send({
         //         status: 401,
         //         message: 'Missing info'
         //     });
         // }
 
-        // const result = await savePredictionData(collection, sessionId, changed_mind_state, elapsed_hover_time, descion_time);
+        // const result = await savePredictionData(collection, SESSION_ID, changed_mind_state, elapsed_hover_time, descion_time);
 
         // if(!result){
         //     return res.status(400).send({

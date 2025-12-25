@@ -194,7 +194,7 @@ const getUserInfo = async(req, res, userCollection, answerCollection, sessionCol
 
         const user = await findUserById(userCollection, USER_ID);
         const userSessions = await findSessionIdsOfUser(sessionCollection, USER_ID);
-        const sessionIdList = userSessions.map(session => session.sessionId);
+        const sessionIdList = userSessions.map(session => session.session_id);
         const answers = await findAllAnswerWithSessionId(answerCollection, sessionIdList);
 
 
