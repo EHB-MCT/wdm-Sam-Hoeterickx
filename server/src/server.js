@@ -56,7 +56,7 @@
   app.use('/api/ollama', ollamaRouter(predicitionCollection, answerCollection, questionsCollection));
   app.use('/api/prediction', predictionRouter(myPredictionCollection) )
   app.use('/api/questions', questionRouter(questionsCollection));
-  app.use('/api/session', sessionRouter(sessionCollection));
+  app.use('/api/session', sessionRouter(sessionCollection, userCollection));
   app.use('/api/auth', userRouter(userCollection, answerCollection, sessionCollection));
   app.use('/api/users', userRouter(userCollection));
 

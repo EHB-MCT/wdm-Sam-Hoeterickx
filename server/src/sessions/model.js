@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const { ObjectId, ReturnDocument } = require('mongodb');
 
 const generateSessionId = () => {
     return crypto.randomBytes(32).toString('hex');
@@ -15,12 +14,16 @@ const saveSessionId = async (collection, SESSION_ID, USER_ID) => {
     return result
 } 
 
+const findSessionById = async (collection, SESSION_ID) => {
+    return collection.findOne({ sessionId: SESSION_ID });
+}
+
 const addUserToSessionId = async(collection, SESSION_ID, USER_ID) => {
-    return await collection.updadateOne(
-        { _id: new ObjectId(SESSION_ID) },
+    return await collection.findOneAndUpdate(
+        { sessionId: SESSION_ID },
         {
             $set: {
-                userId: USER_ID
+                user_id: USER_ID
             }
         },
         { ReturnDocument: 'after' }
@@ -38,5 +41,6 @@ module.exports = {
     generateSessionId,
     saveSessionId,
     findSessionIdsOfUser,
+    findSessionById,
     addUserToSessionId
 }
