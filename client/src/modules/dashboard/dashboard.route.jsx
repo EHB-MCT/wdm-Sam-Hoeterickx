@@ -1,6 +1,6 @@
 //Components
 import { ProtectedRoute } from "../../shared/components";
-import { Dashboard } from "./page/Dashboard";
+import { Dashboard } from "./page/Dashboard.page";
 
 //Routes
 import { LOGIN_ROUTE } from "../auth/login";

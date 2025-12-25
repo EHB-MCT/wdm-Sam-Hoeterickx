@@ -40,6 +40,9 @@ export const Home = () => {
     const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
     const { predictions, showPrediction, isLoadingPrediction, closePrediction } = usePrediction(questionCount);
 
+    useEffect(() => {
+        document.title = 'WDM | Home';
+    }, [])
 
     useEffect(() => {
         if (question && question.category === 'time_pressure') {

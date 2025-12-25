@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 
 // Styles
@@ -23,8 +23,11 @@ export const Register = () => {
     });
 
     const { register, isLoading, isSuccess, error } = useRegisterUser();
-        const { saveSessionAfterLogin, isSaving, saveError } = useSessionSave();
-    
+    const { saveSessionAfterLogin, isSaving, saveError } = useSessionSave();
+
+    useEffect(() => {
+        document.title = 'WDM | Register';
+    }, [])
 
     const handleChange = (e) => {
         setFormData({

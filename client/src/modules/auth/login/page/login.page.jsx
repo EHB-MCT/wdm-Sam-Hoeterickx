@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 //Style
@@ -21,6 +21,10 @@ export const Login = () => {
 
     const { login, isLoading, error } = useLoginUser();
     const { saveSessionAfterLogin, isSaving, saveError } = useSessionSave();
+
+    useEffect(() => {
+        document.title = 'WDM | Login';
+    }, [])
 
     const handleChange = (e) => {
         setFormData({

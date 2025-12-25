@@ -1,11 +1,18 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
+
+//Hooks
 import { useGetUserData } from "../../../shared/hooks";
+
+//Routes
+import { HOME_ROUTE } from '../../home/Home.route';
 
 export const Dashboard = () => {
 
     const { getMyData, user, isLoading, error } = useGetUserData();
 
     useEffect(() => {
+        document.title = 'WDM | Dashboard';
         getMyData(); 
         localStorage.clear();
     }, []);
@@ -16,7 +23,9 @@ export const Dashboard = () => {
     return(
         <div>
             <h2>Dashboard</h2>
-            <p>Welkom, {user?.username || user?.user?.username}</p>
+            <p>Welkom, {user?.username}</p>
+
+            <Link to={`/${HOME_ROUTE.path}`}>Start Again</Link>
         </div>
     )
 }
