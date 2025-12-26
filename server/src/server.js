@@ -45,14 +45,12 @@ app.use(cors({
 
   //Routes
   const answerRouter = require('./answers/route.js');
-  // const ollamaRouter = require('./ollama/route.js');
   const confidenceRouter = require('./confidence/route.js');
   const questionRouter = require('./questions/route.js');
   const sessionRouter = require('./sessions/route.js');
   const userRouter = require('./users/route.js');
 
   app.use('/api/answers', answerRouter(answerCollection));
-  // app.use('/api/ollama', ollamaRouter(predicitionCollection, answerCollection, questionsCollection));
   app.use('/api/confidence', confidenceRouter(confidenceCollection) )
   app.use('/api/questions', questionRouter(questionsCollection));
   app.use('/api/session', sessionRouter(sessionCollection, userCollection));
