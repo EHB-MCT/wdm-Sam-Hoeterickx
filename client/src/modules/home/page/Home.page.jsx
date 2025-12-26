@@ -30,12 +30,13 @@ export const Home = () => {
     const [timerActive, setTimerActive] = useState(false);
     const [optionLocked, setOptionLocked] = useState(false);
     const [lastAnswerSubmitted, setLastAnswerSubmitted] = useState(false);
+    const [showAnswerConfirmation, setShowAnswerConfirmation] = useState(false);
 
     const { handleAnswerQuestion } = useAnswerQuestion();
     const { question, questionCount, nextQuestion, getDecisionTime, isQuizComplete } = useQuestions();
     const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
     const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
-    const { showConfirmation, closeConfirmation } = useRandomConfirmation(questionCount);
+    const { showRandomConfirmation, closeRandomConfirmation } = useRandomConfirmation(questionCount);
 
     useEffect(() => {
         document.title = 'WDM | Home';
@@ -99,6 +100,15 @@ export const Home = () => {
             return;
         }
         
+        if (showRandomConfirmation && selectedAnswer) {
+            setShowAnswerConfirmation(true);
+            return;
+        }
+        
+        submitAnswer();
+    };
+
+    const submitAnswer = () => {
         const decision_time = getDecisionTime();
         const currentQuestionId= localStorage.getItem('question_id')
         
@@ -122,10 +132,17 @@ export const Home = () => {
                 isQuizComplete={isQuizComplete}
                 lastAnswerSubmitted={lastAnswerSubmitted}
             />
-<ConfirmationModal 
-                isOpen={showConfirmation}
-                onConfirm={closeConfirmation}
-                onCancel={closeConfirmation}
+            <ConfirmationModal 
+                isOpen={showAnswerConfirmation}
+                onConfirm={() => {
+                    setShowAnswerConfirmation(false);
+                    closeRandomConfirmation();
+                    submitAnswer();
+                }}
+                onCancel={() => {
+                    setShowAnswerConfirmation(false);
+                    closeRandomConfirmation();
+                }}
             />
             
         </>

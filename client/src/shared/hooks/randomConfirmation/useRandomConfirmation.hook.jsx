@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 export const useRandomConfirmation = (questionCount) => {
-    const [showConfirmation, setShowConfirmation] = useState(false);
     const [confirmationQuestions, setConfirmationQuestions] = useState([]);
+    const [handledQuestions, setHandledQuestions] = useState(new Set());
 
     useEffect(() => {
         const randomQuestions = [];
@@ -19,20 +19,14 @@ export const useRandomConfirmation = (questionCount) => {
         setConfirmationQuestions(randomQuestions);
     }, []);
 
-    useEffect(() => {
-        if (confirmationQuestions.includes(questionCount)) {
-            setShowConfirmation(true);
-        } else {
-            setShowConfirmation(false);
-        }
-    }, [questionCount, confirmationQuestions]);
+    const isRandomQuestion = confirmationQuestions.includes(questionCount) && !handledQuestions.has(questionCount);
 
-    const closeConfirmation = () => {
-        setShowConfirmation(false);
+    const closeRandomConfirmation = () => {
+        setHandledQuestions(prev => new Set([...prev, questionCount]));
     };
 
     return {
-        showConfirmation,
-        closeConfirmation
+        showRandomConfirmation: isRandomQuestion,
+        closeRandomConfirmation
     };
 };
