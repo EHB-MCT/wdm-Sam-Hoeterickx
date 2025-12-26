@@ -9,12 +9,10 @@ const session = require('express-session');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Connectie string (werkt voor Docker én Lokaal als fallback)
 const DB_URI = process.env.MONGO_URI || process.env.DB_URI || 'mongodb://localhost:27017/Development-V-WDM';
 const CLIENT = new MongoClient(DB_URI);
 const DB_NAME = 'Development-V-WDM';
 
-// --- DE 20 VRAGEN VOOR DE DATABASE ---
 const INITIAL_QUESTIONS = [
     { "_id": 1, "question": "Je hebt 80% kans om €100 te winnen. Speel je mee?", "options": ["Ja", "Nee"], "category": "framing" },
     { "_id": 2, "question": "Je hebt 20% kans om €100 te verliezen. Speel je mee?", "options": ["Ja", "Nee"], "category": "framing" },
@@ -46,13 +44,13 @@ async function startServer() {
 
         const DATABASE = CLIENT.db(DB_NAME);
 
-        // Collections
+        //Collections
+        const answerCollection = DATABASE.collection('answers');
+        const confidenceCollection = DATABASE.collection('confidence_checks');
         const questionsCollection = DATABASE.collection('questions');
         const sessionCollection = DATABASE.collection('sessions');
-        const answerCollection = DATABASE.collection('answers');
-        // Let op: predictionCollection is weggehaald omdat Ollama weg is.
+        const userCollection = DATABASE.collection('users');
 
-        // --- SEEDING: Vul DB als deze leeg is ---
         const count = await questionsCollection.countDocuments();
         if (count === 0) {
             console.log("Geen vragen gevonden. Database wordt gevuld...");
@@ -62,7 +60,6 @@ async function startServer() {
             console.log(`Er zijn al ${count} vragen in de database.`);
         }
 
-        // Middleware
         app.use(session({
             secret: 'abc',
             resave: false,
@@ -80,15 +77,20 @@ async function startServer() {
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
 
-        // Routes (Zonder Ollama)
+        // Routers
         const answerRouter = require('./answers/route.js');
-        const sessionRouter = require('./sessions/route.js');
+        const confidenceRouter = require('./confidence/route.js');
         const questionRouter = require('./questions/route.js');
+        const sessionRouter = require('./sessions/route.js');
+        const userRouter = require('./users/route.js');
+
 
         app.use('/api/answers', answerRouter(answerCollection));
-        app.use('/api/session', sessionRouter(sessionCollection));
+        app.use('/api/confidence', confidenceRouter(confidenceCollection) )
         app.use('/api/questions', questionRouter(questionsCollection));
-        // Ollama route is verwijderd
+        app.use('/api/session', sessionRouter(sessionCollection, userCollection));
+        app.use('/api/auth', userRouter(userCollection, answerCollection, sessionCollection, confidenceCollection));
+        app.use('/api/users', userRouter(userCollection));
 
         app.get('/api/', (req, res) => res.status(200).send('Hello world'));
 

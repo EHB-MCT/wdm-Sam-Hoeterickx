@@ -24,7 +24,6 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
-      # Verbinding naar de mongodb service
       - MONGO_URI=mongodb://mongodb:27017/Development-V-WDM 
       - PORT=3000
     command: npm run run
@@ -37,8 +36,6 @@ services:
       - 27017:27017
     volumes:
       - mongodata:/data/db
-    # GEEN environment variabelen of init-scripts hier nodig
-    # De server regelt de database-naam en vulling.
   
 volumes:
   mongodata:
