@@ -8,6 +8,17 @@ const {
     findUserById
 } = require('./model');
 
+
+/**
+ * Login user and set user cookie
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - User collection
+ * @param {string} req.body.email - Email adress of the user
+ * @param {string} req.body.password - Password of the user
+ * @returns 
+ */
 const loginUser = async(req, res, collection) => {
     try{
 
@@ -47,16 +58,16 @@ const loginUser = async(req, res, collection) => {
             });
         };
 
-        const USER_IDString = user._id.toString();
+        const userIdString = user._id.toString();
 
-        res.cookie('user', USER_IDString, {
+        res.cookie('user', userIdString, {
             httpOnly: true,
             sameSite: 'lax',
             secure: false, 
             signed: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-        console.log('Cookie set:', USER_IDString);
+        console.log('Cookie set:', userIdString);
 
         return res.status(200).send({
             status: 200,
@@ -72,6 +83,23 @@ const loginUser = async(req, res, collection) => {
     }
 } 
 
+/**
+ * Register user and set user cookie
+ * * Password Requirements:
+ * - Minimum 8 characters
+ * - At least 1 uppercase letter
+ * - At least 1 lowercase letter
+ * - At least 1 number
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - User collection
+ * @param {string} req.body.username - Username of the user
+ * @param {string} req.body.email - Email adress of the user
+ * @param {string} req.body.password - Password of the user
+ * @param {string} req.body.repeatPassword - Password of the user
+ * @returns 
+ */
 const registerUser = async(req, res, collection) => {
     try{
         const { username, email, password, repeatPassword } = req.body;
@@ -141,9 +169,9 @@ const registerUser = async(req, res, collection) => {
             });
         };
 
-        const USER_IDString = newUser.newUser._id.toString();
+        const userIdString = newUser.newUser._id.toString();
 
-        res.cookie('user', USER_IDString, {
+        res.cookie('user', userIdString, {
             httpOnly: true,
             sameSite: 'lax',
             secure: false, 
@@ -165,6 +193,13 @@ const registerUser = async(req, res, collection) => {
     }
 }
 
+/**
+ * Log out user and removes user cookie
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns 
+ */
 const logoutUser = (req, res) => {
     try{
         res.clearCookie('user');
@@ -180,6 +215,17 @@ const logoutUser = (req, res) => {
     }
 }
 
+/**
+ * Get info of the user
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} userCollection - User collection
+ * @param {Object} answerCollection - Answer collection
+ * @param {Object} sessionCollection - Session collection
+ * @param {Object} confidenceCollection - Confidence collection
+ * @returns 
+ */
 const getUserInfo = async(req, res, userCollection, answerCollection, sessionCollection, confidenceCollection) => {
     try{
 
@@ -226,6 +272,14 @@ const getUserInfo = async(req, res, userCollection, answerCollection, sessionCol
     }
 }
 
+/**
+ * Check if user is currently authenticated with the user cookie
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - User collection
+ * @returns 
+ */
 const authenticateUser = async(req, res, collection) => {
     try{
         console.log('START AUTH USER')
