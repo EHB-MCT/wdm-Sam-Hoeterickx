@@ -1,5 +1,13 @@
 const { saveAnswer, getAllAnswers } = require('./model.js');
 
+/**
+ * Get all answers in database
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - Answer collection
+ * @returns 
+ */
 const getAnswers = async(req, res, collection) => {
     try{
 
@@ -27,6 +35,20 @@ const getAnswers = async(req, res, collection) => {
     }
 }
 
+/**
+ * Save answer in database on question id
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - Answer collection
+ * @param {String} SESSION_ID - Cookie of session id
+ * @param {String} req.body.question_id - Id of the question
+ * @param {String} req.body.selected_answer - String that contains the selelected answer
+ * @param {String} req.body.desicion_time - Duration of the desicion making
+ * @param {Object} req.body.elapsed_hover_time - Duration of the hover time
+ * @param {Object} req.body.changed_mind - Amount of times clicked on each option button
+ * @returns 
+ */
 const answerQuestion = async(req, res, collection) => {
     try{
 
@@ -34,14 +56,22 @@ const answerQuestion = async(req, res, collection) => {
         const { question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind } = req.body;
 
         if(!SESSION_ID || !question_id || !selected_answer || !decision_time || !elapsed_hover_time || !changed_mind){
-            return res.status(401).send({
-                status: 401,
+            return res.status(422).send({
+                status: 422,
                 message: 'Missing info'
             })
         }
 
-        const result = await saveAnswer(collection, SESSION_ID, question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind);
+        const answerData = {
+            session_id: SESSION_ID,
+            question_id,
+            selected_answer,
+            decision_time,
+            elapsed_hover_time,
+            changed_mind,
+        }
 
+        const result = await saveAnswer(collection, answerData);
         if(!result){
             return res.status(500).send({
                 status: 500,
