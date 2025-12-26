@@ -1,8 +1,13 @@
 export const OptionButton = ({ id, value, isSelected, onClick, onMouseEnter, onMouseLeave, disabled }) => {
-    const className = `option-button ${isSelected ? "selected" : ""} ${disabled ? "disabled" : ""}`;
+    const baseClass = "option-button";
+    const selectedClass = isSelected ? "selected" : "";
+    const disabledClass = disabled ? "disabled" : "";
+    const className = `${baseClass} ${selectedClass} ${disabledClass}`.trim();
 
     const handleOptionClick = () => {
-        onClick(id, value); 
+        if (!disabled) {
+            onClick(id, value); 
+        }
     };
 
     const handleMouseEnter = () => onMouseEnter(id);
