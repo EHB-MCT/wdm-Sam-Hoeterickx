@@ -1,5 +1,5 @@
-const saveConfidence = (collection, confidenceData) => {
-    return collection.insertOne({
+const saveConfidence = async (collection, confidenceData) => {
+    return await collection.insertOne({
         session_id: confidenceData.SESSION_ID,
         isConfidence: confidenceData.isConfidence,
         elapsed_hover_time: confidenceData.elapsed_hover_time,
@@ -8,6 +8,13 @@ const saveConfidence = (collection, confidenceData) => {
     });
 }
 
+const findAllConfidencesWithSessionId = async (collection, session_ids) => {
+    return await collection.find({
+        session_id: { $in: session_ids }
+    }).toArray();
+}
+
 module.exports = {
-    saveConfidence
+    saveConfidence,
+    findAllConfidencesWithSessionId
 }

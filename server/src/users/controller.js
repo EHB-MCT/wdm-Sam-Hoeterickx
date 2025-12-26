@@ -1,4 +1,5 @@
 const { findAllAnswerWithSessionId } = require('../answers/model');
+const { findAllConfidencesWithSessionId } = require('../confidence/model');
 const { findSessionIdsOfUser } = require('../sessions/model');
 const {
     findUserByEmail,
@@ -179,7 +180,7 @@ const logoutUser = (req, res) => {
     }
 }
 
-const getUserInfo = async(req, res, userCollection, answerCollection, sessionCollection) => {
+const getUserInfo = async(req, res, userCollection, answerCollection, sessionCollection, confidenceCollection) => {
     try{
 
         const USER_ID = req.signedCookies.user;
@@ -196,12 +197,12 @@ const getUserInfo = async(req, res, userCollection, answerCollection, sessionCol
         const userSessions = await findSessionIdsOfUser(sessionCollection, USER_ID);
         const sessionIdList = userSessions.map(session => session.session_id);
         const answers = await findAllAnswerWithSessionId(answerCollection, sessionIdList);
+        const confidenceData = await findAllConfidencesWithSessionId(confidenceCollection, sessionIdList);
 
-
-        if(!userSessions || !answers || !user){
+        if(!user){
             return res.status(404).send({
                 status: 404,
-                message: 'Something was not found'
+                message: 'User not found'
             })
         }
 
@@ -211,7 +212,8 @@ const getUserInfo = async(req, res, userCollection, answerCollection, sessionCol
             data: {
                 user,
                 userSessions,
-                answers
+                answers,
+                confidenceData
             }
         })
         

@@ -56,7 +56,7 @@ app.use(cors({
   app.use('/api/confidence', confidenceRouter(confidenceCollection) )
   app.use('/api/questions', questionRouter(questionsCollection));
   app.use('/api/session', sessionRouter(sessionCollection, userCollection));
-  app.use('/api/auth', userRouter(userCollection, answerCollection, sessionCollection));
+  app.use('/api/auth', userRouter(userCollection, answerCollection, sessionCollection, confidenceCollection));
   app.use('/api/users', userRouter(userCollection));
 
   app.get('/api/', (req, res) => {
