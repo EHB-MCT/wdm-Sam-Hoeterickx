@@ -10,7 +10,7 @@ export const useRandomConfirmation = (questionCount) => {
         
         while (randomQuestions.length < 5) {
             const randomNum = Math.floor(Math.random() * 20);
-            if (!usedNumbers.has(randomNum)) {
+            if (!usedNumbers.has(randomNum) && randomNum !== 5 && randomNum !== 6) {
                 usedNumbers.add(randomNum);
                 randomQuestions.push(randomNum);
             }
