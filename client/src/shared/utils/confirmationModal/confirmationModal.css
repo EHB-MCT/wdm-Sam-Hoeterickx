@@ -5,76 +5,125 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
     width: 90%;
-    max-width: 400px;
-    
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2); 
-    border: 1px solid #e0e0e0;
-    
+    max-width: 500px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
     z-index: 1000;
     text-align: center;
-    font-family: Arial, sans-serif;
+    animation: modalFadeIn 0.3s ease;
+    backdrop-filter: blur(20px);
 }
 
 .pop-up::before {
     content: '';
     position: fixed;
-    top: -50vh;
-    left: -50vw;
-    width: 200vw;
-    height: 200vh;
-    background-color: #b9b9b979;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 15, 15, 0.8);
+    backdrop-filter: blur(8px);
     z-index: -1;
-    pointer-events: all; 
 }
 
 .pop-up h4 {
-    margin-top: 0;
-    margin-bottom: 25px;
-    color: #000000;
-    font-size: 1.4em;
+    margin: 0 0 1rem 0;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.pop-up p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
 }
 
 .button-container {
     display: flex;
-    justify-content: center;
-    gap: 15px;
+    flex-direction: column;
+    gap: 1rem;
 }
 
-/* Algemene stijl voor beide knoppen */
-.confirm-button, .cancel-button {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s;
-}
-
-.confirm-button:active, .cancel-button:active {
-    transform: scale(0.98);
-}
-
-/* Specifieke kleuren */
 .confirm-button {
-    background-color: #007bff;
+    background: var(--gradient-primary);
     color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    order: 2;
 }
 
-.cancel-button {
-    background-color: #e0e0e0;
-    color: #333;
+.confirm-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.confirm-button:hover::before {
+    left: 100%;
 }
 
 .confirm-button:hover {
-    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.cancel-button {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    padding: 1rem 2rem;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    order: 1;
 }
 
 .cancel-button:hover {
-    background-color: #d0d0d0; 
+    background: var(--bg-hover);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    transform: translateY(-1px);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Responsive for mobile */
+@media (min-width: 768px) {
+    .button-container {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+    
+    .confirm-button, .cancel-button {
+        min-width: 180px;
+    }
 }
