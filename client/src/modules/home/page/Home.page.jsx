@@ -86,7 +86,6 @@ export const Home = () => {
         if (!isQuizComplete) {
             nextQuestion();
         } else {
-            // Laatste vraag is beantwoord
             setLastAnswerSubmitted(true);
             localStorage.setItem('quiz_completed', 'true');
         }
@@ -110,7 +109,9 @@ export const Home = () => {
 
     const submitAnswer = () => {
         const decision_time = getDecisionTime();
-        const currentQuestionId= localStorage.getItem('question_id')
+        const currentQuestionId= localStorage.getItem('question_id');
+
+        console.log('submit', decision_time, currentQuestionId, selectedAnswer, elapsedHoverTime, changedMind);
         
         handleAnswerQuestion(currentQuestionId, selectedAnswer, decision_time, elapsedHoverTime, changedMind, onSuccess);
     };

@@ -1,19 +1,41 @@
+//Hooks
+import { useHoverTracking, useQuestions } from "../../hooks";
+
+//Service
+import { confirmationService } from "../../services";
+
 //Style
-import './confirmationModal.css';
+import './confirmationModal.css'
 
 export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
+
+    const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
+    const { getDecisionTime } = useQuestions();
     
     if(!isOpen){
         return null
     }
 
     const handleConfirm = () => {
+        saveConfirmationData(false);
+        resetHoverTime();
         onConfirm();
     }
 
     const handleCancel = () => {
+        saveConfirmationData(true);
+        resetHoverTime();
         onCancel();
     }
+
+    const saveConfirmationData = async(changedMind) => {
+        try{
+            const decisionTime = getDecisionTime();
+            await confirmationService.saveConfirmationData(changedMind, elapsedHoverTime, decisionTime);    
+        }catch(error){
+            console.error('Failed to save confirmation data:', error);
+        }
+    } 
 
     return (
         <div className="pop-up">
@@ -23,12 +45,16 @@ export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
                 <button
                     className="confirm-button"
                     onClick={ handleConfirm }
+                    onMouseEnter={ () => handleMouseEnter('confirm') }
+                    onMouseLeave={ () => handleMouseLeave('confirm')}
                 >
                     Ik sta achter mijn antwoord
                 </button>
                 <button
                     className="cancel-button"
                     onClick={ handleCancel }
+                    onMouseEnter={ () => handleMouseEnter('cancel') }
+                    onMouseLeave={ () => handleMouseLeave('cancel')}
                 >
                     Ik wil mijn antwoord veranderen
                 </button>
