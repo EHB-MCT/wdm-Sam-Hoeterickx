@@ -1,6 +1,16 @@
 const { findUserById } = require('../users/model.js');
 const { generateSessionId, saveSessionId, findSessionById, addUserToSessionId } = require('./model.js');
 
+/**
+ * Create a new session
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - Session collection
+ * @param {String} USER_ID - Cookie of user id
+ * @param {String} CURRENT_SESSION_ID - Cookie of session id
+ * @returns 
+ */
 const createSessionId = async (req, res, collection) => {
     try{
 
@@ -56,6 +66,16 @@ const createSessionId = async (req, res, collection) => {
     }
 }
 
+/**
+ * Save current session to authenticated user
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - Session collection
+ * @param {String} USER_ID - Cookie of user id
+ * @param {String} SESSION_ID - Cookie of session id
+ * @returns 
+ */
 const saveSessionToUser = async (req, res, sessionCollection, userCollection) => {
     try{
 
@@ -108,6 +128,14 @@ const saveSessionToUser = async (req, res, sessionCollection, userCollection) =>
     };
 }
 
+/**
+ * Create a new session
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {String} SESSION_ID - Cookie of session id
+ * @returns 
+ */
 const readCookie = (req, res) => {
 
     const SESSION_ID = req.signedCookies.session;
