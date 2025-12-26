@@ -1,7 +1,7 @@
 //Components
 import { OptionButton } from '../optionButton/OptionButton';
 
-export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick, onHoverStart, onHoverEnd, timeLeft, timerActive, optionLocked, isQuizComplete, lastAnswerSubmitted }) => {
+export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick, onHoverStart, onHoverEnd, timeLeft, timerActive, optionLocked, lastAnswerSubmitted }) => {
     
     const handleNext = () => {
         if (lastAnswerSubmitted) {

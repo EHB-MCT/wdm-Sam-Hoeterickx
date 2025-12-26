@@ -1,31 +1,6 @@
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 class PredictionService {
-async getBatchPrediction(){
-        const response = await fetch(`${BASE_URL}/ollama/predict-next-ten`, {
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch batch prediction: ${response.statusText}`);
-        }
-
-        const DATA = response.json();
-        return DATA
-    }
-
-    async getPrediction(questionId){
-        const response = await fetch(`${BASE_URL}/ollama/predict-next-answer?question_id=${questionId}`, {
-            credentials: 'include'
-        });
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch prediction: ${response.statusText}`);
-        }
-
-        const DATA = response.json();
-        return DATA
-    }
 
     async savePredictionData(changedMindState, elapsedHoverTime, desicionTime){
         const response = await fetch(`${BASE_URL}/prediction/savePrediction`, {

@@ -5,16 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { QuizUI } from "../components";
 
 //Modals
-import { ConfirmationModal, PredictionModal } from "../../../shared/utils";
+import { ConfirmationModal } from "../../../shared/utils";
 
 //Hooks
 import {
     useAnswerQuestion,
-    // useCheckPrediction,
     useChoiceTracking,
     useHoverTracking,
     useQuestions,
-    usePrediction
+    useRandomConfirmation
 } from '../../../shared/hooks';
 
 //Style
@@ -27,18 +26,16 @@ export const Home = () => {
 
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [selectedButtonId, setSelectedButtonId] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [timeLeft, setTimeLeft] = useState(3);
     const [timerActive, setTimerActive] = useState(false);
     const [optionLocked, setOptionLocked] = useState(false);
     const [lastAnswerSubmitted, setLastAnswerSubmitted] = useState(false);
 
     const { handleAnswerQuestion } = useAnswerQuestion();
-    // const { checkPrediction, isPredictionCorrect } = useCheckPrediction();
     const { question, questionCount, nextQuestion, getDecisionTime, isQuizComplete } = useQuestions();
     const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();
     const { changedMind, updateChoice, resetChoices } = useChoiceTracking();
-    const { predictions, showPrediction, isLoadingPrediction, closePrediction } = usePrediction(questionCount);
+    const { showConfirmation, closeConfirmation } = useRandomConfirmation(questionCount);
 
     useEffect(() => {
         document.title = 'WDM | Home';
@@ -108,9 +105,7 @@ export const Home = () => {
         handleAnswerQuestion(currentQuestionId, selectedAnswer, decision_time, elapsedHoverTime, changedMind, onSuccess);
     };
 
-    if (isLoadingPrediction) {
-        return <p>Loading ...</p>
-    }
+    
     
     return(
         <>
@@ -128,21 +123,11 @@ export const Home = () => {
                 lastAnswerSubmitted={lastAnswerSubmitted}
             />
 <ConfirmationModal 
-                isOpen={isModalOpen}
-                onConfirm={() => {
-                    console.log("Gebruiker is zeker!");
-                    setIsModalOpen(false);
-                }}
-                onCancel={() => {
-                    console.log("Gebruiker is niet zeker.");
-                    setIsModalOpen(false);
-                }}
+                isOpen={showConfirmation}
+                onConfirm={closeConfirmation}
+                onCancel={closeConfirmation}
             />
-            <PredictionModal 
-                isOpen={showPrediction}
-                predictions={predictions}
-                onClose={closePrediction}
-            />
+            
         </>
     )
 }
