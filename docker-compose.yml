@@ -24,22 +24,21 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - DB_URI=mongodb://mongodb:27017/Development-V-WDM 
+      # Verbinding naar de mongodb service
+      - MONGO_URI=mongodb://mongodb:27017/Development-V-WDM 
       - PORT=3000
     command: npm run run
     depends_on:
       - mongodb
 
-
   mongodb:
     image: mongo:latest
     ports:
       - 27017:27017
-    environment:
-      MONGO_INITDB_DATABASE: Development-V-WDM 
     volumes:
       - mongodata:/data/db
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro 
+    # GEEN environment variabelen of init-scripts hier nodig
+    # De server regelt de database-naam en vulling.
   
 volumes:
   mongodata:
