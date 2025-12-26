@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 
 //Services
-import { sessionService, ollamaService } from "../../services";
+import { sessionService } from "../../services";
 
 export const useAppStartUp = () => {
     useEffect(() => {
@@ -20,6 +20,5 @@ export const useAppStartUp = () => {
         }
 
         initializeSession();
-        ollamaService.awakeOllama();
     }, []);
 }

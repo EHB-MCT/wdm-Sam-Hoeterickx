@@ -22,40 +22,25 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
-    # env_file: - .env  <-- Verwijder afhankelijkheid van .env file als je wilt dat het bij iedereen werkt
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - OLLAMA_HOST=http://ollama:11434
-      # Gebruik de interne containernaam 'mongodb' in plaats van localhost of een variabele
       - DB_URI=mongodb://mongodb:27017/Development-V-WDM 
       - PORT=3000
     command: npm run run
     depends_on:
-      - ollama
       - mongodb
 
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    ports: ["11434:11434"]
-    volumes:
-      - ollama_data:/root/.ollama
-    # Optioneel: Script om model te pullen bij start (zie uitleg onder)
-    restart: unless-stopped
-    
+
   mongodb:
     image: mongo:latest
     ports:
       - 27017:27017
     environment:
-      # Zorg dat de DB naam matcht met je mongo-init.js
       MONGO_INITDB_DATABASE: Development-V-WDM 
     volumes:
       - mongodata:/data/db
-      # DIT IS DE KEY FIX: Laad je init script in de entrypoint map
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro 
   
 volumes:
-  ollama_data:
   mongodata:
     driver: local
