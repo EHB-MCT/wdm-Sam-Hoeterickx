@@ -183,11 +183,18 @@ const questions = [
     }
 ]
 
+/**
+ * Get all questions
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - Question collection
+ * @returns 
+ */
 const getQuestions = async(req, res, collection) => {
     try{
 
         const QUESTIONS = await getAllQuestions(collection);
-        // console.log(QUESTIONS);
 
         if(!QUESTIONS){
             return res.status(404).send({
@@ -211,6 +218,15 @@ const getQuestions = async(req, res, collection) => {
     }
 }
 
+/**
+ * Add questions manualy to database
+ * 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} collection - Question collection
+ * @param {Array<Object>} questions - Array of all the questions
+ * @returns 
+ */
 const addQuestions = async(req, res, collection) => {
     try{
 

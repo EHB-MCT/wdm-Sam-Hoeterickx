@@ -1,3 +1,9 @@
+/**
+ * Get all questions from database
+ * 
+ * @param {Object} collection - Question collection
+ * @returns 
+*/
 const getAllQuestions = async(collection) => {
     const result = await collection.find({}).toArray();
 
@@ -5,27 +11,33 @@ const getAllQuestions = async(collection) => {
         return result
     }
 
-    const sortedQuestionsList = result.sort((a, b) => a._id - b._id);
-
-    return sortedQuestionsList
-
+    return sortedQuestionsList = result.sort((a, b) => a._id - b._id);
 }
 
+/**
+ * Find next question
+ * 
+ * @param {Object} collection - Question collection
+ * @param {Number} question_id - id of the current question
+ * @returns 
+*/
 const findNextQuestion = async(collection, question_id) => {
     const next_question_id = question_id + 1;
-    console.log(next_question_id)
 
-    const result = await collection.findOne({
+    return await collection.findOne({
         _id: next_question_id
     })
-
-    return result
 }
 
+/**
+ * Insert all questions in the database
+ * 
+ * @param {Object} collection - Question collection
+ * @param {Array<Object>} questions - Array of all the questions
+ * @returns 
+*/
 const insertAllQuestions = async(collection,questions) => {
-    const result = await collection.insertMany(questions);
-    
-    return result;
+    return await collection.insertMany(questions);
 }
 
 module.exports = {
