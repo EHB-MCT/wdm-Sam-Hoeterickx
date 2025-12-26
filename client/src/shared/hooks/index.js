@@ -8,7 +8,8 @@ export { useAppStartUp } from './auth/useAppStartUp.hook';
 export { useAuth } from './auth/useAuth.hook';
 export { useLoginUser } from './auth/useLoginUser.hook';
 export { useRegisterUser } from './auth/useRegisterUser.hook';
-export { useLogoutUser } from './auth/useLogoutUser.hook'
+export { useLogoutUser } from './auth/useLogoutUser.hook';
+export { useRandomConfirmation } from './randomConfirmation/useRandomConfirmation.hook';
 
 //SESSION
 export { useSessionSave } from './session/useSessionSave.hook';
