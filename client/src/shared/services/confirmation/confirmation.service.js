@@ -1,4 +1,4 @@
-const BASE_URL = `${import.meta.env.VITE_API_URL}/prediction`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}/confidence`;
 
 class ConfirmationService {
     async saveConfirmationData(changedMind, elapsedHoverTime, decisionTime) {
@@ -7,9 +7,9 @@ class ConfirmationService {
             headers: { 'Content-Type': "application/json" },
             credentials: 'include',
             body: JSON.stringify({ 
-                changedMind,
-                elapsedHoverTime, 
-                decisionTime
+                changed_mind_state: changedMind,
+                elapsed_hover_time: elapsedHoverTime, 
+                decision_time: decisionTime
             })
         });
 
