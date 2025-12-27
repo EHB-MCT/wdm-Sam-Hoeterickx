@@ -1,5 +1,16 @@
 import { useState } from "react"
 
+/**
+ * Custom hook that handles the submission of user answers to the backend.
+ * Manages loading states and error handling during the API call.
+ * 
+ * @returns {Object} - The answer submission object
+ * @property {boolean|undefined} isSuccess - True if the answer was saved successfully, false if failed, undefined if no attempt made yet
+ * @property {boolean} isLoading - True while the answer is being sent to the server
+ * @property {string|null} error - The error message string if the submission failed, otherwise null
+ * @property {Function} handleAnswerQuestion - Function to trigger the answer submission (params: question_id, answer, times, etc.)
+*/
+
 export const useAnswerQuestion = () => {
 
     const [isSuccess, setIsSuccess] = useState(undefined);

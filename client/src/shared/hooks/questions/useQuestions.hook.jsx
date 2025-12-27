@@ -1,6 +1,19 @@
 import { useEffect, useState, useRef } from "react";
-// Zorg dat je dit pad aanpast naar waar jij je services hebt staan
+
+//Service
 import { questionService } from "../../services"; 
+
+/**
+ * Custom hook that manages the quiz questions, progress, and timing.
+ * Fetches questions on mount and tracks the current question index.
+ * 
+ * @returns {Object} - The questions management object
+ * @property {Object|undefined} question - The current question object to display
+ * @property {number} questionCount - The zero-based index of the current question
+ * @property {Function} nextQuestion - Function to advance to the next question
+ * @property {Function} getDecisionTime - Function that returns the time elapsed (in seconds) since the question was displayed
+ * @property {boolean} isQuizComplete - True if the user has reached the end of the question list
+*/
 
 export const useQuestions = () => {
     
