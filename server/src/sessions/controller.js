@@ -1,149 +1,150 @@
 const { findUserById } = require('../users/model.js');
-const { generateSessionId, saveSessionId, findSessionById, addUserToSessionId } = require('./model.js');
+const { saveSessionId, findSessionById, addUserToSessionId } = require('./model.js');
+const { 
+    generateSessionId,
+    validateSessionCreation, 
+    prepareSessionData, 
+    validateSessionSaveRequest 
+} = require('./service.js');
 
 /**
  * Create a new session
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {Object} collection - Session collection
- * @param {String} USER_ID - Cookie of user id
- * @param {String} CURRENT_SESSION_ID - Cookie of session id
- * @returns 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} sessionCollection - Session collection
  */
-const createSessionId = async (req, res, collection) => {
-    try{
+const createSessionId = async (req, res, sessionCollection) => {
+    try {
+        const userId = req.signedCookies.user || null;
+        const currentSessionId = req.signedCookies.session;
+        const questionId = req.query.q;
 
-        const USER_ID = req.signedCookies.user;
-        const CURRENT_SESSION_ID = req.signedCookies.session;
-        const QUESTION_ID = req.query.q;
-
-        if(CURRENT_SESSION_ID && QUESTION_ID !== '0'){
-            return res.status(200).send({
+        const shouldCreateNewSession = validateSessionCreation(currentSessionId, questionId);
+        
+        if (!shouldCreateNewSession) {
+            return res.status(200).json({
                 status: 200,
-                message: 'Session id already excists',
-                sessionId: CURRENT_SESSION_ID
+                message: 'Session already exists',
+                sessionId: currentSessionId
             });
         }
 
-        const SESSION_ID = generateSessionId();
-        if(!SESSION_ID){
-            return res.status(500).send({
+        const sessionId = generateSessionId();
+        if (!sessionId) {
+            return res.status(500).json({
                 status: 500,
-                message: 'Failed to create session id',
+                message: 'Failed to create session ID'
             });
         }
 
-        const result = await saveSessionId(collection, SESSION_ID, USER_ID);
-        if(!result){
-            return res.status(500).send({
+        const sessionData = prepareSessionData(sessionId, userId);
+        const result = await saveSessionId(sessionCollection, sessionId, userId);
+        
+        if (!result) {
+            return res.status(500).json({
                 status: 500,
-                message: 'Failed to save session id',
+                message: 'Failed to save session ID'
             });
         }
 
-        res.cookie('session', SESSION_ID, {
+        res.cookie('session', sessionId, {
             httpOnly: true,
             sameSite: 'lax',
             secure: false,
             signed: true,
-            maxAge: 24 * 60 * 60 * 1000,
+            maxAge: 24 * 60 * 60 * 1000
         });
 
-        return res.status(201).send({
+        return res.status(201).json({
             status: 201,
             message: 'Session created successfully',
-            sessionId: SESSION_ID
-        })
+            sessionId: sessionId
+        });
 
-
-    }catch(error){
-        console.error('Session id creation error:', error);
-        res.status(500).send({
+    } catch (error) {
+        console.error('Session ID creation error:', error);
+        return res.status(500).json({
             status: 500,
             message: error.message
-        })
+        });
     }
 }
 
 /**
  * Save current session to authenticated user
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {Object} collection - Session collection
- * @param {String} USER_ID - Cookie of user id
- * @param {String} SESSION_ID - Cookie of session id
- * @returns 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} sessionCollection - Session collection
+ * @param {Object} userCollection - User collection
  */
 const saveSessionToUser = async (req, res, sessionCollection, userCollection) => {
-    try{
+    try {
+        const sessionId = req.signedCookies.session;
+        const userId = req.signedCookies.user;
 
-        const SESSION_ID = req.signedCookies.session;
-        const USER_ID = req.signedCookies.user;
+        validateSessionSaveRequest(sessionId, userId);
 
-        if(!SESSION_ID || !USER_ID){
-            return res.status(422).send({
-                status: 422,
-                message: 'Missing credentials'
-            });
-        };
-
-        const excistingSession = await findSessionById(sessionCollection, SESSION_ID);
-        if(!excistingSession){
-            return res.status(404).send({
+        const existingSession = await findSessionById(sessionCollection, sessionId);
+        if (!existingSession) {
+            return res.status(404).json({
                 status: 404,
                 message: 'Session not found'
             });
-        };
-        
-        const excistingUser = await findUserById(userCollection, USER_ID);
-        if(!excistingUser){
-            return res.status(404).send({
+        }
+
+        const existingUser = await findUserById(userCollection, userId);
+        if (!existingUser) {
+            return res.status(404).json({
                 status: 404,
                 message: 'User not found'
             });
-        };
+        }
 
-        const savedSessionToUser = await addUserToSessionId(sessionCollection, SESSION_ID, USER_ID);
+        const savedSessionToUser = await addUserToSessionId(sessionCollection, sessionId, userId);
         
-        if(!savedSessionToUser){
-            return res.status(500).send({
+        if (!savedSessionToUser) {
+            return res.status(500).json({
                 status: 500,
                 message: 'Failed to save session to user'
             });
-        };
+        }
 
-        return res.status(204).send({
+        return res.status(204).json({
             status: 204,
             message: 'Session saved successfully to User'
         });
 
-    }catch(error){
-        console.error('Error while saving session to user', error);
-        return res.status(500).send({
+    } catch (error) {
+        console.error('Error while saving session to user:', error);
+        return res.status(500).json({
             status: 500,
             message: error.message
         });
-    };
+    }
 }
 
 /**
- * Create a new session
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {String} SESSION_ID - Cookie of session id
- * @returns 
+ * Read session cookie for debugging
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  */
 const readCookie = (req, res) => {
+    try {
+        const sessionId = req.signedCookies.session;
+        console.log('Session ID from cookie:', sessionId);
 
-    const SESSION_ID = req.signedCookies.session;
-    console.log(SESSION_ID);
-
-    res.send({
-        message: "ok"
-    })
+        return res.status(200).json({
+            status: 200,
+            message: "Session cookie read successfully",
+            sessionId: sessionId || null
+        });
+    } catch (error) {
+        console.error('Error reading cookie:', error);
+        return res.status(500).json({
+            status: 500,
+            message: error.message
+        });
+    }
 }
 
 

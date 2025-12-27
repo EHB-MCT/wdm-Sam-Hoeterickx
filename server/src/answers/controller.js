@@ -1,99 +1,94 @@
 const { saveAnswer, getAllAnswers } = require('./model.js');
+const { validateAnswerData, prepareAnswerData, validateSessionForAnswer } = require('./service.js');
 
 /**
  * Get all answers in database
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {Object} collection - Answer collection
- * @returns 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} answerCollection - Answer collection
  */
-const getAnswers = async(req, res, collection) => {
-    try{
-
-        const answers = await getAllAnswers(collection);
+const getAnswers = async(req, res, answerCollection) => {
+    try {
+        const answers = await getAllAnswers(answerCollection);
         
-        if(!answers){
-            return res.status(404).send({
+        if (!answers || answers.length === 0) {
+            return res.status(404).json({
                 status: 404,
                 message: 'No answers found'
             });
         }
 
-        return res.status(200).send({
+        return res.status(200).json({
             status: 200,
             message: 'Answers found successfully',
             data: answers
-        })
+        });
 
-    }catch(error){
+    } catch (error) {
         console.error('Get answers error:', error);
-        return res.status(500).send({
+        return res.status(500).json({
             status: 500,
             message: error.message
         });
     }
-}
+};
 
 /**
  * Save answer in database on question id
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {Object} collection - Answer collection
- * @param {String} SESSION_ID - Cookie of session id
- * @param {String} req.body.question_id - Id of the question
- * @param {String} req.body.selected_answer - String that contains the selelected answer
- * @param {String} req.body.desicion_time - Duration of the desicion making
- * @param {Object} req.body.elapsed_hover_time - Duration of the hover time
- * @param {Object} req.body.changed_mind - Amount of times clicked on each option button
- * @returns 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} answerCollection - Answer collection
  */
-const answerQuestion = async(req, res, collection) => {
-    try{
+const answerQuestion = async(req, res, answerCollection) => {
+    try {
+        const sessionId = req.signedCookies.session;
+        validateSessionForAnswer(sessionId);
 
-        const SESSION_ID = req.signedCookies.session;
         const { question_id, selected_answer, decision_time, elapsed_hover_time, changed_mind } = req.body;
 
-        if(!SESSION_ID || !question_id || !selected_answer || !decision_time || !elapsed_hover_time || !changed_mind){
-            return res.status(422).send({
-                status: 422,
-                message: 'Missing info'
-            })
-        }
-
         const answerData = {
-            session_id: SESSION_ID,
+            session_id: sessionId,
             question_id,
             selected_answer,
             decision_time,
             elapsed_hover_time,
-            changed_mind,
-        }
+            changed_mind
+        };
 
-        const result = await saveAnswer(collection, answerData);
-        if(!result){
-            return res.status(500).send({
+        validateAnswerData(answerData);
+        const preparedData = prepareAnswerData(answerData);
+
+        const result = await saveAnswer(answerCollection, preparedData);
+        if (!result) {
+            return res.status(500).json({
                 status: 500,
                 message: 'Failed to save answer'
-            })
+            });
         }
 
-        return res.status(201).send({
+        return res.status(201).json({
             status: 201,
             message: 'Answer saved successfully'
         });
 
-    }catch(error){
+    } catch (error) {
         console.error('Create answer error:', error);
-        return res.status(500).send({
+        
+        if (error.message.includes('required') || error.message.includes('must be')) {
+            return res.status(400).json({
+                status: 400,
+                message: error.message
+            });
+        }
+
+        return res.status(500).json({
             status: 500,
             message: error.message
-        })
+        });
     }
-}
+};
 
 module.exports = {
     answerQuestion,
     getAnswers
-}
+};

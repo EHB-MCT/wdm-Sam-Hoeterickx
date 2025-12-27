@@ -1,77 +1,65 @@
-const crypto = require('crypto');
-
 /**
- * Generate a random crypot hex string of 32 bytes
- * 
- * @returns 
- */
-const generateSessionId = () => {
-    return crypto.randomBytes(32).toString('hex');
-} 
-
-/**
- * Inserts new session id in the database
- * 
+ * Inserts new session in the database
  * @param {Object} collection - Session collection
- * @param {String} USER_ID - Cookie of user id
- * @param {String} SESSION_ID - Cookie of session id
- * @returns 
+ * @param {string} sessionId - Session ID
+ * @param {string} userId - User ID
+ * @returns {Promise<Object>} MongoDB insert result
+ * @throws {Error} When insertion fails
  */
-const saveSessionId = async (collection, SESSION_ID, USER_ID) => {
+const saveSessionId = async (collection, sessionId, userId) => {
     return await collection.insertOne({
-        session_id: SESSION_ID,
-        user_id: USER_ID,
+        session_id: sessionId,
+        user_id: userId,
         created_at: new Date()
     });
-} 
+};
 
 /**
- * Find session with session id
- * 
+ * Find session with session ID
  * @param {Object} collection - Session collection
- * @param {String} SESSION_ID - Cookie of session id
- * @returns 
+ * @param {string} sessionId - Session ID
+ * @returns {Promise<Object|null>} Session document or null if not found
+ * @throws {Error} When database query fails
  */
-const findSessionById = async (collection, SESSION_ID) => {
-    return collection.findOne({ session_id: SESSION_ID });
-}
+const findSessionById = async (collection, sessionId) => {
+    return await collection.findOne({ session_id: sessionId });
+};
 
 /**
- * Add authenticated user_id to current session
- * 
+ * Add authenticated user ID to current session
  * @param {Object} collection - Session collection
- * @param {String} USER_ID - Cookie of user id
- * @param {String} SESSION_ID - Cookie of session id
- * @returns 
+ * @param {string} sessionId - Session ID
+ * @param {string} userId - User ID
+ * @returns {Promise<Object|null>} Updated session document or null if not found
+ * @throws {Error} When update fails
  */
-const addUserToSessionId = async(collection, SESSION_ID, USER_ID) => {
+const addUserToSessionId = async(collection, sessionId, userId) => {
     return await collection.findOneAndUpdate(
-        { session_id: SESSION_ID },
+        { session_id: sessionId },
         {
             $set: {
-                user_id: USER_ID
+                user_id: userId
             }
         },
         { returnDocument: 'after' }
-    )
-}
+    );
+};
 
 /**
- * Find all sessions with id of authenticated user
- * 
+ * Find all sessions for authenticated user
  * @param {Object} collection - Session collection
- * @param {String} USER_ID - Cookie of user id
- * @returns 
+ * @param {string} userId - User ID
+ * @returns {Promise<Array>} Array of session documents with only session_id field
+ * @throws {Error} When database query fails
  */
-const findSessionIdsOfUser = async(collection, USER_ID) => {
+const findSessionIdsOfUser = async(collection, userId) => {
     return await collection.find(
-        { user_id: USER_ID },
+        { user_id: userId },
         { projection: { session_id: 1, _id: 0 }}
     ).toArray();
-}
+};
 
 module.exports = {
-    generateSessionId,
     saveSessionId,
     findSessionIdsOfUser,
     findSessionById,

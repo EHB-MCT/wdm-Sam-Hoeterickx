@@ -1,47 +1,46 @@
 /**
- * Get all answers from the answer collection
- * 
+ * Get all answers from answer collection
  * @param {Object} collection - Answer collection
- * @returns 
+ * @returns {Promise<Array>} Array of all answer documents
+ * @throws {Error} When database query fails
  */
 const getAllAnswers = async(collection) => {
     return await collection.find({}).toArray();
-}
+};
 
 /**
- * Saves the answer data to the database.
- * 
+ * Saves answer data to database
  * @param {Object} collection - Answer collection 
  * @param {Object} answerData - The object containing all answer details
- * @returns
+ * @param {string} answerData.session_id - Session identifier
+ * @param {string} answerData.question_id - Question identifier
+ * @param {string} answerData.selected_answer - Selected answer
+ * @param {number} answerData.decision_time - Time taken to make decision
+ * @param {Object} answerData.elapsed_hover_time - Hover time data
+ * @param {Object} answerData.changed_mind - Changed mind data
+ * @param {Date} answerData.created_at - Creation timestamp
+ * @returns {Promise<Object>} MongoDB insert result
+ * @throws {Error} When insertion fails
  */
 const saveAnswer = async(collection, answerData) => {
-    return await collection.insertOne({
-        session_id: answerData.session_id,
-        question_id: answerData.question_id,
-        selected_answer: answerData.selected_answer,
-        decision_time: answerData.decision_time,
-        elapsed_hover_time: answerData.elapsed_hover_time,
-        changed_mind: answerData.changed_mind,
-        created_at: new Date()
-    });
-}
+    return await collection.insertOne(answerData);
+};
 
 /**
- * Finds all answers belonging to a list of session IDs.
- * 
+ * Finds all answers belonging to a list of session IDs
  * @param {Object} collection - Answer collection
- * @param {Array<string>} session_ids - Array of session ID strings
- * @returns 
+ * @param {Array<string>} sessionIds - Array of session ID strings
+ * @returns {Promise<Array>} Array of answer documents
+ * @throws {Error} When database query fails
  */
-const findAllAnswerWithSessionId = async (collection, session_ids) => {
+const findAllAnswerWithSessionId = async (collection, sessionIds) => {
     return await collection.find({
-        session_id: { $in: session_ids }
+        session_id: { $in: sessionIds }
     }).toArray();
-}
+};
 
 module.exports = {
     getAllAnswers,
     saveAnswer,
-    findAllAnswerWithSessionId,
-}
+    findAllAnswerWithSessionId
+};

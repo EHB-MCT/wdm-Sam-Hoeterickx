@@ -4,16 +4,12 @@ const router = express.Router();
 const { getQuestions, addQuestions } = require('./controller.js');
 
 /**
- * Routes
- * - GET /
- * - POST /questions
- * 
- * @param {Object} collection - MongoDB Questions collection.
- * @returns {Router} - Express router
+ * Creates questions routes with injected collection
+ * @param {Object} questionsCollection - MongoDB Questions collection
+ * @returns {Object} Express router
  */
-module.exports = (collection) => {
-    router.get('/', (req, res) => getQuestions(req, res, collection));
-    router.post('/questions', (req, res) => addQuestions(req, res, collection));
-    return router
-    
-}
+module.exports = (questionsCollection) => {
+    router.get('/', (req, res) => getQuestions(req, res, questionsCollection));
+    router.post('/questions', (req, res) => addQuestions(req, res, questionsCollection));
+    return router;
+};

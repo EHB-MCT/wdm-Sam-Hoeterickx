@@ -4,14 +4,11 @@ const router = express.Router();
 const { saveConfidenceCheck } = require('./controller.js');
 
 /**
- * Routes
- * - POST /save
- * 
- * @param {Object} collection - MongoDB Confidence_checks collection.
- * @returns {Router} - Express router
+ * Creates confidence routes with injected collection
+ * @param {Object} confidenceCollection - MongoDB Confidence collection
+ * @returns {Object} Express router
  */
-module.exports = (collection) => {
-    router.post('/save', (req, res) => saveConfidenceCheck(req, res, collection))
-
-    return router
-}
+module.exports = (confidenceCollection) => {
+    router.post('/save', (req, res) => saveConfidenceCheck(req, res, confidenceCollection));
+    return router;
+};

@@ -4,18 +4,14 @@ const router = express.Router();
 const { createSessionId, readCookie, saveSessionToUser } = require('./controller.js');
 
 /**
- * Routes
- * - GET /sessionId
- * - GET /readCookie
- * - POST /save
- * 
- * @param {Object} sessionCollection - MongoDB Session collection.
- * @param {Object} userCollection - MongoDB User collection.
- * @returns {Router} - Express router
+ * Creates session routes with injected collections
+ * @param {Object} sessionCollection - MongoDB Session collection
+ * @param {Object} userCollection - MongoDB User collection
+ * @returns {Object} Express router
  */
 module.exports = (sessionCollection, userCollection) => {
-    router.get('/sessionId', (req, res) => createSessionId(req, res, sessionCollection))
+    router.get('/sessionId', (req, res) => createSessionId(req, res, sessionCollection));
     router.get('/readCookie', (req, res) => readCookie(req, res));   
-    router.post('/save', (req, res) => saveSessionToUser(req, res, sessionCollection, userCollection))
-    return router
-}
+    router.post('/save', (req, res) => saveSessionToUser(req, res, sessionCollection, userCollection));
+    return router;
+};
