@@ -20,6 +20,12 @@ import {
 import './home.css';
 import { LOGIN_ROUTE } from "../../auth/login";
 
+/**
+ * Main quiz page component that manages the interactive questionnaire.
+ * Handles question flow, timing, user interactions, and progress tracking.
+ * 
+ * @returns {React.ReactNode} - Complete quiz interface with modals and navigation
+ */
 export const Home = () => {
     
     const nav = useNavigate();

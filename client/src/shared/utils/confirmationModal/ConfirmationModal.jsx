@@ -7,6 +7,16 @@ import { confirmationService } from "../../services";
 //Style
 import './confirmationModal.css'
 
+/**
+ * Modal component that displays a confirmation dialog asking users to verify their answer choice.
+ * Tracks hover time and decision duration before allowing confirmation or cancellation.
+ * 
+ * @param {Object} props - Component props
+ * @param {boolean} props.isOpen - Whether the modal should be displayed
+ * @param {Function} props.onConfirm - Callback when user confirms their choice
+ * @param {Function} props.onCancel - Callback when user wants to change their choice
+ * @returns {React.ReactNode|null} - Modal JSX or null if not open
+ */
 export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
 
     const { elapsedHoverTime, handleMouseEnter, handleMouseLeave, resetHoverTime } = useHoverTracking();

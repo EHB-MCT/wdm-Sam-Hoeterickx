@@ -10,6 +10,12 @@ import { useLoginUser, useSessionSave } from '../../../../shared/hooks';
 //Routes
 import { REGISTER_ROUTE } from '../../register';
 
+/**
+ * Login page component that handles user authentication.
+ * Provides form for email/password login and manages session persistence after successful authentication.
+ * 
+ * @returns {React.ReactNode} - Login form JSX with error handling and navigation
+ */
 export const Login = () => {
     
     const nav = useNavigate();

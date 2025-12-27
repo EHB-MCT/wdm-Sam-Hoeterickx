@@ -9,6 +9,12 @@ import { LOGIN_ROUTE } from '../auth/login';
 import { REGISTER_ROUTE } from '../auth/register';
 import { DASHBOARD_ROUTE } from '../dashboard';
 
+/**
+ * Root component that sets up the application routing structure.
+ * Defines all application routes and provides routing context to the entire app.
+ * 
+ * @returns {React.ReactNode} - Router provider with configured routes
+ */
 export const Root = () => {
     const ROUTE = createHashRouter([
         {

@@ -1,6 +1,23 @@
 //Components
 import { OptionButton } from '../optionButton/OptionButton';
 
+/**
+ * Main quiz interface component that displays questions, options, and navigation.
+ * Handles different states for regular questions, time pressure questions, and quiz completion.
+ * 
+ * @param {Object} props - Component props
+ * @param {Object} props.question - Current question object with _id, question, category, options
+ * @param {string|null} props.selectedButtonId - ID of currently selected option button
+ * @param {Function} props.onOptionClick - Handler for option selection (params: id, value)
+ * @param {Function} props.onNextClick - Handler for next navigation (params: questionId)
+ * @param {Function} props.onHoverStart - Handler for hover start (params: id)
+ * @param {Function} props.onHoverEnd - Handler for hover end (params: id)
+ * @param {number} props.timeLeft - Seconds remaining for time pressure questions
+ * @param {boolean} props.timerActive - Whether timer is currently active
+ * @param {boolean} props.optionLocked - Whether options are locked (time expired)
+ * @param {boolean} props.lastAnswerSubmitted - Whether this is the final question completion view
+ * @returns {React.ReactNode} - Quiz interface JSX
+ */
 export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick, onHoverStart, onHoverEnd, timeLeft, timerActive, optionLocked, lastAnswerSubmitted }) => {
     
     const handleNext = () => {

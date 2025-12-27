@@ -7,6 +7,12 @@ import { useGetUserData } from "../../../shared/hooks";
 //Routes
 import { HOME_ROUTE } from '../../home/Home.route';
 
+/**
+ * Dashboard page component displaying user profile information.
+ * Shows welcome message and provides navigation to restart the quiz.
+ * 
+ * @returns {React.ReactNode} - Dashboard JSX with user data and navigation
+ */
 export const Dashboard = () => {
 
     const { getMyData, user, isLoading, error } = useGetUserData();

@@ -10,6 +10,12 @@ import { useRegisterUser, useSessionSave } from '../../../../shared/hooks';
 //Routes
 import { LOGIN_ROUTE } from '../../login';
 
+/**
+ * Registration page component for new user account creation.
+ * Handles user registration with validation, error handling, and session management after successful registration.
+ * 
+ * @returns {React.ReactNode} - Registration form JSX with validation and navigation
+ */
 export const Register = () => {
 
     const nav = useNavigate()
