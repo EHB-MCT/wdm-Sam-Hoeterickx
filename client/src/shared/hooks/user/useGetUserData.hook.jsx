@@ -1,5 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { userService } from "../../services"
+
+/**
+ * Custom hook that fetches and manages the current user's data.
+ * 
+ * @returns {Object} - The user data management object
+ * @property {Function} getMyData - Function to trigger the API call to fetch user data
+ * @property {Object|undefined} user - The user object containing profile details (undefined until fetched)
+ * @property {boolean} isLoading - True while the data fetch is in progress
+ * @property {boolean} isError - True if an error occurred during the fetch
+ * @property {Object|boolean} error - The error object ({status, message}) if failed, otherwise false
+*/
 
 export const useGetUserData = () => {
     const [isLoading, setIsLoading] = useState(false);
