@@ -11,8 +11,8 @@ const PORT = process.env.PORT || 3000;
 const DB_URI = process.env.MONGO_URI || process.env.DB_URI || 'mongodb://localhost:27017/Development-V-WDM';
 const DB_NAME = process.env.DB_NAME || 'Development-V-WDM';
 const CLIENT = new MongoClient(DB_URI);
-const SESSION_SECRET = process.env.SESSION_SECRET || 'default-secret';
-const COOKIE_SECRET = process.env.COOKIE_SECRET || 'default-cookie-secret';
+const SESSION_SECRET = process.env.SESSION_SECRET || 'xyz-789';
+const COOKIE_SECRET = process.env.COOKIE_SECRET || 'abc123';
 
 const INITIAL_QUESTIONS = [
     { "_id": 1, "question": "Je hebt 80% kans om €100 te winnen. Speel je mee?", "options": ["Ja", "Nee"], "category": "framing" },
