@@ -37,7 +37,9 @@ export const OptionButton = ({ id, value, isSelected, onClick, onMouseEnter, onM
             onClick={handleOptionClick}
             disabled={disabled}
         >
-            {value}
+            <div className="option-button-content">
+                <div className="option-button-text">{value}</div>
+            </div>
         </button>
     );
 

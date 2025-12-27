@@ -48,27 +48,37 @@ export const ConfirmationModal = ({ isOpen, onConfirm, onCancel }) => {
     } 
 
     return (
-        <div className="pop-up">
-            <h4>Nog even nadenken?</h4>
-            <p>Soms twijfelen we aan ons eerste antwoord. Neem een moment om na te denken.</p>
-            <div className="button-container">
-                <button
-                    className="confirm-button"
-                    onClick={ handleConfirm }
-                    onMouseEnter={ () => handleMouseEnter('confirm') }
-                    onMouseLeave={ () => handleMouseLeave('confirm')}
-                >
-                    Ik sta achter mijn antwoord
-                </button>
-                <button
-                    className="cancel-button"
-                    onClick={ handleCancel }
-                    onMouseEnter={ () => handleMouseEnter('cancel') }
-                    onMouseLeave={ () => handleMouseLeave('cancel')}
-                >
-                    Ik wil mijn antwoord veranderen
-                </button>
+        <>
+            <div className="modal-overlay"></div>
+            <div className="modal">
+                <div className="modal-header">
+                    <div className="modal-icon">🤔</div>
+                    <h3 className="modal-title">Nog even nadenken?</h3>
+                </div>
+                <div className="modal-body">
+                    <p className="modal-message">
+                        <strong>Soms twijfelen we aan ons eerste antwoord.</strong> Neem een moment om na te denken en maak een bewuste keuze.
+                    </p>
+                </div>
+                <div className="modal-footer">
+                    <button
+                        className="modal-button modal-button-secondary"
+                        onClick={ handleCancel }
+                        onMouseEnter={ () => handleMouseEnter('cancel') }
+                        onMouseLeave={ () => handleMouseLeave('cancel')}
+                    >
+                        Ik wil mijn antwoord veranderen
+                    </button>
+                    <button
+                        className="modal-button modal-button-primary"
+                        onClick={ handleConfirm }
+                        onMouseEnter={ () => handleMouseEnter('confirm') }
+                        onMouseLeave={ () => handleMouseLeave('confirm')}
+                    >
+                        Ik sta achter mijn antwoord
+                    </button>
+                </div>
             </div>
-        </div>
+        </>
     )
 }

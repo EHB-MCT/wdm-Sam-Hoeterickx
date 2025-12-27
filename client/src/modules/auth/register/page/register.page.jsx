@@ -69,41 +69,57 @@ export const Register = () => {
     return (
         <div className="auth-container">
             <div className="auth-card">
-                <h2 className="auth-title">Register</h2>
+                <div className="auth-header">
+                    <h1 className="auth-title">Registreren</h1>
+                    <p className="auth-subtitle">Maak een account om de quiz te starten en je resultaten te bekijken.</p>
+                </div>
                 
                 {error && (
-                    <div className="alert alert-error" style={{ color: 'red', marginBottom: '1rem' }}>
-                        {error.message || "Er is iets misgegaan tijdens het inloggen."}
+                    <div className="auth-alert auth-alert-error">
+                        <div className="auth-alert-icon">⚠️</div>
+                        <div className="auth-alert-content">
+                            <div className="auth-alert-title">Fout bij registratie</div>
+                            <div className="auth-alert-message">{error.message || "Er is iets misgegaan tijdens het registreren."}</div>
+                        </div>
                     </div>
                 )}
                 {saveError && (
-                    <div className="alert alert-warning" style={{ color: 'orange', marginBottom: '1rem' }}>
-                        {saveError || "Sessie kon niet worden opgeslagen."}
+                    <div className="auth-alert auth-alert-warning">
+                        <div className="auth-alert-icon">⚠️</div>
+                        <div className="auth-alert-content">
+                            <div className="auth-alert-title">Sessie probleem</div>
+                            <div className="auth-alert-message">{saveError || "Sessie kon niet worden opgeslagen."}</div>
+                        </div>
                     </div>
                 )}
 
                 {validationError && (
-                    <div className="alert alert-warning" style={{ color: 'orange', marginBottom: '1rem' }}>
-                        {validationError}
+                    <div className="auth-alert auth-alert-warning">
+                        <div className="auth-alert-icon">⚠️</div>
+                        <div className="auth-alert-content">
+                            <div className="auth-alert-title">Validatie fout</div>
+                            <div className="auth-alert-message">{validationError}</div>
+                        </div>
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="auth-form">
-                    <div className="form-group">
-                        <label htmlFor="name">username</label>
+                    <div className="auth-form-group">
+                        <label htmlFor="username" className="form-label">Gebruikersnaam</label>
                         <input
                             type="text"
-                            id="name"
+                            id="username"
                             name="username"
                             value={formData.username}
                             onChange={handleChange}
                             required
-                            className="form-input"
+                            className="auth-input"
                             disabled={isLoading}
+                            placeholder="jouw-naam"
                         />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                    <div className="auth-form-group">
+                        <label htmlFor="email" className="form-label">Email Adres</label>
                         <input
                             type="email"
                             id="email"
@@ -111,12 +127,13 @@ export const Register = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="form-input"
+                            className="auth-input"
                             disabled={isLoading}
+                            placeholder="jouw@email.com"
                         />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                    <div className="auth-form-group">
+                        <label htmlFor="password" className="form-label">Wachtwoord</label>
                         <input
                             type="password"
                             id="password"
@@ -124,12 +141,13 @@ export const Register = () => {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            className="form-input"
+                            className="auth-input"
                             disabled={isLoading}
+                            placeholder="••••••"
                         />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="repeatPassword">Confirm Password</label>
+                    <div className="auth-form-group">
+                        <label htmlFor="repeatPassword" className="form-label">Bevestig Wachtwoord</label>
                         <input
                             type="password"
                             id="repeatPassword"
@@ -137,20 +155,24 @@ export const Register = () => {
                             value={formData.repeatPassword}
                             onChange={handleChange}
                             required
-                            className="form-input"
+                            className="auth-input"
                             disabled={isLoading}
+                            placeholder="••••••"
                         />
                     </div>
                     <button 
                         type="submit" 
-                        className="auth-button"
-                        disabled={isLoading}
+                        className={`auth-submit ${isLoading ? 'loading' : ''}`}
+                        disabled={isLoading || isSaving}
                     >
-                        {isLoading ? 'Registreren...' : 'Register'}
+                        {isLoading || isSaving ? 'Laden...' : 'Registreren'}
                     </button>
                 </form>
-                <div className="auth-link">
-                    <Link to={`/${LOGIN_ROUTE.path}`}>Login</Link>
+                
+                <div className="auth-links">
+                    <div className="auth-link">
+                        Al een account? <Link to={`/${LOGIN_ROUTE.path}`}>Log hier in</Link>
+                    </div>
                 </div>
             </div>
         </div>

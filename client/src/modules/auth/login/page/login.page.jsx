@@ -64,22 +64,33 @@ export const Login = () => {
     return (
         <div className="auth-container">
             <div className="auth-card">
-                <h2 className="auth-title">Login</h2>
-                
                 {error && (
-                    <div className="alert alert-error" style={{ color: 'red', marginBottom: '1rem' }}>
-                        {error.message || "Er is iets misgegaan tijdens het inloggen."}
+                    <div className="auth-alert auth-alert-error">
+                        <div className="auth-alert-icon">⚠️</div>
+                        <div className="auth-alert-content">
+                            <div className="auth-alert-title">Fout bij inloggen</div>
+                            <div className="auth-alert-message">{error.message || "Er is iets misgegaan tijdens het inloggen."}</div>
+                        </div>
                     </div>
                 )}
                 {saveError && (
-                    <div className="alert alert-warning" style={{ color: 'orange', marginBottom: '1rem' }}>
-                        {saveError || "Sessie kon niet worden opgeslagen."}
+                    <div className="auth-alert auth-alert-warning">
+                        <div className="auth-alert-icon">⚠️</div>
+                        <div className="auth-alert-content">
+                            <div className="auth-alert-title">Sessie probleem</div>
+                            <div className="auth-alert-message">{saveError || "Sessie kon niet worden opgeslagen."}</div>
+                        </div>
                     </div>
                 )}
-
+                
+                <div className="auth-header">
+                    <h1 className="auth-title">Login</h1>
+                    <p className="auth-subtitle">Welkom terug! Log in om je dashboard te bekijken.</p>
+                </div>
+                
                 <form onSubmit={handleSubmit} className="auth-form">
-                    <div className="form-group">
-                        <label htmlFor="email">Email</label>
+                    <div className="auth-form-group">
+                        <label htmlFor="email" className="form-label">Email Adres</label>
                         <input
                             type="email"
                             id="email"
@@ -87,12 +98,13 @@ export const Login = () => {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="form-input"
+                            className="auth-input"
                             disabled={isLoading}
+                            placeholder="jouw@email.com"
                         />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                    <div className="auth-form-group">
+                        <label htmlFor="password" className="form-label">Wachtwoord</label>
                         <input
                             type="password"
                             id="password"
@@ -100,20 +112,24 @@ export const Login = () => {
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            className="form-input"
+                            className="auth-input"
                             disabled={isLoading}
+                            placeholder="••••••"
                         />
                     </div>
                     <button 
                         type="submit" 
-                        className="auth-button"
+                        className={`auth-submit ${isLoading || isSaving ? 'loading' : ''}`}
                         disabled={isLoading || isSaving}
                     >
                         {isLoading || isSaving ? 'Laden...' : 'Login'}
                     </button>
                 </form>
-                <div className="auth-link">
-                    <Link to={`/${REGISTER_ROUTE.path}`}>Registreer hier</Link>
+                
+                <div className="auth-links">
+                    <div className="auth-link">
+                        Nog geen account? <Link to={`/${REGISTER_ROUTE.path}`}>Registreer hier</Link>
+                    </div>
                 </div>
             </div>
         </div>
