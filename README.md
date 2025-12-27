@@ -1,64 +1,67 @@
-# WDM - InnerView
-This is a full-stack web application designed to predict user answers and generate a deep personality summary. It achieves this by analyzing traditional quiz responses alongside unique behavioral microdata (decision time, hover duration, and changes of mind) using Ollama Large Language Model (LLM) in the backend.
+# WDM
 
-## Technology stack
-| Component | Technology | Specifics & Role |
+![License](https://img.shields.io/github/license/EHB-MCT/wdm-Sam-Hoeterickx)
+![Node](https://img.shields.io/badge/Node.js-v18%2B-green)
+![React](https://img.shields.io/badge/React-v19-blue)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
+
+**WDM** is a full-stack web application designed to capture and analyze user behavior during personality quizzes. Beyond standard answers, it records granular **behavioral microdata**—including decision latency, hover duration, and "change of mind" events—providing a rich dataset for psychological analysis and behavioral research.
+
+## 🚀 Features
+
+* **Behavioral Tracking**: Real-time monitoring of micro-interactions like mouse hovers and hesitation times.
+* **Granular Data Collection**: Stores detailed logs of every interaction (clicks, changes) alongside quiz answers.
+* **Full-Stack Architecture**: Modern React frontend connected to a robust Node.js/Express backend.
+* **Containerized**: Fully Dockerized environment for easy deployment of Client, Server, and Database.
+
+## 🛠️ Technology Stack
+
+| Component | Technology | Role |
 | :--- | :--- | :--- |
-| **AI/LLM** | **Ollama** (e.g., Llama3.2) | Local LLM for prediction and summary generation. |
-| **Backend (API)** | **Node.js (Express)** | Server logic, API routing, **`cookie-parser`**, and communication with Ollama. Uses **`nodemon`** for development. |
-| **Database** | **MongoDB** | Stores questions, answers, and all granular behavioral data using the **`mongodb`** driver. |
-| **Frontend (Client)** | **React (v19)**, **Vite** | User interface and client-side tracking of micro-interactions. **Vite** is used for fast development and bundling. |
-| **Tooling** | **Docker & Docker Compose** | Arrange all services (App, DB, Ollama proxy) for easy local development. |
-| **Security/Auth** | **`bcrypt`**, **`express-session`** | Used for user authentication (hashing) and session management. |
+| **Frontend** | React 19, Vite | UI and client-side tracking of micro-interactions |
+| **Backend** | Node.js, Express | API routing and session management |
+| **Database** | MongoDB | Storage for questions, answers, and behavioral logs |
+| **Infra** | Docker | Container orchestration |
 
----
+## 🏁 Getting Started
 
-## Up and Running
+### Prerequisites
+* Docker & Docker Compose
+* Git
 
-To run this project, follow these steps
+### Installation
 
-1. Clone repository
-```sh
-    git clone https://github.com/EHB-MCT/wdm-Sam-Hoeterickx.git
-```
+1.  **Clone the repository**
+    ```bash
+    git clone [https://github.com/EHB-MCT/wdm-Sam-Hoeterickx.git](https://github.com/EHB-MCT/wdm-Sam-Hoeterickx.git)
+    cd wdm-Sam-Hoeterickx
+    ```
 
-2. ENV configurtion
-```sh
-    # Mongo db username and password
-    MONGO_INITDB_ROOT_USERNAME=<username>
-    MONGO_INITDB_ROOT_PASSWORD=<password>
-    # Database connection string
-    DB_URI: mongodb://<MONGO_INITDB_ROOT_USERNAME>:<MONGO_INITDB_ROOT_PASSWORD>@mongodb:27017/<DB_NAME>?authSource=admin
-```
+2.  **Environment Configuration**
+    Create a `.env` file in the root (or server directory) and configure your database credentials:
+    ```env
+    MONGO_INITDB_ROOT_USERNAME=root
+    MONGO_INITDB_ROOT_PASSWORD=example
+    DB_URI=mongodb://root:example@mongodb:27017/Development-V-WDM?authSource=admin
+    ```
 
-3. Build docker-compose
-```sh
+3.  **Run with Docker**
+    ```bash
     docker-compose up --build
-```
+    ```
+    * Frontend: `http://localhost:8080`
+    * Backend: `http://localhost:3000`
 
-## Where to get help?
+## 🤝 Contributing
 
-If you encounter issues or have questions regarding this project:
+Contributions are welcome! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on the process.
 
-* Open an Issue: Submit a detailed bug report or feature request via the GitHub Issues page.
+## 📜 License
 
-* Contact the Author: For urgent questions or specific project details, refer to the contact information in the Authors section below.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
-## Project status
+## ✍️ Author
 
-In progress: 
-* Core functionality (data collection, MongoDB storage, and basic Ollama integration for prediction) is operational.
-Next Steps:
-* Create profile with ollama of the user according to the answers and tracked data.
-* ...
-
-## Author
-This project is developed by
-<br />
-    Sam Hoeterickx
-    <br />
-    email: sam.hoeterickx@student.ehb.be
-    <br />
-    (linkedin)[https://www.linkedin.com/in/sam-hoeterickx/] 
-
-## License
+**Sam Hoeterickx**
+* Email: sam.hoeterickx@student.ehb.be
+* [LinkedIn](https://www.linkedin.com/in/sam-hoeterickx/)
