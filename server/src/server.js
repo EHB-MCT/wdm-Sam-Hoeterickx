@@ -7,11 +7,12 @@ const cors = require('cors');
 const session = require('express-session');
 
 const app = express();
-const port = process.env.PORT || 3000;
-
+const PORT = process.env.PORT || 3000;
 const DB_URI = process.env.MONGO_URI || process.env.DB_URI || 'mongodb://localhost:27017/Development-V-WDM';
+const DB_NAME = process.env.DB_NAME || 'Development-V-WDM';
 const CLIENT = new MongoClient(DB_URI);
-const DB_NAME = 'Development-V-WDM';
+const SESSION_SECRET = process.env.SESSION_SECRET || 'default-secret';
+const COOKIE_SECRET = process.env.COOKIE_SECRET || 'default-cookie-secret';
 
 const INITIAL_QUESTIONS = [
     { "_id": 1, "question": "Je hebt 80% kans om €100 te winnen. Speel je mee?", "options": ["Ja", "Nee"], "category": "framing" },
@@ -36,6 +37,76 @@ const INITIAL_QUESTIONS = [
     { "_id": 20, "question": "Je hebt tijd voor maar één: een goed salaris of veel vrije tijd. Wat kies je?", "options": ["Goed salaris", "Veel vrije tijd"], "category": "tradeoff" }
 ];
 
+/**
+ * Initializes the database with initial questions if empty
+ * @param {Object} questionsCollection - MongoDB questions collection
+ * @returns {Promise<void>}
+ */
+const initializeDatabase = async (questionsCollection) => {
+    const count = await questionsCollection.countDocuments();
+    if (count === 0) {
+        console.log("Geen vragen gevonden. Database wordt gevuld...");
+        await questionsCollection.insertMany(INITIAL_QUESTIONS);
+        console.log("20 Vragen toegevoegd!");
+    } else {
+        console.log(`Er zijn al ${count} vragen in de database.`);
+    }
+};
+
+/**
+ * Configures middleware for the Express app
+ */
+const configureMiddleware = () => {
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(cors({
+        origin: ['http://localhost:8080', 'http://localhost:3000'],
+        credentials: true,
+        allowedHeaders: ["Content-Type", "Authorization"]
+    }));
+};
+
+/**
+ * Configures authentication middleware
+ */
+const configureAuth = () => {
+    app.use(session({
+        secret: SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24 }
+    }));
+    app.use(cookieParser(COOKIE_SECRET));
+};
+
+/**
+ * Configures API routes
+ * @param {Object} collections - Database collections object
+ */
+const configureRoutes = (collections) => {
+    const { answerCollection, confidenceCollection, questionsCollection, sessionCollection, userCollection } = collections;
+
+    // Routers
+    const answerRouter = require('./answers/route.js');
+    const confidenceRouter = require('./confidence/route.js');
+    const questionRouter = require('./questions/route.js');
+    const sessionRouter = require('./sessions/route.js');
+    const userRouter = require('./users/route.js');
+
+    app.use('/api/answers', answerRouter(answerCollection));
+    app.use('/api/confidence', confidenceRouter(confidenceCollection));
+    app.use('/api/questions', questionRouter(questionsCollection));
+    app.use('/api/session', sessionRouter(sessionCollection, userCollection));
+    app.use('/api/auth', userRouter(userCollection, answerCollection, sessionCollection, confidenceCollection));
+    app.use('/api/users', userRouter(userCollection));
+
+    app.get('/api/', (req, res) => res.status(200).send('Hello world'));
+};
+
+/**
+ * Starts the express server
+ * @returns {Promise<void>}
+ */
 async function startServer() {
     try {
         console.log(`Verbinden met database op ${DB_URI}...`);
@@ -44,58 +115,22 @@ async function startServer() {
 
         const DATABASE = CLIENT.db(DB_NAME);
 
-        //Collections
-        const answerCollection = DATABASE.collection('answers');
-        const confidenceCollection = DATABASE.collection('confidence_checks');
-        const questionsCollection = DATABASE.collection('questions');
-        const sessionCollection = DATABASE.collection('sessions');
-        const userCollection = DATABASE.collection('users');
+        // Collections
+        const collections = {
+            answerCollection: DATABASE.collection('answers'),
+            confidenceCollection: DATABASE.collection('confidence_checks'),
+            questionsCollection: DATABASE.collection('questions'),
+            sessionCollection: DATABASE.collection('sessions'),
+            userCollection: DATABASE.collection('users')
+        };
 
-        const count = await questionsCollection.countDocuments();
-        if (count === 0) {
-            console.log("Geen vragen gevonden. Database wordt gevuld...");
-            await questionsCollection.insertMany(INITIAL_QUESTIONS);
-            console.log("20 Vragen toegevoegd!");
-        } else {
-            console.log(`Er zijn al ${count} vragen in de database.`);
-        }
+        await initializeDatabase(collections.questionsCollection);
+        configureMiddleware();
+        configureAuth();
+        configureRoutes(collections);
 
-        app.use(session({
-            secret: 'abc',
-            resave: false,
-            saveUninitialized: false,
-            cookie: { httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24 }
-        }));
-        app.use(cookieParser('abc'));
-        
-        app.use(cors({
-            origin: ['http://localhost:8080', 'http://localhost:3000'],
-            credentials: true,
-            allowedHeaders: ["Content-Type", "Authorization"]
-        }));
-
-        app.use(express.json());
-        app.use(express.urlencoded({ extended: true }));
-
-        // Routers
-        const answerRouter = require('./answers/route.js');
-        const confidenceRouter = require('./confidence/route.js');
-        const questionRouter = require('./questions/route.js');
-        const sessionRouter = require('./sessions/route.js');
-        const userRouter = require('./users/route.js');
-
-
-        app.use('/api/answers', answerRouter(answerCollection));
-        app.use('/api/confidence', confidenceRouter(confidenceCollection) )
-        app.use('/api/questions', questionRouter(questionsCollection));
-        app.use('/api/session', sessionRouter(sessionCollection, userCollection));
-        app.use('/api/auth', userRouter(userCollection, answerCollection, sessionCollection, confidenceCollection));
-        app.use('/api/users', userRouter(userCollection));
-
-        app.get('/api/', (req, res) => res.status(200).send('Hello world'));
-
-        app.listen(port, '0.0.0.0', () => {
-            console.log(`Server running on port ${port}`);
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`Server running on port ${PORT}`);
         });
 
     } catch (error) {
