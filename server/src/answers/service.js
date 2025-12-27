@@ -20,7 +20,7 @@ const validateAnswerData = (answerData) => {
         throw new Error('Question ID is required');
     }
 
-    if (!selected_answer) {
+    if (selected_answer === undefined) {
         throw new Error('Selected answer is required');
     }
 

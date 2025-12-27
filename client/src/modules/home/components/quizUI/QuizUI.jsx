@@ -69,7 +69,7 @@ export const QuizUI = ({ question, selectedButtonId, onOptionClick, onNextClick,
                             <button
                                 className="next-button"
                                 onClick={handleNext}
-                                disabled={!selectedButtonId}
+                                disabled={!selectedButtonId && !optionLocked}
                             >
                                 Next
                             </button>
