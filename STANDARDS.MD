@@ -7,7 +7,18 @@
 ## 1. Architecture: The 3-Layer Structure
 We strictly follow the **Separation of Concerns** principle. Code is divided into three distinct layers. No business logic is allowed in the Controller layer.
 
-### 1.1 The Controller Layer (`/controllers`)
+
+
+### 1.1 The HTTP Layer (`/routes`)
+* **Role:** The application entry point and traffic director.
+* **Responsibility:**
+    * Defining API endpoints (mapping URL paths and HTTP methods).
+    * Request parsing and middleware execution (Authentication, Validation).
+    * Delegating execution to the Business Logic Layer (Controllers/Services).
+    * Structuring and sending the HTTP response.
+* **Rule:** No business logic and no direct database access. Strictly handles **routing** and **delegation**.
+
+### 1.2 The Controller Layer (`/controllers`)
 * **Role:** The entry point for HTTP requests.
 * **Responsibility:** * Extracts parameters from `req.body`, `req.params`, etc.
     * Validates the existence of required input.
@@ -16,7 +27,7 @@ We strictly follow the **Separation of Concerns** principle. Code is divided int
 * **Rule:** **"Skinny Controllers"**. No calculations, no algorithms, no database calls.
 * **Naming:** `getUser`, `loginUser`, `updateOrder`.
 
-### 1.2 The Service Layer (`/services`)
+### 1.3 The Service Layer (`/services`)
 * **Role:** The "Brain" of the application.
 * **Responsibility:**
     * Contains **ALL** business logic.
@@ -25,7 +36,7 @@ We strictly follow the **Separation of Concerns** principle. Code is divided int
 * **Rule:** **"Fat Services"**. 
 * **Naming:** `AuthService`, `QuestionService`.
 
-### 1.3 The Data Access Layer (`/models`)
+### 1.4 The Data Access Layer (`/models`)
 * **Role:** The interface to the Database.
 * **Responsibility:**
     * Direct database queries (Find, Insert, Update).
