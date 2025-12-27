@@ -2,52 +2,53 @@ const bcrypt = require('bcrypt');
 const { ObjectId } = require('mongodb');
 
 /**
- * Find user in database by email adress
- * 
+ * Find user in database by email address
  * @param {Object} collection - User collection
- * @param {String} email - email adress of the user
- * @returns 
+ * @param {string} email - Email address of the user
+ * @returns {Promise<Object|null>} User object or null if not found
  */
 const findUserByEmail = async(collection, email) => {
-    return await collection.findOne({ email: email});
-}
+    return await collection.findOne({ email: email });
+};
 
 /**
  * Find user in database by their _id
- * 
  * @param {Object} collection - User collection
- * @param {String} USER_ID - id of the user
- * @returns 
+ * @param {string} userId - ID of the user
+ * @returns {Promise<Object|null>} User object with username and email or null if not found
  */
-const findUserById = async(collection, USER_ID) => {
+const findUserById = async(collection, userId) => {
     return await collection.findOne(
-        { _id: new ObjectId(USER_ID) },
+        { _id: new ObjectId(userId) },
         { projection: { username: 1, email: 1 } }
     );
-}
+};
 
 /**
  * Verify password
  * Compares plain text password with a bcrypt hash
- * 
- * @param {String} password - Plain password from input
- * @param {String} hashedpassword - Hashed pasword from the database
- * @returns 
+ * @param {string} password - Plain password from input
+ * @param {string} hashedPassword - Hashed password from the database
+ * @returns {Promise<boolean>} True if password matches
+ * @throws {Error} When password comparison fails
  */
-const verifyPassword = async(password, hashedpassword) => {
-    return await bcrypt.compare(password, hashedpassword);
-}
+const verifyPassword = async(password, hashedPassword) => {
+    return await bcrypt.compare(password, hashedPassword);
+};
 
 /**
  * Create a new user in the database
- * - Hashes the password
- * 
  * @param {Object} collection - User collection
  * @param {Object} userData - Object containing username, email, and password
- * @returns 
+ * @param {string} userData.username - Username of the user
+ * @param {string} userData.email - Email address of the user
+ * @param {string} userData.password - Plain text password
+ * @returns {Promise<Object>} Object containing result and newUser
+ * @throws {Error} When user creation fails
  */
 const registerNewUser = async(collection, userData) => {
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const { hashPassword } = require('./service');
+    const hashedPassword = await hashPassword(userData.password);
 
     const newUser = {
         username: userData.username,
@@ -60,8 +61,8 @@ const registerNewUser = async(collection, userData) => {
     
     newUser._id = result.insertedId;
 
-    return {result, newUser};
-}
+    return { result, newUser };
+};
 
 module.exports = {
     findUserByEmail,

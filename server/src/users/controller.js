@@ -3,80 +3,74 @@ const { findAllConfidencesWithSessionId } = require('../confidence/model');
 const { findSessionIdsOfUser } = require('../sessions/model');
 const {
     findUserByEmail,
-    verifyPassword,
     registerNewUser,
     findUserById
 } = require('./model');
-
+const {
+    validateLoginCredentials,
+    validateRegistrationData,
+    verifyPasswordHash
+} = require('./service');
 
 /**
  * Login user and set user cookie
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {Object} collection - User collection
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} userCollection - User collection
  * @param {string} req.body.email - Email adress of the user
  * @param {string} req.body.password - Password of the user
- * @returns 
  */
-const loginUser = async(req, res, collection) => {
-    try{
-
-        const USER_ID = req.signedCookies.user;
-        const {email, password} = req.body;
-        console.log('login')
-
-        if(USER_ID){
-            return res.status(200).send({
-                status: 200,
-                message: 'Login Successful',
-            });
-        };
-
-        if(!email || !password){
-            return res.status(422).send({
-                status: 422,
-                message: 'Missing login info',
-            });
-        };
-
-        const user = await findUserByEmail(collection, email);
+const loginUser = async(req, res, userCollection) => {
+    try {
+        const userId = req.signedCookies.user;
         
-        if(!user){
-            return res.status(401).send({
-                status: 401,
-                message: 'Invalid credentials',
+        if (userId) {
+            return res.status(200).json({
+                status: 200,
+                message: 'Login Successful'
             });
-        };
+        }
 
-        const passwordMatch = await verifyPassword(password, user.password);
+        const { email, password } = req.body;
 
-        if(!passwordMatch){
-            return res.status(401).send({
+        validateLoginCredentials({ email, password });
+
+        const user = await findUserByEmail(userCollection, email);
+        
+        if (!user) {
+            return res.status(401).json({
                 status: 401,
-                message: 'Invalid credentials',
+                message: 'Invalid credentials'
             });
-        };
+        }
+
+        const passwordMatch = await verifyPasswordHash(password, user.password);
+
+        if (!passwordMatch) {
+            return res.status(401).json({
+                status: 401,
+                message: 'Invalid credentials'
+            });
+        }
 
         const userIdString = user._id.toString();
 
         res.cookie('user', userIdString, {
             httpOnly: true,
             sameSite: 'lax',
-            secure: false, 
+            secure: false,
             signed: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
-        console.log('Cookie set:', userIdString);
 
-        return res.status(200).send({
+        return res.status(200).json({
             status: 200,
-            message: 'Login succesfull',
+            message: 'Login successful'
         });
 
-    }catch(error){
-        console.error('Error whith login', error);
-        return res.status(500).send({
+    } catch (error) {
+        console.error('Error with login:', error);
+        return res.status(500).json({
             status: 500,
             message: error.message
         });
@@ -85,174 +79,130 @@ const loginUser = async(req, res, collection) => {
 
 /**
  * Register user and set user cookie
- * * Password Requirements:
+ * Password Requirements:
  * - Minimum 8 characters
  * - At least 1 uppercase letter
  * - At least 1 lowercase letter
  * - At least 1 number
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {Object} collection - User collection
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} userCollection - User collection
  * @param {string} req.body.username - Username of the user
  * @param {string} req.body.email - Email adress of the user
  * @param {string} req.body.password - Password of the user
  * @param {string} req.body.repeatPassword - Password of the user
- * @returns 
+ * @param {Object} userCollection - User collection
  */
-const registerUser = async(req, res, collection) => {
-    try{
+const registerUser = async(req, res, userCollection) => {
+    try {
         const { username, email, password, repeatPassword } = req.body;
         const userData = {
             username,
             email,
             password,
             repeatPassword
-        }
+        };
 
-        if(!username || !email || !password || !repeatPassword){
-            return res.status(422).send({
-                status: 422,
-                message: "Missing register info"
-            });
-        }
+        validateRegistrationData(userData);
 
-        if (password.length < 8) {
-            return res.status(422).send({
-                status: 422,
-                message: "Password must be at least 8 characters long"
-            });
-        }
-
-        if (!/[A-Z]/.test(password)) {
-            return res.status(422).send({
-                status: 422,
-                message: "Password must contain at least one uppercase letter"
-            });
-        }
-
-        if (!/[a-z]/.test(password)) {
-            return res.status(422).send({
-                status: 422,
-                message: "Password must contain at least one lowercase letter"
-            });
-        }
-
-        if (!/[0-9]/.test(password)) {
-            return res.status(422).send({
-                status: 422,
-                message: "Password must contain at least one number"
-            });
-        }
-
-        if(password !== repeatPassword){
-            return res.status(401).send({
-                status: 401,
-                message: "Passwords don't match"
-            })
-        }
-
-        const user = await findUserByEmail(collection, email);
-        if(user){
-            return res.status(409).send({
+        const existingUser = await findUserByEmail(userCollection, email);
+        if (existingUser) {
+            return res.status(409).json({
                 status: 409,
                 message: "Email already in use"
-            })         
+            });
         }
 
-        const newUser = await registerNewUser(collection, userData);
+        const newUser = await registerNewUser(userCollection, userData);
 
-        if(!newUser.newUser._id) {
-            return res.status(401).send({
+        if (!newUser.newUser._id) {
+            return res.status(401).json({
                 status: 401,
                 message: "Error while creating account"
             });
-        };
+        }
 
         const userIdString = newUser.newUser._id.toString();
 
         res.cookie('user', userIdString, {
             httpOnly: true,
             sameSite: 'lax',
-            secure: false, 
+            secure: false,
             signed: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        return res.status(201).send({
+        return res.status(201).json({
             status: 201,
-            message: "Account created succesfully",
+            message: "Account created successfully"
         });
 
-    }catch(error){
-        console.error('Error whith login', error);
-        return res.status(500).send({
+    } catch (error) {
+        console.error('Error with registration:', error);
+        return res.status(500).json({
             status: 500,
-            message: error.message,
+            message: error.message
         });
     }
 }
 
 /**
  * Log out user and removes user cookie
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @returns 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  */
 const logoutUser = (req, res) => {
-    try{
+    try {
         res.clearCookie('user');
 
-        res.status(200).send({ message: 'Logged out successfully' });
+        return res.status(200).json({ 
+            message: 'Logged out successfully' 
+        });
 
-    }catch(error){
-        console.error('Error whith logout', error);
-        return res.status(500).send({
+    } catch (error) {
+        console.error('Error with logout:', error);
+        return res.status(500).json({
             status: 500,
-            message: error.message,
+            message: error.message
         });
     }
 }
 
 /**
  * Get info of the user
- * 
- * @param {Object} req 
- * @param {Object} res 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  * @param {Object} userCollection - User collection
  * @param {Object} answerCollection - Answer collection
  * @param {Object} sessionCollection - Session collection
  * @param {Object} confidenceCollection - Confidence collection
- * @returns 
  */
 const getUserInfo = async(req, res, userCollection, answerCollection, sessionCollection, confidenceCollection) => {
-    try{
+    try {
+        const userId = req.signedCookies.user;
+        const sessionId = req.signedCookies.session;
 
-        const USER_ID = req.signedCookies.user;
-        const SESSION_ID = req.signedCookies.session;
-
-        if(!USER_ID || !SESSION_ID){
-            return res.status(422).send({
+        if (!userId || !sessionId) {
+            return res.status(422).json({
                 status: 422,
                 message: 'Missing credentials'
             });
-        };
+        }
 
-        const user = await findUserById(userCollection, USER_ID);
-        const userSessions = await findSessionIdsOfUser(sessionCollection, USER_ID);
+        const user = await findUserById(userCollection, userId);
+        const userSessions = await findSessionIdsOfUser(sessionCollection, userId);
         const sessionIdList = userSessions.map(session => session.session_id);
         const answers = await findAllAnswerWithSessionId(answerCollection, sessionIdList);
         const confidenceData = await findAllConfidencesWithSessionId(confidenceCollection, sessionIdList);
 
-        if(!user){
-            return res.status(404).send({
+        if (!user) {
+            return res.status(404).json({
                 status: 404,
                 message: 'User not found'
-            })
+            });
         }
 
-        return res.status(200).send({
+        return res.status(200).json({
             status: 200,
             message: 'Successful',
             data: {
@@ -261,35 +211,29 @@ const getUserInfo = async(req, res, userCollection, answerCollection, sessionCol
                 answers,
                 confidenceData
             }
-        })
+        });
         
-    }catch(error){
-        console.error('Error whith getting user info', error);
-        return res.status(500).send({
+    } catch (error) {
+        console.error('Error with getting user info:', error);
+        return res.status(500).json({
             status: 500,
-            message: error.message,
+            message: error.message
         });
     }
 }
 
 /**
  * Check if user is currently authenticated with the user cookie
- * 
- * @param {Object} req 
- * @param {Object} res 
- * @param {Object} collection - User collection
- * @returns 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} userCollection - User collection
  */
-const authenticateUser = async(req, res, collection) => {
-    try{
-        console.log('START AUTH USER')
+const authenticateUser = async(req, res, userCollection) => {
+    try {
+        const userId = req.signedCookies.user;
 
-        const USER_ID = req.signedCookies.user;
-
-        console.log(USER_ID)
-
-        if(!USER_ID){
-            return res.status(200).send({
+        if (!userId) {
+            return res.status(200).json({
                 status: 200,
                 message: 'Authorization failed',
                 isLoggedIn: false,
@@ -297,29 +241,29 @@ const authenticateUser = async(req, res, collection) => {
             });
         }
 
-        const user = await findUserById(collection, USER_ID);
+        const user = await findUserById(userCollection, userId);
 
-        if(!user){
-            return res.status(404).send({
+        if (!user) {
+            return res.status(404).json({
                 status: 404,
                 message: 'User not found'
             });
-        };
+        }
 
-        return res.status(200).send({
+        return res.status(200).json({
             status: 200,
-            message: 'Authentication successfull',
-            isLoggedIn: false,
+            message: 'Authentication successful',
+            isLoggedIn: true,
             data: user
         });
 
-    }catch(error){
-        console.error('Error while authenticating user', error);
-        return res.status(500).send({
+    } catch (error) {
+        console.error('Error while authenticating user:', error);
+        return res.status(500).json({
             status: 500,
             message: error.message
         });
-    };
+    }
 }
 
 module.exports = {

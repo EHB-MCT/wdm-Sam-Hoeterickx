@@ -3,8 +3,9 @@ const router = express.Router();
 
 const { loginUser, registerUser, logoutUser, getUserInfo, authenticateUser } = require('./controller');
 
-
 /**
+ * Creates user routes with injected collections
+ * 
  * Routes
  * - GET /
  * - GET /authenticate
@@ -12,11 +13,11 @@ const { loginUser, registerUser, logoutUser, getUserInfo, authenticateUser } = r
  * - POST /register
  * - POST /logout
  * 
- * @param {Object} userCollection - MongoDB Users collection.
- * @param {Object} answerCollection - MongoDB Answers collection.
- * @param {Object} sessionCollection - MongoDB Sessions collection.
- * @param {Object} confidenceCollection - MongoDB Confidence collection.
- * @returns {Router} - Express router
+ * @param {Object} userCollection - MongoDB Users collection
+ * @param {Object} answerCollection - MongoDB Answers collection
+ * @param {Object} sessionCollection - MongoDB Sessions collection
+ * @param {Object} confidenceCollection - MongoDB Confidence collection
+ * @returns {Object} Express router
  */
 module.exports = (userCollection, answerCollection, sessionCollection, confidenceCollection) => {
     router.get('/', (req, res) => getUserInfo(req, res, userCollection, answerCollection, sessionCollection, confidenceCollection));
@@ -27,4 +28,4 @@ module.exports = (userCollection, answerCollection, sessionCollection, confidenc
     router.post('/logout', (req, res) => logoutUser(req, res));
 
     return router;
-}
+};
