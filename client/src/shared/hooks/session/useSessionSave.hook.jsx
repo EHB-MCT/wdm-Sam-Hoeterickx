@@ -1,5 +1,19 @@
 import { useState } from 'react';
+
+//Service
 import { sessionService } from '../../services';
+
+/**
+ * Custom hook that manages the process of saving a temporary session to a user account after login.
+ * It checks if a quiz was actually completed before attempting to merge the session.
+ * 
+ * @returns {Object} - The session saving management object
+ * @property {Function} saveSessionAfterLogin - Async function that triggers the save process. Returns true if saved, false if skipped or failed.
+ * @property {boolean} isSaving - True while the save operation is in progress
+ * @property {string|null} saveError - Error message string if the operation failed, otherwise null
+ * @property {boolean} saveSuccess - True if the session was successfully linked to the account
+ * @property {Function} resetSaveState - Function to reset the error and success states to their defaults
+*/
 
 export const useSessionSave = () => {
     const [isSaving, setIsSaving] = useState(false);
@@ -36,11 +50,5 @@ export const useSessionSave = () => {
         setSaveSuccess(false);
     };
 
-    return {
-        saveSessionAfterLogin,
-        isSaving,
-        saveError,
-        saveSuccess,
-        resetSaveState
-    };
+    return { saveSessionAfterLogin, isSaving, saveError, saveSuccess, resetSaveState };
 };
