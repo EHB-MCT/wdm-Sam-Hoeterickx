@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 //Hooks
 import { useGetUserData } from "../../../shared/hooks";
@@ -13,13 +12,6 @@ import { DashboardContainer } from '../components/DashboardContainer';
 //Style
 import '~styles/dashboard.css';
 
-
-/**
- * Dashboard page component displaying user profile information and personality analysis.
- * Shows welcome message, personality visualizations, and navigation to restart the quiz.
- * 
- * @returns {React.ReactNode} - Dashboard JSX with user data, analytics and navigation
- */
 export const Dashboard = () => {
     const { getMyData, user, answerData, decisionData, isLoading, error } = useGetUserData();
     const [activeTab, setActiveTab] = useState('profile');
@@ -35,11 +27,11 @@ export const Dashboard = () => {
 
     useEffect(() => {
         if (answerData && answerData.length > 0) {
-            processAnalysisData(answerData);
+            processAnalysisData(answerData, decisionData);
         }
-    }, [answerData]);
+    }, [answerData, decisionData]);
 
-    const processAnalysisData = (answers) => {
+    const processAnalysisData = (answers, decisions) => {
         const questionCategories = {
             1: 'framing', 2: 'framing',
             3: 'risk', 4: 'risk', 5: 'risk',
@@ -59,11 +51,13 @@ export const Dashboard = () => {
         const scores = calculatePersonalityScores(enrichedAnswers);
         const categoryStats = calculateCategoryStats(enrichedAnswers);
         const scatterData = createScatterData(enrichedAnswers);
+        const confidenceStats = calculateConfidenceStats(decisions);
 
         setAnalysisData({
             personalityScores: scores,
             categoryData: categoryStats,
-            scatterData: scatterData
+            scatterData: scatterData,
+            confidenceStats: confidenceStats
         });
     };
 
@@ -87,24 +81,15 @@ export const Dashboard = () => {
             scores['Risicomijdend'] = (safeChoices / riskAnswers.length) * 100;
         }
 
-        //Ethics
+        // Ethics
         const ethicsAnswers = answers.filter(a => a.category === 'ethics');
         if (ethicsAnswers.length > 0) {
-            // Debug: log alle ethics vragen
-            console.log('🔍 Ethics vragen:', ethicsAnswers.map(a => ({
-                id: a.question_id,
-                answer: a.selected_answer
-            })));
-
             const ethicalChoices = ethicsAnswers.filter(a => {
                 if (a.question_id === "9") return a.selected_answer === 'Nee';
                 if (a.question_id === "10") return a.selected_answer === 'Breng terug';
                 if (a.question_id === "11") return a.selected_answer === 'Ja';
-                
                 return false;
             }).length;
-            
-            console.log('✅ Ethische keuzes:', ethicalChoices, '/', ethicsAnswers.length);
             scores['Ethisch'] = (ethicalChoices / ethicsAnswers.length) * 100;
         }
 
@@ -119,11 +104,26 @@ export const Dashboard = () => {
         }
 
         // Consistency
-        const q8 = answers.find(a => a.question_id === "8");
-        const q12 = answers.find(a => a.question_id === "12");
-        if (q8 && q12) {
-            scores['Consistent'] = (q8.selected_answer === q12.selected_answer) ? 100 : 0;
-            console.log(q8.selected_answer, q12.selected_answer)
+        const q8Answers = answers.filter(a => a.question_id === "8");
+        const q12Answers = answers.filter(a => a.question_id === "12");
+
+        if (q8Answers.length > 0 && q12Answers.length > 0) {
+            const maxPairs = Math.max(q8Answers.length, q12Answers.length);
+            let consistentPairs = 0;
+            let totalComparisons = 0;
+            
+            for (let i = 0; i < q8Answers.length; i++) {
+                for (let j = 0; j < q12Answers.length; j++) {
+                    totalComparisons++;
+                    if (q8Answers[i].selected_answer === q12Answers[j].selected_answer) {
+                        consistentPairs++;
+                    }
+                }
+            }
+            
+            scores['Consistent'] = totalComparisons > 0 
+                ? (consistentPairs / totalComparisons) * 100 
+                : 0;
         }
 
         // Decisiveness
@@ -179,6 +179,57 @@ export const Dashboard = () => {
         }));
     };
 
+    const calculateConfidenceStats = (decisions) => {
+        if (!decisions || decisions.length === 0) {
+            return {
+                distribution: [
+                    { name: 'Zeker', value: 0 },
+                    { name: 'Onzeker', value: 0 }
+                ],
+                timeComparison: [
+                    { type: 'Zeker', avgTime: 0 },
+                    { type: 'Onzeker', avgTime: 0 }
+                ],
+                totalChecks: 0,
+                confidencePercentage: 0,
+                avgDecisionTime: 0
+            };
+        }
+
+        // Count confident vs not confident
+        const confidentCount = decisions.filter(d => d.isConfidence === true).length;
+        const notConfidentCount = decisions.filter(d => d.isConfidence === false).length;
+        
+        // Calculate average decision times
+        const confidentDecisions = decisions.filter(d => d.isConfidence === true);
+        const notConfidentDecisions = decisions.filter(d => d.isConfidence === false);
+        
+        const avgConfidentTime = confidentDecisions.length > 0 
+            ? (confidentDecisions.reduce((sum, d) => sum + (d.decision_time || 0), 0) / confidentDecisions.length)
+            : 0;
+            
+        const avgNotConfidentTime = notConfidentDecisions.length > 0
+            ? (notConfidentDecisions.reduce((sum, d) => sum + (d.decision_time || 0), 0) / notConfidentDecisions.length)
+            : 0;
+
+        // Overall average decision time
+        const avgDecisionTime = decisions.reduce((sum, d) => sum + (d.decision_time || 0), 0) / decisions.length;
+
+        return {
+            distribution: [
+                { name: 'Zeker', value: confidentCount },
+                { name: 'Onzeker', value: notConfidentCount }
+            ],
+            timeComparison: [
+                { type: 'Zeker', avgTime: parseFloat(avgConfidentTime.toFixed(2)) },
+                { type: 'Onzeker', avgTime: parseFloat(avgNotConfidentTime.toFixed(2)) }
+            ],
+            totalChecks: decisions.length,
+            confidencePercentage: Math.round((confidentCount / decisions.length) * 100),
+            avgDecisionTime: parseFloat(avgDecisionTime.toFixed(2))
+        };
+    };
+
     return (
         <DashboardContainer 
             user={user}
@@ -192,5 +243,5 @@ export const Dashboard = () => {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
         />
-    )
-}
+    );
+};

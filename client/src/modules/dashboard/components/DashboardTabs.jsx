@@ -21,6 +21,12 @@ export const DashboardTabs = ({ activeTab, setActiveTab }) => {
             >
                 Beslissingsgedrag
             </button>
+            <button
+                onClick={() => setActiveTab('confidence')}
+                className={`dashboard-tab ${activeTab === 'confidence' ? 'dashboard-tab--active' : ''}`}
+            >
+                Zekerheid
+            </button>
         </div>
     );
 };

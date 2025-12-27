@@ -242,7 +242,7 @@
 @media (min-width: 768px) {
   .modal {
     /* width: 85%; */
-    max-width: 80%;
+    max-width: 50%;
     padding: var(--spacing-2xl) var(--spacing-2xl);
   }
   

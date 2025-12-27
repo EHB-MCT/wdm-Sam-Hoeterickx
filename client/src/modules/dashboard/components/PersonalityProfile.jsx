@@ -5,6 +5,7 @@ export const PersonalityProfile = ({ personalityScores }) => {
     return (
         <div className="dashboard-chart-wrapper">
             <h3 className="dashboard-content-title">Jouw Persoonlijkheidsprofiel</h3>
+            <p>Dit is een verzameling van alle antwoorden ook uit voorgaande sessies</p>
             <div className="dashboard-chart-container">
                 <ResponsiveContainer width="100%" height={400}>
                     <RadarChart data={personalityScores}>

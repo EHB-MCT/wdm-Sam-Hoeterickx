@@ -1,11 +1,15 @@
 import React from 'react';
 
-//Components
+//Dashboard Components
 import { DashboardHeader } from './DashboardHeader';
 import { DashboardTabs } from './DashboardTabs';
 import { PersonalityProfile } from './PersonalityProfile';
 import { CategoryAnalysis } from './CategoryAnalysis';
 import { BehaviorAnalysis } from './BehaviorAnalysis';
+import { ConfidenceAnalysis } from './ConfidenceAnalysis';
+
+//Components
+import { LogoutButton } from '../../../shared/components';
 
 export const DashboardContainer = ({ user, answerData, decisionData, isLoading, error, getMyData, homeRoute, analysisData, activeTab, setActiveTab }) => {
     if (isLoading) return <p className="dashboard-loading">Gegevens laden...</p>;
@@ -23,9 +27,12 @@ export const DashboardContainer = ({ user, answerData, decisionData, isLoading, 
                         {activeTab === 'profile' && <PersonalityProfile personalityScores={analysisData.personalityScores} />}
                         {activeTab === 'categories' && <CategoryAnalysis categoryData={analysisData.categoryData} />}
                         {activeTab === 'behavior' && <BehaviorAnalysis scatterData={analysisData.scatterData} />}
+                        {activeTab === 'confidence' && <ConfidenceAnalysis confidenceStats={analysisData.confidenceStats} />}
                     </div>
                 </>
             )}
+
+            <LogoutButton />
         </div>
     );
 };
