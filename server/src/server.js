@@ -84,16 +84,18 @@ const configureAuth = () => {
  * @param {Object} collections - Database collections object
  */
 const configureRoutes = (collections) => {
-    const { answerCollection, confidenceCollection, questionsCollection, sessionCollection, userCollection } = collections;
+    const { answerCollection, browserDataCollection, confidenceCollection, questionsCollection, sessionCollection, userCollection } = collections;
 
     // Routers
     const answerRouter = require('./answers/route.js');
+    const browserRouter = require('./browser/route.js');
     const confidenceRouter = require('./confidence/route.js');
     const questionRouter = require('./questions/route.js');
     const sessionRouter = require('./sessions/route.js');
     const userRouter = require('./users/route.js');
 
     app.use('/api/answers', answerRouter(answerCollection));
+    app.use('/api/browser', browserRouter(collections.browserDataCollection));
     app.use('/api/confidence', confidenceRouter(confidenceCollection));
     app.use('/api/questions', questionRouter(questionsCollection));
     app.use('/api/session', sessionRouter(sessionCollection, userCollection));
@@ -118,6 +120,7 @@ async function startServer() {
         // Collections
         const collections = {
             answerCollection: DATABASE.collection('answers'),
+            browserDataCollection: DATABASE.collection('browser_data'),
             confidenceCollection: DATABASE.collection('confidence_checks'),
             questionsCollection: DATABASE.collection('questions'),
             sessionCollection: DATABASE.collection('sessions'),
