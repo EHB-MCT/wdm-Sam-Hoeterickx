@@ -18,5 +18,5 @@ export { useSessionSave } from './session/useSessionSave.hook';
 export { useGetUserData } from './user/useGetUserData.hook';
 
 //BROWSER TRACKING
-export { useBrowserTracking } from './browser/useBrowserTracking.hook';
+export { useSaveBrowserTracking } from './browser/useSaveBrowserTracking.hook';
 export { useGetAllBrowserTracking } from './browser/useGetAllBrowserTracking.hook';
