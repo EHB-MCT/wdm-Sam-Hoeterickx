@@ -12,7 +12,7 @@ const { getBrowserData, saveBrowserData } = require('./controller');
  * @returns {Object} Express router
  */
 module.exports = (browserDataCollection) => {
-    router.get('/:sessionId', getBrowserData(browserDataCollection));
+    router.get('/', getBrowserData(browserDataCollection));
     router.post('/track', saveBrowserData(browserDataCollection));
     
     return router;
