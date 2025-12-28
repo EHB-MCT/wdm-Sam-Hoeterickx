@@ -82,11 +82,7 @@ const saveBrowserData = (browserCollection) => async (req, res) => {
         return res.status(201).json({
             status: 201,
             message: 'Browser data saved successfully',
-            data: {
-                id: result.insertedId,
-                session_id: SESSION_ID,
-                timestamp: new Date()
-            },
+            data: result
         });
     } catch (error) {
         console.error('Error saving browser data:', error);
