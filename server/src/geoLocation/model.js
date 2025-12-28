@@ -17,7 +17,7 @@ const getAllLocations = async (geoLocationCollection) => {
  */
 const saveLocationData = async (geoLocationCollection, locationData) => {
 
-    const result = await geoLocationCollection.insertOne(...locationData);
+    const result = await geoLocationCollection.insertOne(locationData);
     
     return {
         _id: result.insertedId,

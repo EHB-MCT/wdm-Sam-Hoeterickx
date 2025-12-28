@@ -98,7 +98,7 @@ const configureRoutes = (collections) => {
     app.use('/api/answers', answerRouter(answerCollection));
     app.use('/api/browser', browserRouter(browserDataCollection));
     app.use('/api/confidence', confidenceRouter(confidenceCollection));
-    app.use('/api/geolocation', geoLocationRouter(geoLocationCollection));
+    app.use('/api/geolocation', geoLocationRouter(geoLocationCollection, sessionCollection));
     app.use('/api/questions', questionRouter(questionsCollection));
     app.use('/api/session', sessionRouter(sessionCollection, userCollection));
     app.use('/api/auth', userRouter(userCollection, answerCollection, sessionCollection, confidenceCollection));

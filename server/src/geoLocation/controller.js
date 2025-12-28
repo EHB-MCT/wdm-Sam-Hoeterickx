@@ -73,6 +73,9 @@ const saveGeoLocationData = async (req, res, geoLocationCollection, sessionColle
             timestamp
         };
 
+        console.log(locationData);
+        console.log(SESSION_ID);
+
         const result = await saveGeoLocation(
             { geoLocationCollection, sessionCollection },
             SESSION_ID,
