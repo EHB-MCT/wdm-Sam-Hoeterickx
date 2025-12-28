@@ -16,3 +16,7 @@ export { useSessionSave } from './session/useSessionSave.hook';
 
 //USERS
 export { useGetUserData } from './user/useGetUserData.hook';
+
+//BROWSER TRACKING
+export { useBrowserTracking } from './browser/useBrowserTracking.hook';
+export { useGetAllBrowserTracking } from './browser/useGetAllBrowserTracking.hook';
