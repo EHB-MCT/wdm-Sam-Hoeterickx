@@ -1,4 +1,4 @@
-export const getAllBrowserTracking = () => {
+export const useGetAllBrowserTracking = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
