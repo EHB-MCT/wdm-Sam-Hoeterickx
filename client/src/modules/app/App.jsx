@@ -25,7 +25,7 @@ export const App = () => {
                 const foundExtensions = await detectInstalledExtensions();
                 
                 await trackSession(foundExtensions);
-                console.log("Session tracked successfully", foundExtensions);
+                // console.log("Session tracked successfully", foundExtensions);
             } catch (error) {
                 console.error("Failed to track session:", error);
             }
@@ -36,7 +36,7 @@ export const App = () => {
 
 
     useEffect(() => {    
-        console.log('auth check done', isAuthenticated);
+        // console.log('auth check done', isAuthenticated);
         localStorage.setItem('auth_status', isAuthenticated);
     }, [isAuthenticated, isLoading]);
 

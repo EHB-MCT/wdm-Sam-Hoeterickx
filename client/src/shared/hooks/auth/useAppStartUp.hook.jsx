@@ -18,7 +18,7 @@ export const useAppStartUp = () => {
         
                 console.log('App startup started');
                 const data = await sessionService.createSession();
-                console.log(data);
+                // console.log(data);
                 console.log('App startup successfull');
                 
             }catch(error){

@@ -15,7 +15,7 @@ export const useSaveBrowserTracking = () => {
             const result = await browserService.trackCurrentSession(detectedExtensions);
             setSessionData(result.data);
 
-            console.log(result);
+            // console.log(result);
 
             return result.data;
         } catch (err) {

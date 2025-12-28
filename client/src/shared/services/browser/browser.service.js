@@ -59,7 +59,7 @@ class BrowserService {
                 extensions: detectedExtensions
             };
 
-            console.log('payload:', payload);
+            // console.log('payload:', payload);
 
             const response = await fetch(`${BASE_URL}/track`, {
                 method: 'POST',
