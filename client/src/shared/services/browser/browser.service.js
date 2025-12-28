@@ -3,7 +3,7 @@
  * Handles interactions with the backend browser tracking API.
  */
 
-const BASE_URL = `${VITE_API_URI}/browser`;
+const BASE_URL = `${import.meta.env.VITE_API_URL}/browser`;
 
 class BrowserService {
 
@@ -44,7 +44,7 @@ class BrowserService {
      * @param {Array<string>} [detectedExtensions=[]] - An array of extension names/IDs detected by your detection scripts.
      * @returns {Promise<Object>} The server response containing the saved session ID.
     */
-    async trackCurrentSession(){
+    async trackCurrentSession(detectedExtensions = []){
         try {
             const payload = {
                 userAgent: navigator.userAgent,
@@ -53,6 +53,8 @@ class BrowserService {
                 screenHeight: window.screen.height,
                 extensions: detectedExtensions
             };
+
+            console.log('payload:', payload);
 
             const response = await fetch(`${BASE_URL}/track`, {
                 method: 'POST',

@@ -48,6 +48,8 @@ const saveBrowserData = (browserCollection) => async (req, res) => {
         const SESSION_ID = req.signedCookies.session;
         const ipAddress = req.ip || req.connection.remoteAddress;
 
+        console.log(req.body)
+
         if (!SESSION_ID) {
             return res.status(422).json({
                 status: 422,
