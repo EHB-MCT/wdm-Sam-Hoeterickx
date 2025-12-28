@@ -6,6 +6,21 @@ const BASE_URL = `${import.meta.env.VITE_API_URL}/geolocation`;
 
 class GeoLocationService {
 
+    /**
+     * Get all geolocatoin data
+     * 
+     * @returns {Promise<Object>} The server response data upon success 
+    */
+    async getAllGeoLocationData(){
+        const response = await fetch(`${BASE_URL}/`);
+        
+        if(!response.ok){
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to get geolocation data');
+        }
+
+        return await response.json();
+    }
 
 
     /**
@@ -15,7 +30,7 @@ class GeoLocationService {
      * @returns {Promise<Object>} The server response data upon success
      * @throws {Error} Throws an error if saving fails
      */
-    async saveGeoLocation(locationData, ){
+    async saveGeoLocation(locationData){
 
         if (!locationData) {
             const error = new Error("Location data is required");
