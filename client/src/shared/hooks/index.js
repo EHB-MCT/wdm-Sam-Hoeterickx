@@ -22,5 +22,5 @@ export { useSaveBrowserTracking } from './browser/useSaveBrowserTracking.hook';
 export { useGetAllBrowserTracking } from './browser/useGetAllBrowserTracking.hook';
 
 //GEOLOCATION TRACKING
-// export { useGetGeoLocation } from './geoLocation/useGeoLocation.hook';
+export { useGetGeoLocation } from './geoLocation/useGeoLocation.hook';
 export { useSaveGeoLocation } from './geoLocation/useSaveGeoLocation.hook'; 
