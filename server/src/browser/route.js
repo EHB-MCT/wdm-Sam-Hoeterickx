@@ -12,8 +12,8 @@ const { getBrowserData, saveBrowserData } = require('./controller');
  * @returns {Object} Express router
  */
 module.exports = (browserDataCollection) => {
-    router.get('/', getBrowserData(browserDataCollection));
-    router.post('/track', saveBrowserData(browserDataCollection));
+    router.get('/', (req, res) => getBrowserData(req, res, browserDataCollection));
+    router.post('/track', (req, res) => saveBrowserData(req, res, browserDataCollection));
     
     return router;
 }

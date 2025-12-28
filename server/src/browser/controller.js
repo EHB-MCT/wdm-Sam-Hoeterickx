@@ -11,7 +11,7 @@ const browserService = require("./service");
  * @param {Object} browserCollection - MongoDB browser collection.
  * @returns {Function} Express middleware function.
  */
-const getBrowserData = (browserCollection) => async (req, res) => {
+const getBrowserData = async(req, res, browserCollection) => {
     try {
         const browserData = await browserService.fetchAllBrowserData(browserCollection);
 
@@ -42,7 +42,7 @@ const getBrowserData = (browserCollection) => async (req, res) => {
  * @param {Object} browserCollection - MongoDB browser collection.
  * @returns {Function} Express middleware function.
  */
-const saveBrowserData = (browserCollection) => async (req, res) => {
+const saveBrowserData = async(req, res, browserCollection) => {
     try {
         const { userAgent, platform, brand, browserVersion, language, screenWidth, screenHeight, extensions } = req.body;
         const SESSION_ID = req.signedCookies.session;
