@@ -33,6 +33,8 @@ const createBrowserSession = async (browserCollection, data) => {
     const browserData = {
         session_id: data.sessionId,
         user_agent: data.userAgent,
+        platform: data.platform,
+        brand: data.brand,
         language: data.language || 'unknown',
         screen_Width: data.screenWidth || 0,
         screen_Height: data.screenHeight || 0,

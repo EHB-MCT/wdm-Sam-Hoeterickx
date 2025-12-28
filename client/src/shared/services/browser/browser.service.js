@@ -45,9 +45,13 @@ class BrowserService {
      * @returns {Promise<Object>} The server response containing the saved session ID.
     */
     async trackCurrentSession(detectedExtensions = []){
+        const brands = navigator.userAgentData.brands;
+
         try {
             const payload = {
                 userAgent: navigator.userAgent,
+                platform: navigator.userAgentData.platform,
+                brand: brands[0],
                 language: navigator.language || navigator.userLanguage,
                 screenWidth: window.screen.width,
                 screenHeight: window.screen.height,
