@@ -35,12 +35,13 @@ const createBrowserSession = async (browserCollection, data) => {
         user_agent: data.userAgent,
         platform: data.platform,
         brand: data.brand,
+        browser_version: data.browserVersion, 
         language: data.language || 'unknown',
-        screen_Width: data.screenWidth || 0,
-        screen_Height: data.screenHeight || 0,
+        screen_width: data.screenWidth || 0,
+        screen_height: data.screenHeight || 0,
         extensions: data.extensions || [],
-        timestamp: new Date(),
         ip_address: data.ipAddress,
+        timestamp: new Date(),
     };
 
     return await insertBrowserData(browserCollection, browserData);

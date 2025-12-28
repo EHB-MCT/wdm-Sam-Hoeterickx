@@ -18,10 +18,14 @@ const findAllBrowserSessions = async (collection) => {
  *
  * @param {Object} collection - The MongoDB collection instance.
  * @param {Object} browserData - The browser data object to insert.
- * @returns {Promise<Object>} A promise that resolves to the insert result.
+ * @returns {Object}
  */
 const insertBrowserData = async (collection, browserData) => {
-    return await collection.insertOne(browserData);
+    const result = await collection.insertOne(browserData);
+    
+    if (result.acknowledged) {
+        return { _id: result.insertedId, ...browserData };
+    }
 };
 
 module.exports = {

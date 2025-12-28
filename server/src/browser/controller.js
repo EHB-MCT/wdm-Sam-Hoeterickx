@@ -44,7 +44,7 @@ const getBrowserData = (browserCollection) => async (req, res) => {
  */
 const saveBrowserData = (browserCollection) => async (req, res) => {
     try {
-        const { userAgent, platform, brand, language, screenWidth, screenHeight, extensions } = req.body;
+        const { userAgent, platform, brand, browserVersion, language, screenWidth, screenHeight, extensions } = req.body;
         const SESSION_ID = req.signedCookies.session;
         const ipAddress = req.ip || req.connection.remoteAddress;
 
@@ -69,6 +69,7 @@ const saveBrowserData = (browserCollection) => async (req, res) => {
             userAgent,
             platform,
             brand,
+            browserVersion,
             language,
             screenWidth,
             screenHeight,

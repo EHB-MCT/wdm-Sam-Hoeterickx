@@ -52,6 +52,7 @@ class BrowserService {
                 userAgent: navigator.userAgent,
                 platform: navigator.userAgentData.platform,
                 brand: brands[0],
+                browserVersion: brands[1],
                 language: navigator.language || navigator.userLanguage,
                 screenWidth: window.screen.width,
                 screenHeight: window.screen.height,
