@@ -68,5 +68,5 @@ export const useGeoLocation = () => {
         getLocation();
     }, []);
 
-    return { location, isLoading, error, refetch: getLocation };
+    return { location, isLoading, error, getLocation };
 };
