@@ -32,8 +32,8 @@ export const AdminDashboard = () => {
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-screen bg-gray-50 text-gray-500">
-                <Activity className="w-8 h-8 animate-spin mr-2 text-blue-600" />
+            <div className="dashboard-loading">
+                <Activity className="w-8 h-8 animate-spin text-blue-600" />
                 Data ophalen...
             </div>
         );
@@ -41,17 +41,17 @@ export const AdminDashboard = () => {
 
     if (error) {
         return (
-            <div className="flex items-center justify-center h-screen bg-gray-50 text-red-500">
+            <div className="dashboard-error">
                 Er is een fout opgetreden bij het laden van de data.
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-12">
+        <div className="dashboard">
             <DashboardHeader user={{ name: 'Admin' }} homeRoute="/" />
             
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
+            <div className="dashboard-content">
                 {/* Tab Navigation Card */}
                 <div className="admin-dashboard-tabs">
                     <button
@@ -87,7 +87,7 @@ export const AdminDashboard = () => {
                     )}
                 </div>
 
-                <div className="mt-8 flex justify-end">
+                <div className="dashboard-button-wrapper">
                     <LogoutButton />
                 </div>
             </div>
