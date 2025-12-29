@@ -65,9 +65,14 @@ const registerNewUser = async(collection, userData) => {
     return { result, newUser };
 };
 
+const findAllUsers = (userCollection) => {
+
+}
+
 module.exports = {
     findUserByEmail,
     verifyPassword,
     registerNewUser,
-    findUserById
+    findUserById,
+    findAllUsers
 }

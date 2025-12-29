@@ -22,9 +22,9 @@ const {
  */
 const loginUser = async(req, res, userCollection) => {
     try {
-        const userId = req.signedCookies.user;
+        const USER_ID = req.signedCookies.user;
         
-        if (userId) {
+        if (USER_ID) {
             return res.status(200).json({
                 status: 200,
                 message: 'Login Successful'
@@ -179,18 +179,18 @@ const logoutUser = (req, res) => {
  */
 const getUserInfo = async(req, res, userCollection, answerCollection, sessionCollection, confidenceCollection) => {
     try {
-        const userId = req.signedCookies.user;
-        const sessionId = req.signedCookies.session;
+        const USER_ID = req.signedCookies.user;
+        const SESSION_ID = req.signedCookies.session;
 
-        if (!userId || !sessionId) {
+        if (!USER_ID || !SESSION_ID) {
             return res.status(422).json({
                 status: 422,
                 message: 'Missing credentials'
             });
         }
 
-        const user = await findUserById(userCollection, userId);
-        const userSessions = await findSessionIdsOfUser(sessionCollection, userId);
+        const user = await findUserById(userCollection, USER_ID);
+        const userSessions = await findSessionIdsOfUser(sessionCollection, USER_ID);
         const sessionIdList = userSessions.map(session => session.session_id);
         const answers = await findAllAnswerWithSessionId(answerCollection, sessionIdList);
         const confidenceData = await findAllConfidencesWithSessionId(confidenceCollection, sessionIdList);
@@ -230,9 +230,9 @@ const getUserInfo = async(req, res, userCollection, answerCollection, sessionCol
  */
 const authenticateUser = async(req, res, userCollection) => {
     try {
-        const userId = req.signedCookies.user;
+        const USER_ID = req.signedCookies.user;
 
-        if (!userId) {
+        if (!USER_ID) {
             return res.status(200).json({
                 status: 200,
                 message: 'Authorization failed',
@@ -241,7 +241,7 @@ const authenticateUser = async(req, res, userCollection) => {
             });
         }
 
-        const user = await findUserById(userCollection, userId);
+        const user = await findUserById(userCollection, USER_ID);
 
         if (!user) {
             return res.status(404).json({

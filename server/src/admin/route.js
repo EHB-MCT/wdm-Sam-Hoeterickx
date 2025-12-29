@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
+const { authenticateAdmin } = require('./controller');
 
-module.exports = (adminCollection) => {
+module.exports = (adminCollection, answerCollection, browserCollection, confidenceCollection, geoLocationCollection, sessionCollection, userCollection) => {
 
-    router.get('/', (req, res) => handle(req, res, adminCollection))
+    router.get('/authenticate', (req, res) => authenticateAdmin(req, res, userCollection));
 
     return router
 }
