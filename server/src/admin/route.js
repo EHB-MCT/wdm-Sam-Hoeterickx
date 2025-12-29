@@ -1,11 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-const { authenticateAdmin } = require('./controller');
+const { authenticateAdmin, collectAllData } = require('./controller');
 
 module.exports = (adminCollection, answerCollection, browserCollection, confidenceCollection, geoLocationCollection, sessionCollection, userCollection) => {
 
     router.get('/authenticate', (req, res) => authenticateAdmin(req, res, userCollection));
-
+    router.get('/data', (req, res) => collectAllData(req, res, {
+        users: userCollection,
+        answers: answerCollection,
+        sessions: sessionCollection,
+        browser: browserCollection,
+        confidence: confidenceCollection,
+        geoLocation: geoLocationCollection,
+        questions: adminCollection,
+        admin: adminCollection
+    }))
     return router
 }

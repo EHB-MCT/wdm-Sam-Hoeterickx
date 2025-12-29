@@ -59,9 +59,20 @@ const findSessionIdsOfUser = async(collection, userId) => {
     ).toArray();
 };
 
+/**
+ * Find all sessions in the collection
+ * @param {Object} collection - Session collection
+ * @returns {Promise<Array>} Array of all session documents
+ * @throws {Error} When database query fails
+ */
+const findAllSessions = async (collection) => {
+    return await collection.find({}).toArray();
+};
+
 module.exports = {
     saveSessionId,
     findSessionIdsOfUser,
     findSessionById,
-    addUserToSessionId
+    addUserToSessionId,
+    findAllSessions
 }
