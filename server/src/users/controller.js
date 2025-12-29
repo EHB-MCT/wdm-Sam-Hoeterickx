@@ -25,9 +25,18 @@ const loginUser = async(req, res, userCollection) => {
         const USER_ID = req.signedCookies.user;
         
         if (USER_ID) {
+            const user = await findUserById(userCollection, USER_ID);
+            const userData = {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            }
             return res.status(200).json({
                 status: 200,
-                message: 'Login Successful'
+                message: 'Login Successful',
+                test: 'already_logged_in',
+                data: userData
             });
         }
 
@@ -63,9 +72,18 @@ const loginUser = async(req, res, userCollection) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
+        const userData = {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            role: user.role
+        }
+
         return res.status(200).json({
             status: 200,
-            message: 'Login successful'
+            message: 'Login successful',
+            test: 'test',
+            data: userData
         });
 
     } catch (error) {

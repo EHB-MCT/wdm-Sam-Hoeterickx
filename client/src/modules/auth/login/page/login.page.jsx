@@ -56,9 +56,13 @@ export const Login = () => {
         login(formData.email, formData.password, onSuccess);
     }
 
-    const onSuccess = async () => {
+    const onSuccess = async (user) => {
         await saveSessionAfterLogin();
-        nav('/dashboard');
+        if(user.role === 'admin'){
+            nav('/admin/dashboard');
+        }else {
+            nav('/dashboard');
+        }
     }
 
     return (

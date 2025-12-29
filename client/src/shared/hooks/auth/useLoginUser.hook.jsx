@@ -26,10 +26,10 @@ export const useLoginUser = () => {
         setError(false);
 
         try{
-            await authService.loginUser(email, password);
+            const result = await authService.loginUser(email, password);
 
             setIsSuccess(true);
-            if(onSuccess) onSuccess();
+            if(onSuccess) onSuccess(result.data);
 
         }catch (error) {
             setIsSuccess(false);

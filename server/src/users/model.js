@@ -8,7 +8,10 @@ const { ObjectId } = require('mongodb');
  * @returns {Promise<Object|null>} User object or null if not found
  */
 const findUserByEmail = async(collection, email) => {
-    return await collection.findOne({ email: email });
+    return await collection.findOne(
+        { email: email },
+        { projection: { username: 1, email: 1, role: 1, password: 1 }}
+    );
 };
 
 /**
@@ -20,7 +23,7 @@ const findUserByEmail = async(collection, email) => {
 const findUserById = async(collection, userId) => {
     return await collection.findOne(
         { _id: new ObjectId(userId) },
-        { projection: { username: 1, email: 1 } }
+        { projection: { username: 1, email: 1, role: 1 } }
     );
 };
 

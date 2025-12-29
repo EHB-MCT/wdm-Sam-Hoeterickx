@@ -4,6 +4,7 @@ export { useHoverTracking } from './tracking/useHoverTracking.hook';
 export { useQuestions } from './questions/useQuestions.hook';
 
 //AUTH
+export { useAdminAuth} from './auth/useAdminAuth.hook';
 export { useAppStartUp } from './auth/useAppStartUp.hook';
 export { useAuth } from './auth/useAuth.hook';
 export { useLoginUser } from './auth/useLoginUser.hook';
