@@ -1,10 +1,16 @@
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css'; // Vergeet deze niet!
+import {
+    MapContainer,
+    TileLayer,
+    CircleMarker,
+    Popup,
+    useMap,
+} from "react-leaflet";
+import "leaflet/dist/leaflet.css"; // Vergeet deze niet!
 
 // Fix voor het centreren van de kaart
 const MapUpdater = ({ center }) => {
     const map = useMap();
-    
+
     // Update view only if center has changed significantly
     if (center && center.length === 2) {
         const [lat, lng] = center;
@@ -12,16 +18,16 @@ const MapUpdater = ({ center }) => {
             map.setView([lat, lng], map.getZoom());
         }
     }
-    
+
     return null;
 };
 
 export const MapComponent = ({ center, heatmapData, getHeatColor }) => {
     return (
-        <MapContainer 
-            center={center} 
-            zoom={13} 
-            scrollWheelZoom={true} 
+        <MapContainer
+            center={center}
+            zoom={13}
+            scrollWheelZoom={true}
             style={{ height: "100%", width: "100%" }}
         >
             <TileLayer
@@ -39,13 +45,14 @@ export const MapComponent = ({ center, heatmapData, getHeatColor }) => {
                         color: getHeatColor(point.intensity),
                         weight: 1,
                         opacity: 0.8,
-                        fillOpacity: 0.6
+                        fillOpacity: 0.6,
                     }}
-                    >
+                >
                     <Popup>
                         <div className="text-sm text-gray-800">
-                        <strong>Cluster</strong><br/>
-                        Punten: {point.intensity}
+                            <strong>Cluster</strong>
+                            <br />
+                            Punten: {point.intensity}
                         </div>
                     </Popup>
                 </CircleMarker>

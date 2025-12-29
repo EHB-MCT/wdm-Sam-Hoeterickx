@@ -68,14 +68,19 @@ const registerNewUser = async(collection, userData) => {
     return { result, newUser };
 };
 
-const findAllUsers = (userCollection) => {
-
-}
+const findAllUsers = async(userCollection) => {
+    try {
+        return await userCollection.find({}).toArray();
+    } catch (error) {
+        console.error('Error finding all users:', error);
+        throw new Error('Failed to retrieve users');
+    }
+};
 
 module.exports = {
     findUserByEmail,
     verifyPassword,
     registerNewUser,
     findUserById,
-    findAllUsers
+    findAllUsers,
 }
