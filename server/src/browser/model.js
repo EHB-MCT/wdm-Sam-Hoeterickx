@@ -28,7 +28,12 @@ const insertBrowserData = async (collection, browserData) => {
     }
 };
 
+const findBrowserSession = async(collection, SESSION_ID) => {
+    return await collection.findOne({ session_id: SESSION_ID });
+}
+
 module.exports = {
     findAllBrowserSessions,
-    insertBrowserData
+    insertBrowserData,
+    findBrowserSession
 };

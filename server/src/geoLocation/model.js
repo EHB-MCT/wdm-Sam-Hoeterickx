@@ -25,7 +25,12 @@ const saveLocationData = async (geoLocationCollection, locationData) => {
     };
 };
 
+const findGeoLocationSession = async(collection, SESSION_ID) => {
+    return await collection.findOne({ session_id: SESSION_ID });
+}
+
 module.exports = {
     getAllLocations,
-    saveLocationData
+    saveLocationData,
+    findGeoLocationSession
 };

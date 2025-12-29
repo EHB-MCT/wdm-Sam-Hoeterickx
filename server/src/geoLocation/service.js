@@ -1,4 +1,4 @@
-const { getAllLocations, saveLocationData } = require('./model');
+const { getAllLocations, saveLocationData, findGeoLocationSession } = require('./model');
 const { findSessionById } = require('../sessions/model');
 
 /**
@@ -31,25 +31,31 @@ const getAllGeoLocations = async (geoLocationCollection) => {
  * @throws {Error} When latitude and longitude are not provided
  * @throws {Error} When session is not found
  */
-const saveGeoLocation = async ({ geoLocationCollection, sessionCollection }, sessionId, locationData) => {
+const saveGeoLocation = async ({ geoLocationCollection, sessionCollection }, SESSION_ID, locationData) => {
     if (!locationData.latitude || !locationData.longitude) {
         throw new Error('Latitude and longitude are required');
     }
 
-    const session = await findSessionById(sessionCollection, sessionId);
+    const session = await findSessionById(sessionCollection, SESSION_ID);
     if (!session) {
         throw new Error('Session not found');
     }
 
     const dataToSave = {
-        sessionId,
+        session_id: SESSION_ID,
         ...locationData
     };
 
     return await saveLocationData(geoLocationCollection, dataToSave);
 };
 
+const findGeoLocationWithSession = async(geoLocationCollection, SESSION_ID) => {
+    return await findGeoLocationSession(geoLocationCollection, SESSION_ID);
+
+}
+
 module.exports = {
     getAllGeoLocations,
-    saveGeoLocation
+    saveGeoLocation,
+    findGeoLocationWithSession
 };

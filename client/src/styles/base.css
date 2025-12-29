@@ -830,3 +830,10 @@ select {
   justify-content: center;
   margin-top: 4rem;
 }
+
+.leaflet-container {
+  z-index: 0;
+}
+.leaflet-container img {
+  max-width: none !important;
+}

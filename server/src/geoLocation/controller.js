@@ -1,5 +1,5 @@
 const { findSessionById } = require("../sessions/model");
-const { getAllGeoLocations, saveGeoLocation } = require("./service");
+const { getAllGeoLocations, saveGeoLocation, findGeoLocationWithSession } = require("./service");
 
 /**
  * Retrieves all geolocation data from the database
@@ -72,9 +72,14 @@ const saveGeoLocationData = async (req, res, geoLocationCollection, sessionColle
             speed,
             timestamp
         };
+        const excisitingGeoLocation = await findGeoLocationWithSession(geoLocationCollection, SESSION_ID);
+        if(excisitingGeoLocation){
+            return res.status(200).json({
+                status: 200,
+                message: 'Location is already saved with this session id'
+            })
+        }
 
-        console.log(locationData);
-        console.log(SESSION_ID);
 
         const result = await saveGeoLocation(
             { geoLocationCollection, sessionCollection },

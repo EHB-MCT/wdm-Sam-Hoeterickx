@@ -13,8 +13,4 @@ import '~styles/base.css';
  * 
  * @returns {void} - Renders the application to the DOM
  */
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Root />
-  </StrictMode>,
-)
+createRoot(document.getElementById('root')).render( <Root /> )

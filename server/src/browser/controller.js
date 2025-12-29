@@ -53,7 +53,7 @@ const saveBrowserData = async(req, res, browserCollection) => {
         if (!SESSION_ID) {
             return res.status(422).json({
                 status: 422,
-                message: 'Missing Session id'
+                message: 'Missing Session cookie'
             });
         }
 
@@ -62,6 +62,14 @@ const saveBrowserData = async(req, res, browserCollection) => {
                 status: 422,
                 message: 'Missing user agent'
             });
+        }
+
+        const excisitingBrowserData = await browserService.findBrowserSessionWithSession(browserCollection, SESSION_ID);
+        if(excisitingBrowserData){
+            return res.status(200).json({
+                status: 200,
+                message: 'Data is already saved with this session id'
+            })
         }
 
         const result = await browserService.createBrowserSession(browserCollection, {

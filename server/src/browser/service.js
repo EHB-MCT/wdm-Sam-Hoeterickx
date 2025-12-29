@@ -3,7 +3,7 @@
  * Handles business logic and coordinates between Controller and Model.
  */
 
-const { findAllBrowserSessions, insertBrowserData } = require("./model");
+const { findAllBrowserSessions, insertBrowserData, findBrowserSession } = require("./model");
 
 /**
  * Retrieves all browser tracking data.
@@ -47,7 +47,12 @@ const createBrowserSession = async (browserCollection, data) => {
     return await insertBrowserData(browserCollection, browserData);
 };
 
+const findBrowserSessionWithSession = async(browserCollection, SESSION_ID) => {
+    return await findBrowserSession(browserCollection, SESSION_ID);
+}
+
 module.exports = {
     fetchAllBrowserData,
-    createBrowserSession
+    createBrowserSession,
+    findBrowserSessionWithSession
 };
