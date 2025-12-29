@@ -54,6 +54,43 @@ const initializeDatabase = async (questionsCollection) => {
 };
 
 /**
+ * Creates default admin user if none exists
+ * @param {Object} userCollection - MongoDB user collection
+ * @returns {Promise<void>}
+ */
+const createAdminUser = async (userCollection) => {
+    const { hashPassword } = require('./users/service');
+    
+    try {
+        const existingAdmin = await userCollection.findOne({ role: 'admin' });
+        
+        if (!existingAdmin) {
+            console.log("Geen admin gebruiker gevonden. Admin account wordt aangemaakt...");
+            
+            const hashedPassword = await hashPassword('admin123');
+            
+            const adminUser = {
+                username: 'admin',
+                email: 'admin@example.com',
+                password: hashedPassword,
+                role: 'admin',
+                created_at: new Date()
+            };
+            
+            const result = await userCollection.insertOne(adminUser);
+            console.log(`Admin account aangemaakt met ID: ${result.insertedId}`);
+            console.log("Login credentials:");
+            console.log("Email: admin@example.com");
+            console.log("Password: admin123");
+        } else {
+            console.log("Admin gebruiker bestaat al.");
+        }
+    } catch (error) {
+        console.error("Fout bij het aanmaken van admin gebruiker:", error);
+    }
+};
+
+/**
  * Configures middleware for the Express app
  */
 const configureMiddleware = () => {
@@ -84,9 +121,10 @@ const configureAuth = () => {
  * @param {Object} collections - Database collections object
  */
 const configureRoutes = (collections) => {
-    const { answerCollection, browserDataCollection, confidenceCollection, geoLocationCollection, questionsCollection, sessionCollection, userCollection } = collections;
+    const { adminCollection, answerCollection, browserDataCollection, confidenceCollection, geoLocationCollection, questionsCollection, sessionCollection, userCollection } = collections;
 
     // Routers
+    const adminRouter = require('./admin/route.js');
     const answerRouter = require('./answers/route.js');
     const browserRouter = require('./browser/route.js');
     const confidenceRouter = require('./confidence/route.js');
@@ -95,6 +133,7 @@ const configureRoutes = (collections) => {
     const sessionRouter = require('./sessions/route.js');
     const userRouter = require('./users/route.js');
 
+    app.use('/api/admin', adminRouter(adminCollection, answerCollection, browserDataCollection, confidenceCollection, geoLocationCollection, sessionCollection, userCollection));
     app.use('/api/answers', answerRouter(answerCollection));
     app.use('/api/browser', browserRouter(browserDataCollection));
     app.use('/api/confidence', confidenceRouter(confidenceCollection));
@@ -121,6 +160,7 @@ async function startServer() {
 
         // Collections
         const collections = {
+            adminCollection: DATABASE.collection('admin'),
             answerCollection: DATABASE.collection('answers'),
             browserDataCollection: DATABASE.collection('browser_data'),
             confidenceCollection: DATABASE.collection('confidence_checks'),
@@ -130,7 +170,8 @@ async function startServer() {
             userCollection: DATABASE.collection('users')
         };
 
-        await initializeDatabase(collections.questionsCollection);
+await initializeDatabase(collections.questionsCollection);
+        await createAdminUser(collections.userCollection);
         configureMiddleware();
         configureAuth();
         configureRoutes(collections);
