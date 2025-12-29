@@ -68,6 +68,11 @@ const registerNewUser = async(collection, userData) => {
     return { result, newUser };
 };
 
+/**
+ * Get all users from database
+ * @param {Object} userCollection - User collection
+ * @returns {Promise<Array>} Array of all users
+ */
 const findAllUsers = async(userCollection) => {
     try {
         return await userCollection.find({}).toArray();
@@ -77,6 +82,11 @@ const findAllUsers = async(userCollection) => {
     }
 };
 
+/**
+ * Get all user IDs from database
+ * @param {Object} userCollection - User collection
+ * @returns {Promise<Array>} Array of user ID strings
+ */
 const findAllUsersIds = async(userCollection) => {
     try {
         const userIdObjects = await userCollection.find(

@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react"
 import { adminService } from "../../services/admin/admin.service";
 
+/**
+ * Custom hook for collecting all admin data from all collections
+ * Provides functionality to fetch comprehensive dataset for admin analysis
+ * 
+ * @returns {Object} - Admin data collection object
+ * @property {Function} collectData - Function to trigger data collection
+ * @property {boolean} isLoading - True while data collection is in progress
+ * @property {boolean} isError - True if an error occurred during collection
+ * @property {Object|null} error - The error object ({status, message}) if failed, otherwise null
+ */
 export const useGetAllData = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);

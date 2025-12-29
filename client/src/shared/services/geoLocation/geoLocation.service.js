@@ -6,11 +6,11 @@ const BASE_URL = `${import.meta.env.VITE_API_URL}/geolocation`;
 
 class GeoLocationService {
 
-    /**
-     * Get all geolocatoin data
+/**
+     * Get all geolocation data from server
      * 
      * @returns {Promise<Object>} The server response data upon success 
-    */
+     */
     async getAllGeoLocationData(){
         const response = await fetch(`${BASE_URL}/`);
         
@@ -23,10 +23,10 @@ class GeoLocationService {
     }
 
 
-    /**
+/**
      * Saves geolocation data when available.
      * 
-     * @param {Object} locationData - The desired username
+     * @param {Object} locationData - Location data object containing coordinates and location info
      * @returns {Promise<Object>} The server response data upon success
      * @throws {Error} Throws an error if saving fails
      */

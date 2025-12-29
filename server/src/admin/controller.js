@@ -44,6 +44,12 @@ const authenticateAdmin = async(req, res, userCollection) => {
     }
 };
 
+/**
+ * Collect all data from all collections for admin analysis
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} collections - Database collections object
+ */
 const collectAllData = async(req, res, collections) => {
     try{
         const USER_ID = req.signedCookies.user;
@@ -97,6 +103,12 @@ const collectAllData = async(req, res, collections) => {
     }
 }
 
+/**
+ * Get all user IDs for admin analysis
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} collections - Database collections object
+ */
 const collectAllDataFromUsers = async(req, res, collections) => {
     try{
 
@@ -150,6 +162,12 @@ const collectAllDataFromUsers = async(req, res, collections) => {
     }
 }
 
+/**
+ * Get all sessions grouped by user for detailed analysis
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Object} collections - Database collections object
+ */
 const collectAllSessionsPerUser = async(req, res, collections) => {
     try {
 
@@ -304,4 +322,4 @@ module.exports = {
     collectAllData,
     collectAllDataFromUsers,
     collectAllSessionsPerUser
-}
+};
