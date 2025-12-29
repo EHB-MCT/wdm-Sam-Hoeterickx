@@ -54,6 +54,7 @@ const registerNewUser = async(collection, userData) => {
         username: userData.username,
         email: userData.email,
         password: hashedPassword,
+        role: 'user',
         created_at: new Date()
     };
 

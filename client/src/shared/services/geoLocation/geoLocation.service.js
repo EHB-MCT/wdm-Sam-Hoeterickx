@@ -33,9 +33,7 @@ class GeoLocationService {
     async saveGeoLocation(locationData){
 
         if (!locationData) {
-            const error = new Error("Location data is required");
-            setSaveError(error.message);
-            throw error;
+            return
         }
 
         const response = await fetch(`${BASE_URL}/save`, {

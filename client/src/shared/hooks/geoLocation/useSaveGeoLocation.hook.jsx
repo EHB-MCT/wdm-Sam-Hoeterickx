@@ -15,6 +15,11 @@ export const useSaveGeoLocation = () => {
         setIsSaving(true);
         setSaveError(null);
 
+        if(!locationData){
+            setIsSaving(false);
+            return
+        }
+
         try {
 
             await geoLocationService.saveGeoLocation(locationData);
