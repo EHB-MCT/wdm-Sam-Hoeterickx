@@ -142,9 +142,6 @@ export const UserExplorer = () => {
                                                     <div className="detail-item">
                                                         <strong>Answers:</strong> {session.answerCount}
                                                     </div>
-                                                    <div className="detail-item">
-                                                        <strong>Avg Confidence:</strong> {session.avgConfidence || 'N/A'}
-                                                    </div>
                                                 </div>
 
                                                 {session.extensions && session.extensions.length > 0 && (
