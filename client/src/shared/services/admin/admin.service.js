@@ -32,6 +32,39 @@ class AdminService {
 
         return data
     }
+
+    async collectAllDataFromUsers(){
+        const response = await fetch(`${BASE_URL}/`, { 
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if(!response.ok){
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to collect data');
+        }
+
+        const data = await response.json();
+        console.log(data);
+
+        return data
+    }
+
+    async collectAllSessionsPerUser(){
+        const response = await fetch(`${BASE_URL}/sessions`, { 
+            method: 'GET',
+            credentials: 'include'
+        });
+
+        if(!response.ok){
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to collect session data');
+        }
+
+        const data = await response.json();
+        console.log(data);
+        return data
+    }
 }
 
 export const adminService = new AdminService();

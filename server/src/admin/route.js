@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { authenticateAdmin, collectAllData } = require('./controller');
+const { authenticateAdmin, collectAllData, collectAllDataFromUsers, collectAllSessionsPerUser } = require('./controller');
 
 module.exports = (adminCollection, answerCollection, browserCollection, confidenceCollection, geoLocationCollection, sessionCollection, userCollection) => {
 
@@ -17,7 +17,25 @@ module.exports = (adminCollection, answerCollection, browserCollection, confiden
         admin: adminCollection
     }));
 
-    // router.get('/')
+    router.get('/', (req, res) => collectAllDataFromUsers(req, res, {
+        users: userCollection,
+        answers: answerCollection,
+        sessions: sessionCollection,
+        browser: browserCollection,
+        confidence: confidenceCollection,
+        geoLocation: geoLocationCollection,
+        questions: adminCollection,
+    }));
+
+    router.get('/sessions', (req, res) => collectAllSessionsPerUser(req, res, {
+        users: userCollection,
+        answers: answerCollection,
+        sessions: sessionCollection,
+        browser: browserCollection,
+        confidence: confidenceCollection,
+        geoLocation: geoLocationCollection,
+        questions: adminCollection,
+    }));
 
     return router
 }

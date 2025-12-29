@@ -60,6 +60,44 @@ const findSessionIdsOfUser = async(collection, userId) => {
 };
 
 /**
+ * Update session start time
+ * @param {Object} collection - Session collection
+ * @param {string} sessionId - Session ID
+ * @returns {Promise<Object|null>} Updated session document or null if not found
+ * @throws {Error} When update fails
+ */
+const updateSessionStartTime = async (collection, sessionId) => {
+    return await collection.findOneAndUpdate(
+        { session_id: sessionId },
+        {
+            $set: {
+                start_time: new Date()
+            }
+        },
+        { returnDocument: 'after' }
+    );
+};
+
+/**
+ * Update session end time
+ * @param {Object} collection - Session collection
+ * @param {string} sessionId - Session ID
+ * @returns {Promise<Object|null>} Updated session document or null if not found
+ * @throws {Error} When update fails
+ */
+const updateSessionEndTime = async (collection, sessionId) => {
+    return await collection.findOneAndUpdate(
+        { session_id: sessionId },
+        {
+            $set: {
+                end_time: new Date()
+            }
+        },
+        { returnDocument: 'after' }
+    );
+};
+
+/**
  * Find all sessions in the collection
  * @param {Object} collection - Session collection
  * @returns {Promise<Array>} Array of all session documents
@@ -74,5 +112,7 @@ module.exports = {
     findSessionIdsOfUser,
     findSessionById,
     addUserToSessionId,
+    updateSessionStartTime,
+    updateSessionEndTime,
     findAllSessions
 }

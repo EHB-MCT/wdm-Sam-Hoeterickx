@@ -70,5 +70,5 @@ export const useQuestions = () => {
         }
     };
 
-    return { question, questionCount, nextQuestion, getDecisionTime, isQuizComplete };
+    return { question, questionCount, nextQuestion, getDecisionTime, isQuizComplete, questionList };
 }

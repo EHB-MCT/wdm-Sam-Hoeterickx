@@ -77,10 +77,28 @@ const findAllUsers = async(userCollection) => {
     }
 };
 
+const findAllUsersIds = async(userCollection) => {
+    try {
+        const userIdObjects = await userCollection.find(
+            {},
+            { projection: {_id: 1} }
+        ).toArray();
+        
+        // Convert ObjectId array to string array
+        const userIdList = userIdObjects.map(user => user._id.toString());
+        
+        return userIdList;
+    } catch (error) {
+        console.error('Error finding all users:', error);
+        throw new Error('Failed to retrieve users');
+    }
+};
+
 module.exports = {
     findUserByEmail,
     verifyPassword,
     registerNewUser,
     findUserById,
     findAllUsers,
+    findAllUsersIds,
 }

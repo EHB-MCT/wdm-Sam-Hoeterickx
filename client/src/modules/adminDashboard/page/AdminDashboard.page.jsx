@@ -7,6 +7,7 @@ import { LogoutButton } from "../../../shared/components/index.js";
 // Components
 import { BrowserDataVisual } from "../components/BrowserDataVisual.jsx";
 import { GeoLocationVisual } from "../components/GeoLocationVisual.jsx";
+import { UserExplorer } from "../components/UserExplorer.jsx";
 
 export const AdminDashboard = () => {
     // We slaan de volledige response op, plus specifieke shortcuts
@@ -74,6 +75,15 @@ export const AdminDashboard = () => {
                         Locatie Heatmap
                     </button>
                     
+                    <button
+                        onClick={() => setActiveTab('users')}
+                        className={`dashboard-tab--large ${
+                            activeTab === 'users' ? 'dashboard-tab--active' : ''
+                        }`}
+                    >
+                        <Users className="w-5 h-5" />
+                        User Explorer
+                    </button>
                 </div>
 
                 {/* Tab Content Area */}
@@ -84,6 +94,10 @@ export const AdminDashboard = () => {
                     
                     {activeTab === 'location' && (
                         <GeoLocationVisual geoLocationData={geoLocationData} />
+                    )}
+                    
+                    {activeTab === 'users' && (
+                        <UserExplorer />
                     )}
                 </div>
 

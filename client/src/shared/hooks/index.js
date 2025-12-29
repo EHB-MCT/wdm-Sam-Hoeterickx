@@ -1,4 +1,6 @@
 export { useGetAllData } from './admin/useGetAllData.hook';
+export { useGetAllDataFromUser } from './admin/useGetAllDataFromUser.hook';
+export { useGetAllSessionsPerUser } from './admin/useGetAllSessionsPerUser.hook';
 export { useAnswerQuestion } from './questions/useAnswerQuestion.hook';
 export { useChoiceTracking } from './tracking/useChoiceTracking.hook';
 export { useHoverTracking } from './tracking/useHoverTracking.hook';
