@@ -40,9 +40,28 @@
 2.  **Environment Configuration**
     Create a `.env` file in the root (or server directory) and configure your database credentials:
     ```env
-    MONGO_INITDB_ROOT_USERNAME=root
-    MONGO_INITDB_ROOT_PASSWORD=example
-    DB_URI=mongodb://root:example@mongodb:27017/Development-V-WDM?authSource=admin
+        # Server Configuration
+        PORT=3000
+
+        # Database Configuration
+        MONGO_URI=mongodb://localhost:27017/Development-V-WDM
+        DB_URI=mongodb://localhost:27017/Development-V-WDM
+        DB_NAME=Development-V-WDM
+
+        # MongoDB Docker Configuration
+        MONGO_INITDB_ROOT_USERNAME=username
+        MONGO_INITDB_ROOT_PASSWORD=password
+        MONGO_INITDB_DATABASE=wdm_database
+
+        # Session and Cookie Security
+        SESSION_SECRET=your-secret
+        COOKIE_SECRET=your-secret
+
+        # Development Configuration
+        CHOKIDAR_USEPOLLING=true
+
+        # Client Configuration
+        VITE_API_URL=http://localhost:3000/api
     ```
 
 3.  **Run with Docker**
