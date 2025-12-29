@@ -17,7 +17,7 @@ export const DashboardContainer = ({ user, answerData, decisionData, isLoading, 
 
     return (
         <div className="dashboard">
-            <DashboardHeader user={user} homeRoute={homeRoute} />
+            <DashboardHeader state={''} />
             
             {analysisData && (
                 <>

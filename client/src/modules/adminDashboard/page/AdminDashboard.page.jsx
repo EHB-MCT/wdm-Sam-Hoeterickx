@@ -50,7 +50,7 @@ export const AdminDashboard = () => {
 
     return (
         <div className="dashboard">
-            <DashboardHeader user={{ name: 'Admin' }} homeRoute="/" />
+            <DashboardHeader state={"Admin"} />
             
             <div className="dashboard-content">
                 {/* Tab Navigation Card */}
