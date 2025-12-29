@@ -46,7 +46,7 @@ const authenticateAdmin = async(req, res, userCollection) => {
 
 const collectAllData = async(req, res, collections) => {
     try{
-        const { USER_ID } = req.body;
+        const USER_ID = req.signedCookies.user;
 
         if (!USER_ID) {
             return res.status(422).json({
