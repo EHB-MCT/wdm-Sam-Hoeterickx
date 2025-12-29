@@ -7,7 +7,6 @@ import { LogoutButton } from "../../../shared/components/index.js";
 // Components
 import { BrowserDataVisual } from "../components/BrowserDataVisual.jsx";
 import { GeoLocationVisual } from "../components/GeoLocationVisual.jsx";
-import { UserExplorer } from "../components/UserExplorer.jsx";
 
 export const AdminDashboard = () => {
     // We slaan de volledige response op, plus specifieke shortcuts
@@ -54,57 +53,37 @@ export const AdminDashboard = () => {
             
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-10">
                 {/* Tab Navigation Card */}
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 mb-6 inline-flex flex-wrap gap-2">
+                <div className="admin-dashboard-tabs">
                     <button
                         onClick={() => setActiveTab('browser')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                            activeTab === 'browser' 
-                                ? 'bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100' 
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        className={`dashboard-tab--large ${
+                            activeTab === 'browser' ? 'dashboard-tab--active' : ''
                         }`}
                     >
-                        <LayoutDashboard className="w-4 h-4" />
+                        <LayoutDashboard className="w-5 h-5" />
                         Browser Analytics
                     </button>
                     
                     <button
                         onClick={() => setActiveTab('location')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                            activeTab === 'location' 
-                                ? 'bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100' 
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        className={`dashboard-tab--large ${
+                            activeTab === 'location' ? 'dashboard-tab--active' : ''
                         }`}
                     >
-                        <Map className="w-4 h-4" />
+                        <Map className="w-5 h-5" />
                         Locatie Heatmap
                     </button>
-
-                    <button
-                        onClick={() => setActiveTab('users')}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                            activeTab === 'users' 
-                                ? 'bg-blue-50 text-blue-600 shadow-sm ring-1 ring-blue-100' 
-                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                        }`}
-                    >
-                        <Users className="w-4 h-4" />
-                        Gebruikers Explorer
-                    </button>
+                    
                 </div>
 
                 {/* Tab Content Area */}
-                <div className="transition-opacity duration-200">
+                <div className="admin-dashboard-content">
                     {activeTab === 'browser' && (
                         <BrowserDataVisual browserData={browserData} />
                     )}
                     
                     {activeTab === 'location' && (
                         <GeoLocationVisual geoLocationData={geoLocationData} />
-                    )}
-                    
-                    {/* UserExplorer gebruikt nu eigen data via nieuwe hook */}
-                    {activeTab === 'users' && (
-                        <UserExplorer />
                     )}
                 </div>
 

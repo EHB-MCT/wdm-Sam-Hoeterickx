@@ -15,6 +15,9 @@ module.exports = (adminCollection, answerCollection, browserCollection, confiden
         geoLocation: geoLocationCollection,
         questions: adminCollection,
         admin: adminCollection
-    }))
+    }));
+
+    // router.get('/')
+
     return router
 }
