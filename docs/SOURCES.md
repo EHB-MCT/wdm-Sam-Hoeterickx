@@ -2,7 +2,7 @@
 
 - [How to use a service with express controller and model](https://gemini.google.com/share/40853d4e5b0c)
 - [How to track browser data](https://gemini.google.com/share/4f5569e6a5fb)
-- [Opencode | Refactoring users flow according to STANDARDS.md, Refactoring users flow per STANDARDS.md, updating server.js, and Refactoring users flow per STANDARDS.md, updating server.js](https://opncd.ai/share/1SY4oVH4);
+- [Opencode | Refactoring users flow according to STANDARDS.md, Refactoring users flow per STANDARDS.md, updating server.js, and Refactoring users flow per STANDARDS.md, updating server.js](https://opncd.ai/share/1SY4oVH4): De link werkt nog wel, als je erop klikt en dan naar de console gaat kan je de data rond de conversatie zien
 - [Nodejs conventions](https://softwareontheroad.com/ideal-nodejs-project-structure/)
 - [Dockerize MongoDB](https://medium.com/swlh/dockerizing-a-mongo-database-ac8f8219a019)
 - [Dockerize express](https://medium.com/@muhammadnaqeeb/dockerizing-a-node-js-and-express-js-app-9cb31cf9139e)
