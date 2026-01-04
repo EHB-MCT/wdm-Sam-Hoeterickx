@@ -64,14 +64,20 @@ const createAdminUser = async (userCollection) => {
     try {
         const existingAdmin = await userCollection.findOne({ role: 'admin' });
         
+        const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
+        const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+        const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+
+        console.log(ADMIN_PASSWORD, 'password')
+        
         if (!existingAdmin) {
             console.log("Geen admin gebruiker gevonden. Admin account wordt aangemaakt...");
             
-            const hashedPassword = await hashPassword('admin123');
+            const hashedPassword = await hashPassword(ADMIN_PASSWORD);
             
             const adminUser = {
-                username: 'admin',
-                email: 'admin@example.com',
+                username: ADMIN_USERNAME,
+                email: ADMIN_EMAIL,
                 password: hashedPassword,
                 role: 'admin',
                 created_at: new Date()
@@ -187,3 +193,4 @@ await initializeDatabase(collections.questionsCollection);
 }
 
 startServer();
+
