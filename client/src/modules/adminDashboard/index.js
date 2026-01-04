@@ -1,0 +1,1 @@
+export { ADMIN_DASHBOARD_ROUTE } from './adminDashboard.route';
