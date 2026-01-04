@@ -34,7 +34,6 @@
 1.  **Clone the repository**
     ```bash
     git clone [https://github.com/EHB-MCT/wdm-Sam-Hoeterickx.git](https://github.com/EHB-MCT/wdm-Sam-Hoeterickx.git)
-    cd wdm-Sam-Hoeterickx
     ```
 
 2.  **Environment Configuration**
@@ -53,6 +52,11 @@
         MONGO_INITDB_ROOT_PASSWORD=password
         MONGO_INITDB_DATABASE=wdm_database
 
+        # Admin credentials
+        ADMIN_USERNAME=username
+        ADMIN_EMAIL=username@example.com
+        ADMIN_PASSWORD=my-secret-password
+
         # Session and Cookie Security
         SESSION_SECRET=your-secret
         COOKIE_SECRET=your-secret
@@ -69,7 +73,12 @@
     docker-compose up --build
     ```
     * Frontend: `http://localhost:8080`
-    * Backend: `http://localhost:3000`
+    * Backend: `http://localhost:3000/api/`
+
+4. **Admin panel**
+    Once the server is started and you want to access the admin panel, 
+    Go to http://localhost:8080/#/auth/login
+    Login with admin credentials from the ENV file
 
 ## 🤝 Contributing
 

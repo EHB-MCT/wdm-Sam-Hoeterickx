@@ -25,6 +25,9 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - MONGO_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/wdm_database?authSource=admin
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
       - PORT=3000
     command: npm run run
     depends_on:
